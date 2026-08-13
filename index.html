@@ -49,8 +49,6 @@ FINISH: unreviewed und undokumentiert ist unfertig; dieser Bau endet mit dem Fin
   /* Muss derselbe Farbwert wie --grund sein, nur durchsichtig: ein transparentes
      Schwarz als Endpunkt gibt in manchen Browsern einen grauen Schleier. */
   --grund-klar:rgba(27,42,51,0);
-  /* Streulicht der Signalfarbe. Muss derselbe Farbwert wie --signal sein. */
-  --signal-schwach:rgba(255,138,76,.42);
 
   /* Textskala. Fuenf Stufen, mehr braucht die Seite nicht. Ueberschriften laufen
      ueber clamp() und stehen bewusst ausserhalb dieser Leiter. */
@@ -254,53 +252,36 @@ section{padding-block:clamp(66px,10vh,128px)}
   border-top:1px solid var(--linie);
 }
 
-/* Der Block, auf dem du bist, wird von seinen beiden Linien eingerahmt: die
-   Linie darueber und die darunter gehen an, nur ueber der Breite dieses Blocks.
-   Dadurch hebt sich der Text hervor, statt dass irgendwo Licht herumliegt.
-   Zwei Ebenen je Linie: eine scharfe 1px-Kante und ein weiches Band als
-   Streulicht, sonst ist eine Haarlinie kaum wahrnehmbar. */
-.saetze > div{position:relative;--zellpad-links:0px}
-.saetze > div::before,
-.saetze > div::after{
-  content:"";position:absolute;
-  left:var(--zellpad-links);width:clamp(150px,45%,340px);height:9px;
-  pointer-events:none;opacity:0;
-  transform:scaleX(.35);transform-origin:left;
-  transition:opacity .22s ease, transform .42s cubic-bezier(.16,1,.3,1);
-  background-repeat:no-repeat;
-  background-image:
-    linear-gradient(var(--signal),var(--signal)),
-    linear-gradient(180deg,transparent,var(--signal-schwach),transparent);
-  background-size:100% 1px, 100% 100%;
-  background-position:0 4px, 0 0;
-  /* Nach rechts ausblenden. Ohne das endet die Linie mit einer harten Kante und
-     sieht nach abgeschnitten aus statt nach Licht, das ausläuft. */
-  -webkit-mask-image:linear-gradient(90deg,#000 0%,#000 28%,transparent 100%);
-  mask-image:linear-gradient(90deg,#000 0%,#000 28%,transparent 100%);
+/* Ein einziges Leitlicht statt vier gleicher Marken. Es steht am linken Rand des
+   aktiven Blocks und gleitet zum naechsten — dadurch gibt es nichts, was sich
+   wiederholen koennte, und die Bewegung dazwischen wird selbst zum Effekt.
+   Es faehrt in beiden Achsen, muss also im zweispaltigen Raster auch die Spalte
+   wechseln koennen. Groesse und Position kommen aus einer einzigen
+   transform-Eigenschaft, damit die Bewegung auf dem Compositor laeuft. */
+.saetze > div{position:relative}
+.leitlicht{
+  position:absolute;top:0;left:0;width:2px;height:100px;
+  transform-origin:0 0;transform:translate(0,0) scaleY(0);
+  opacity:0;pointer-events:none;
+  background:linear-gradient(180deg,
+    transparent 0%, var(--signal) 16%, var(--signal) 84%, transparent 100%);
+  transition:transform .45s cubic-bezier(.16,1,.3,1), opacity .3s ease;
 }
-.saetze > div::before{top:-5px}
-.saetze > div::after{bottom:-5px}
-
-/* Zeigergeraete: reines CSS, kein Skript. Beruehrungsgeraete bekommen dieselbe
-   Hervorhebung ueber die Scrollposition (siehe Skript). */
-@media(hover:hover){
-  .saetze > div:hover::before,
-  .saetze > div:hover::after{opacity:1;transform:scaleX(1)}
+.saetze.leuchtet .leitlicht{opacity:1}
+/* Auf dem Desktop andere Strategie: dort zeigt der Zeiger schon, wo du bist —
+   das Licht soll nicht quer ueber zwei Spalten gleiten, sondern sofort am
+   richtigen Block stehen. Nur die Deckkraft blendet. */
+@media(min-width:820px) and (hover:hover){
+  .leitlicht{transition:opacity .25s ease}
 }
-.saetze > div.aktiv::before,
-.saetze > div.aktiv::after{opacity:1;transform:scaleX(1)}
-@media(prefers-reduced-motion:reduce){
-  .saetze > div::before,.saetze > div::after{transition:none}
-}
+@media(prefers-reduced-motion:reduce){.leitlicht{transition:none}}
 .saetze > div{padding-block:clamp(20px,2.6vw,28px);border-bottom:1px solid var(--linie)}
 .saetze h3{margin-bottom:.45em}
 .saetze p{color:var(--auf-grund-still);font-size:var(--txt-m);max-width:46ch}
 @media(min-width:820px){
   .saetze{grid-template-columns:1fr 1fr}
-  /* --zellpad-links haelt die Marke buendig zum Textanfang. In der rechten
-     Spalte beginnt der Text erst nach dem Innenabstand, in der linken bei null. */
-  .saetze > div{padding-inline:clamp(24px,3vw,40px);--zellpad-links:clamp(24px,3vw,40px)}
-  .saetze > div:nth-child(odd){padding-left:0;border-right:1px solid var(--linie);--zellpad-links:0px}
+  .saetze > div{padding-inline:clamp(24px,3vw,40px)}
+  .saetze > div:nth-child(odd){padding-left:0;border-right:1px solid var(--linie)}
   .saetze > div:nth-child(even){padding-right:0}
 }
 
@@ -694,33 +675,64 @@ else addEventListener('load', ringLinieSetzen);
 // ohne Zeiger: dort uebernimmt die Scrollposition. Der Block, der gerade das
 // mittlere Zehntel des Bildschirms kreuzt, ist der aktive — und die Klasse geht
 // beim Herausscrollen wieder weg, in beide Richtungen, beliebig oft.
-const saetzeBloecke = [...document.querySelectorAll('.saetze > div')];
-if (saetzeBloecke.length && 'IntersectionObserver' in window) {
-  const zeiger = matchMedia('(hover: hover)');
+// Ein Leitlicht fuer beide Welten, aber mit unterschiedlichem Auslöser: am
+// Zeiger springt es zum Block, auf den du zeigst, ohne Zeiger wandert es mit
+// der Scrollposition. Die Bewegung selbst regelt CSS (siehe .leitlicht).
+const saetze = document.querySelector('.saetze');
+const saetzeBloecke = saetze ? [...saetze.querySelectorAll(':scope > div')] : [];
 
-  // Genau ein Block ist aktiv: der, dessen Mitte der Bildschirmmitte am
-  // naechsten liegt. Alle zu nehmen, die das Band schneiden, waere im
-  // zweispaltigen Raster falsch — dort liegen zwei Zellen auf gleicher Hoehe.
-  function aktivenSetzen(){
-    if (zeiger.matches) {                       // Zeigergeraet: der Hover regelt es
-      saetzeBloecke.forEach(b => b.classList.remove('aktiv'));
-      return;
-    }
+if (saetze && saetzeBloecke.length) {
+  const licht = document.createElement('span');
+  licht.className = 'leitlicht';
+  licht.setAttribute('aria-hidden', 'true');
+  saetze.appendChild(licht);
+
+  const zeiger = matchMedia('(hover: hover)');
+  let ziel = null;
+
+  // Position und Hoehe stecken in einer einzigen transform-Eigenschaft. Die
+  // Grundhoehe von 100px wird auf die echte Blockhoehe skaliert.
+  function lichtStellen(){
+    if (!ziel) { saetze.classList.remove('leuchtet'); return; }
+    const r = saetze.getBoundingClientRect();
+    const c = ziel.getBoundingClientRect();
+    const einzug = parseFloat(getComputedStyle(ziel).paddingLeft) || 0;
+    const x = (c.left - r.left) + einzug - 14;   // knapp links neben dem Text
+    const y = c.top - r.top;
+    licht.style.transform =
+      'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) scaleY(' +
+      (c.height / 100).toFixed(3) + ')';
+    saetze.classList.add('leuchtet');
+  }
+  const zielSetzen = (b) => { ziel = b; lichtStellen(); };
+
+  saetzeBloecke.forEach(b => b.addEventListener('pointerenter', () => {
+    if (zeiger.matches) zielSetzen(b);
+  }));
+  saetze.addEventListener('pointerleave', () => { if (zeiger.matches) zielSetzen(null); });
+
+  // Ohne Zeiger: der Block, dessen Mitte der Bildschirmmitte am naechsten liegt.
+  // Genau einer, nicht alle, die das Band schneiden.
+  function ausScrollposition(){
+    if (zeiger.matches) return;
     const mitte = innerHeight / 2;
-    let bester = null, kleinsterAbstand = Infinity;
+    let bester = null, kleinster = Infinity;
     saetzeBloecke.forEach(b => {
       const r = b.getBoundingClientRect();
       const abstand = Math.abs(r.top + r.height / 2 - mitte);
-      if (abstand < kleinsterAbstand) { kleinsterAbstand = abstand; bester = b; }
+      if (abstand < kleinster) { kleinster = abstand; bester = b; }
     });
-    const naheGenug = kleinsterAbstand < innerHeight * 0.3;
-    saetzeBloecke.forEach(b => b.classList.toggle('aktiv', naheGenug && b === bester));
+    zielSetzen(kleinster < innerHeight * 0.35 ? bester : null);
   }
 
-  const leseband = new IntersectionObserver(aktivenSetzen,
-    { rootMargin: '-35% 0px -35% 0px', threshold: 0 });
-  saetzeBloecke.forEach(b => leseband.observe(b));
-  // Faellt der Zeiger weg oder kommt dazu, wird sofort umgeschaltet.
-  zeiger.addEventListener('change', aktivenSetzen);
+  if ('IntersectionObserver' in window) {
+    const leseband = new IntersectionObserver(ausScrollposition,
+      { rootMargin: '-35% 0px -35% 0px', threshold: 0 });
+    saetzeBloecke.forEach(b => leseband.observe(b));
+  }
+
+  zeiger.addEventListener('change', () => { zielSetzen(null); ausScrollposition(); });
+  addEventListener('resize', lichtStellen);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(lichtStellen);
 }
 </script>
