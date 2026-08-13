@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Richtung 3 — Musterfächer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Public+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
+<!--
+THESIS: Wer noch kaum Referenzen hat, verspricht nichts Fertiges, sondern zeigt
+Muster. Die Seite ist ein Farbfaecher aus dem Malerkoffer: sechs volle Blaetter,
+jedes eine ganze Flaeche. Sie verweigert die helle Startseite mit Kartenraster.
+OWN-WORLD: Schweizer Fassadenfarben als Vollflaechen — Kalk, Lehmrot, Tiefblau,
+Moos, Ocker, Anthrazit. Strenge Notation oben links, Faecherreiter am rechten Rand.
+Bricolage Grotesque gross, Public Sans fuer Text. Ein System, sechs Farben.
+STORY: Der Besucher blaettert durch, erkennt seinen Fall auf einem Blatt und holt
+sich auf Blatt 05 den Preisrahmen.
+FIRST VIEWPORT: Kalkblatt ueber die volle Hoehe, Notation oben links, Headline in
+drei Zeilen bis fast an den Rand, Knopf darunter, rechts ragen fuenf Farbreiter herein.
+FORM: Musterfaecher / Farbkarte, Position 1 der Kandidatenliste, extern gewuerfelt.
+FINISH: unreviewed und undokumentiert ist unfertig; dieser Bau endet mit dem Finish-Review, dem Verdikt und DESIGN.md
+-->
+
+<style>
+:root{
+  --kalk:#efe9dc;
+  --lehm:#b4432c;
+  --blau:#24405e;
+  --moos:#37503f;
+  --ocker:#d9a128;
+  --anthrazit:#1c1c1a;
+
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --text:"Public Sans",system-ui,-apple-system,sans-serif;
+  --spalte:min(1220px,calc(100% - 2 * clamp(22px,5vw,64px)));
+  --reiter:clamp(30px,3.4vw,46px);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  font-family:var(--text);font-size:clamp(16px,1.02vw,17.5px);line-height:1.6;
+  font-weight:400;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  background:var(--kalk);color:var(--anthrazit);
+  padding-right:var(--reiter);
+}
+a{color:inherit}
+img{max-width:100%;display:block}
+::selection{background:var(--anthrazit);color:var(--kalk)}
+:focus-visible{outline:2px solid currentColor;outline-offset:4px}
+
+html{scrollbar-width:none}
+::-webkit-scrollbar{width:0}
+
+/* ---------- Blatt ---------- */
+.blatt{
+  position:relative;min-height:100svh;display:flex;flex-direction:column;
+  justify-content:center;padding-block:clamp(104px,14vh,146px);
+  --grund:var(--kalk);--auf:var(--anthrazit);--still:#6b6558;
+  background:var(--grund);color:var(--auf);
+}
+.blatt .spalte{width:var(--spalte);margin-inline:auto;position:relative;z-index:2}
+
+.blatt.kalk{--grund:var(--kalk);--auf:var(--anthrazit);--still:#645e4f}
+.blatt.lehm{--grund:var(--lehm);--auf:#fdf6ee;--still:#f0c9bd}
+.blatt.blau{--grund:var(--blau);--auf:#f0f4f8;--still:#a8bcd0}
+.blatt.moos{--grund:var(--moos);--auf:#eef2ec;--still:#adc0b0}
+.blatt.ocker{--grund:var(--ocker);--auf:#1c1c1a;--still:#6a5316}
+.blatt.anthrazit{--grund:var(--anthrazit);--auf:#eceae4;--still:#93908a}
+
+/* Notation: die Nummer des Musters. Sie sagt, wo im Faecher man steht. */
+.notation{
+  position:absolute;top:clamp(66px,9.4vh,94px);left:0;right:0;
+  display:flex;justify-content:space-between;align-items:baseline;gap:20px;
+  font-size:.71rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700;
+  color:var(--still);z-index:2;
+}
+.notation .spalte{display:flex;justify-content:space-between;align-items:baseline;gap:20px}
+
+h1,h2{font-family:var(--display);font-weight:700;line-height:.94;letter-spacing:-.035em}
+h1{font-size:clamp(2.4rem,5.1vw,4.4rem)}
+h2{font-size:clamp(2rem,4.1vw,3.4rem)}
+h3{font-family:var(--display);font-weight:700;font-size:clamp(1.2rem,1.9vw,1.55rem);letter-spacing:-.025em;line-height:1.05}
+p{max-width:60ch}
+.still{color:var(--still)}
+.gross{font-size:clamp(1.05rem,1.5vw,1.25rem);max-width:52ch}
+
+.knopf{
+  display:inline-flex;align-items:center;gap:11px;
+  background:var(--auf);color:var(--grund);font-weight:700;font-size:.98rem;
+  padding:15px 25px;text-decoration:none;border:0;cursor:pointer;font-family:var(--text);
+  transition:transform .2s ease,box-shadow .2s ease,opacity .2s ease;
+}
+.knopf:hover{transform:translateY(-2px);box-shadow:0 12px 28px -14px rgba(0,0,0,.6)}
+.knopf:active{transform:translateY(0)}
+.knopf .pfeil{transition:transform .2s ease}
+.knopf:hover .pfeil{transform:translateX(4px)}
+.klarzeile{font-size:.86rem;color:var(--still);max-width:40ch}
+
+/* ---------- Fächerreiter ---------- */
+.faecher{
+  position:fixed;top:0;right:0;bottom:0;width:var(--reiter);z-index:40;
+  display:flex;flex-direction:column;
+}
+.reiter{
+  flex:1;border:0;padding:0;cursor:pointer;position:relative;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--text);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+  font-weight:800;writing-mode:vertical-rl;
+  transition:flex .45s cubic-bezier(.16,1,.3,1),filter .25s ease;
+  filter:saturate(.72) brightness(.94);
+}
+.reiter:hover{filter:none}
+.reiter[aria-current="true"]{flex:1.9;filter:none}
+.reiter::after{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:1px;background:rgba(0,0,0,.16);
+}
+.reiter.k1{background:var(--kalk);color:#5f5a4b}
+.reiter.k2{background:var(--lehm);color:#fbe6de}
+.reiter.k3{background:var(--blau);color:#cfdcea}
+.reiter.k4{background:var(--moos);color:#d3e0d5}
+.reiter.k5{background:var(--ocker);color:#4a3910}
+.reiter.k6{background:var(--anthrazit);color:#a8a49c}
+
+/* ---------- Blatt 01 ---------- */
+.kopfzeile{
+  position:absolute;top:clamp(22px,3.6vh,38px);left:0;right:0;z-index:3;
+}
+.kopfzeile .spalte{display:flex;align-items:center;justify-content:space-between;gap:18px}
+.logo{display:flex;align-items:center;gap:9px;font-family:var(--display);font-weight:800;letter-spacing:-.03em;font-size:1.06rem}
+.logo .fleck{display:flex;gap:3px}
+.logo .fleck i{width:8px;height:16px;display:block}
+.logo .fleck i:nth-child(1){background:var(--lehm)}
+.logo .fleck i:nth-child(2){background:var(--moos)}
+.logo .fleck i:nth-child(3){background:var(--ocker)}
+
+.einstieg{display:flex;flex-direction:column;gap:clamp(20px,3vh,32px);align-items:flex-start}
+.einstieg h1{max-width:19ch}
+.einstieg .zeile2{color:var(--still)}
+
+.fussleiste{
+  position:absolute;left:0;right:0;bottom:clamp(24px,4vh,40px);z-index:2;
+}
+.fussleiste .spalte{
+  display:flex;flex-wrap:wrap;gap:8px 26px;font-size:.83rem;color:var(--still);
+  border-top:1px solid currentColor;padding-top:16px;
+}
+.fussleiste span{display:flex;align-items:center;gap:8px}
+.fussleiste span::before{content:"";width:6px;height:6px;background:currentColor;flex:none}
+
+/* ---------- Zweispalt ---------- */
+.zweispalt{display:grid;grid-template-columns:1fr;gap:clamp(26px,4vw,64px);align-items:start}
+@media(min-width:920px){.zweispalt{grid-template-columns:1.05fr .95fr}}
+
+/* ---------- Muster: Beweis als Musterreihe ---------- */
+.muster{display:grid;grid-template-columns:1fr;gap:clamp(10px,1.4vw,16px);margin-top:clamp(28px,4vh,46px)}
+@media(min-width:700px){.muster{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1040px){.muster{grid-template-columns:repeat(4,1fr)}}
+.probe{
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.22);
+  padding:18px 18px 16px;display:flex;flex-direction:column;gap:8px;min-height:180px;
+  transition:background .25s ease,transform .25s ease;
+}
+.probe:hover{background:rgba(255,255,255,.14);transform:translateY(-3px)}
+.probe .stand{
+  font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;font-weight:800;
+  display:flex;align-items:center;gap:7px;color:var(--still);
+}
+.probe .stand i{width:7px;height:7px;background:currentColor;display:block;flex:none}
+.probe .stand.live{color:var(--auf)}
+.probe h3{margin-top:auto}
+.probe .was{font-size:.85rem;color:var(--still)}
+
+/* ---------- Umfang: drei Zeilen ---------- */
+.zeilen{margin-top:clamp(26px,4vh,44px);border-top:2px solid currentColor}
+.zeile{
+  display:grid;grid-template-columns:1fr;gap:6px;padding:clamp(18px,2.5vw,28px) 0;
+  border-bottom:1px solid rgba(255,255,255,.28);text-decoration:none;
+  transition:padding-left .28s ease,background .28s ease;
+}
+.blatt.kalk .zeile,.blatt.ocker .zeile{border-bottom-color:rgba(0,0,0,.2)}
+@media(min-width:820px){.zeile{grid-template-columns:minmax(0,14rem) 1fr auto;gap:30px;align-items:baseline}}
+.zeile:hover{padding-left:12px;background:rgba(255,255,255,.08)}
+.zeile p{font-size:.93rem;color:var(--still);max-width:50ch}
+.zeile .hin{font-weight:700;font-size:.85rem;white-space:nowrap;opacity:0;transition:opacity .25s}
+.zeile:hover .hin{opacity:1}
+@media(max-width:819px){.zeile .hin{opacity:1}}
+
+/* ---------- Preis ---------- */
+.preisfeld{
+  display:flex;flex-direction:column;gap:14px;align-items:flex-start;
+  border:2px solid currentColor;padding:clamp(22px,3vw,34px);
+}
+.preisfeld .zahl{
+  font-family:var(--display);font-weight:700;font-size:clamp(2.2rem,5vw,3.6rem);
+  line-height:1;letter-spacing:-.04em;
+}
+.platzhalter{border-bottom:2px dotted currentColor;padding-bottom:2px}
+.chip{
+  display:inline-block;font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;
+  font-weight:800;padding:4px 7px;background:var(--auf);color:var(--grund);
+}
+
+.portrait{
+  aspect-ratio:4/5;max-width:310px;background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.24);display:grid;place-items:center;
+  color:var(--still);font-size:.72rem;letter-spacing:.17em;text-transform:uppercase;font-weight:800;
+}
+
+.fusszeile{
+  margin-top:clamp(34px,6vh,60px);padding-top:22px;border-top:1px solid rgba(255,255,255,.24);
+  display:flex;flex-wrap:wrap;gap:18px 36px;justify-content:space-between;align-items:flex-start;
+  font-size:.86rem;color:var(--still);
+}
+.fusszeile nav{display:flex;flex-wrap:wrap;gap:8px 22px}
+.fusszeile nav a{text-decoration:none}
+.fusszeile nav a:hover{color:var(--auf)}
+
+@media(prefers-reduced-motion:no-preference){
+  .auf-an{opacity:0;transform:translateY(20px);transition:opacity .75s cubic-bezier(.16,1,.3,1),transform .75s cubic-bezier(.16,1,.3,1)}
+  .auf-an.da{opacity:1;transform:none}
+}
+
+@media(max-width:640px){
+  :root{--reiter:26px}
+  .reiter{font-size:.7rem;letter-spacing:.1em}
+}
+</style>
+
+<nav class="faecher" aria-label="Musterblätter">
+  <button class="reiter k1" data-ziel="b1" aria-current="true">01 Ausgangslage</button>
+  <button class="reiter k2" data-ziel="b2">02 Der Punkt</button>
+  <button class="reiter k3" data-ziel="b3">03 Der Stand</button>
+  <button class="reiter k4" data-ziel="b4">04 Der Umfang</button>
+  <button class="reiter k5" data-ziel="b5">05 Der Preis</button>
+  <button class="reiter k6" data-ziel="b6">06 Die Person</button>
+</nav>
+
+<main>
+
+<section class="blatt kalk" id="b1">
+  <div class="kopfzeile">
+    <div class="spalte">
+      <div class="logo"><span class="fleck"><i></i><i></i><i></i></span>AVA</div>
+      <span style="font-size:.71rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--still)">Markenname Platzhalter</span>
+    </div>
+  </div>
+
+  <div class="notation"><div class="spalte"><span>AVA 01 — Ausgangslage</span><span>Kalk</span></div></div>
+
+  <div class="spalte">
+    <div class="einstieg">
+      <h1>Du weisst genau, wie dein Betrieb wirken soll.<br><span class="zeile2">Online kommt das nicht an.</span></h1>
+      <p class="gross">Ich baue Websites für Selbstständige und kleine Betriebe. Von Hand, ohne Baukasten, zum Festpreis. Keine Shops, keine Bestellsysteme — dafür alles andere richtig.</p>
+      <a class="knopf" href="#b5">Preisrahmen ansehen<span class="pfeil">→</span></a>
+      <span class="klarzeile">Sechs Fragen, zwei Minuten. Am Ende steht eine Zahl — kein Rückrufformular.</span>
+    </div>
+  </div>
+
+  <div class="fussleiste">
+    <div class="spalte">
+      <span>Handwerk, Praxen, Fotografie, Dienstleistung</span>
+      <span>Eine Person, kein Apparat</span>
+      <span>Region Olten / Solothurn</span>
+    </div>
+  </div>
+</section>
+
+<section class="blatt lehm" id="b2">
+  <div class="notation"><div class="spalte"><span>AVA 02 — Der Punkt</span><span>Lehmrot</span></div></div>
+  <div class="spalte zweispalt auf-an">
+    <h2>Empfohlen wirst du längst.<br><span class="still">Gefunden wirst du nicht.</span></h2>
+    <div>
+      <p class="gross">Deine Kunden kommen über Mundpropaganda, und das funktioniert. Bis jemand deinen Namen hört, ihn abends googelt und nichts findet ausser einem Eintrag von 2014 und drei Bildern von der Konkurrenz.</p>
+      <p style="margin-top:1.2em" class="still">Eine Website ersetzt die Empfehlung nicht. Sie sorgt nur dafür, dass die Empfehlung nicht ins Leere läuft.</p>
+    </div>
+  </div>
+</section>
+
+<section class="blatt blau" id="b3">
+  <div class="notation"><div class="spalte"><span>AVA 03 — Der Stand</span><span>Tiefblau</span></div></div>
+  <div class="spalte auf-an">
+    <h2>Vier Projekte.<br><span class="still">Drei davon im Bau.</span></h2>
+    <p style="margin-top:1.2em" class="gross">Das ist der ganze Stand, ungeschönt. Ich hätte hier auch vierzig fremde Logos hinstellen können — die Zahl wäre grösser und der Wert null.</p>
+
+    <div class="muster">
+      <article class="probe">
+        <span class="stand live"><i></i>Live</span>
+        <h3>adrianvonarb&#8203;films.ch</h3>
+        <span class="was">Meine eigene Seite. Konzept, Gestaltung, Code.</span>
+      </article>
+      <article class="probe">
+        <span class="stand"><i></i>Im Bau</span>
+        <h3>Craniosacral&#8203;-Praxis</h3>
+        <span class="was">Praxisseite, Fulenbach. Ein klarer Weg zum Termin.</span>
+      </article>
+      <article class="probe">
+        <span class="stand"><i></i>Im Bau</span>
+        <h3>Butterfly Cottage</h3>
+        <span class="was">Ferienhaus in Schottland. Belegung, Anreise, Bilder.</span>
+      </article>
+      <article class="probe">
+        <span class="stand"><i></i>Im Bau</span>
+        <h3>Garden Park</h3>
+        <span class="was">Gästehaus. Website und Newsletter&#8203;-Vorlage.</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="blatt moos" id="b4">
+  <div class="notation"><div class="spalte"><span>AVA 04 — Der Umfang</span><span>Moosgrün</span></div></div>
+  <div class="spalte auf-an">
+    <h2>Nicht jede Website braucht alles.<br><span class="still">Deine braucht das Richtige.</span></h2>
+    <div class="zeilen">
+      <a class="zeile" href="#b5"><h3>Eine Seite</h3><p>Was du machst, für wen, wie man dich erreicht. Auf einer Länge, ohne Umwege. Für die meisten Betriebe reicht genau das.</p><span class="hin">Einschätzen →</span></a>
+      <a class="zeile" href="#b5"><h3>Firmenwebsite</h3><p>Drei bis fünf Seiten, wenn Leistungen, Team oder Standorte wirklich getrennt gehören.</p><span class="hin">Einschätzen →</span></a>
+      <a class="zeile" href="#b5"><h3>Bestehendes erneuern</h3><p>Ich schaue mir deine Seite zuerst an und sage dir dann ehrlich: aufhübschen oder neu bauen.</p><span class="hin">Einschätzen →</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="blatt ocker" id="b5">
+  <div class="notation"><div class="spalte"><span>AVA 05 — Der Preis</span><span>Ocker</span></div></div>
+  <div class="spalte zweispalt auf-an">
+    <div>
+      <h2>Kein „ab“.<br><span class="still">Keine Überraschung.</span></h2>
+      <p style="margin-top:1.2em" class="gross">Ein Startpreis ist ein Köder. Er steht gross auf der Seite und hat mit dem, was am Ende auf der Rechnung steht, wenig zu tun.</p>
+      <p style="margin-top:1em">Bei mir umgekehrt: du beantwortest sechs Fragen, siehst sofort einen Rahmen, und ich schicke dir danach einen Festpreis, der hält.</p>
+    </div>
+    <div class="preisfeld">
+      <span style="font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;font-weight:800;color:var(--still)">Dein Rahmen</span>
+      <span class="zahl platzhalter">CHF ———</span>
+      <span class="chip">Platzhalter</span>
+      <p style="font-size:.88rem">Die Preislogik ist noch nicht kalibriert. Fest steht nur: unter 1'000 Franken gibt es bei mir nichts.</p>
+      <a class="knopf" href="#">Rechner starten<span class="pfeil">→</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="blatt anthrazit" id="b6">
+  <div class="notation"><div class="spalte"><span>AVA 06 — Die Person</span><span>Anthrazit</span></div></div>
+  <div class="spalte auf-an">
+    <div class="zweispalt">
+      <div class="portrait">Portrait folgt</div>
+      <div>
+        <h2>Eine Person.<br><span class="still">Keine Runde.</span></h2>
+        <p style="margin-top:1.2em">Ich bin Adrian. Ich filme seit Jahren Hochzeiten und habe dabei gelernt, worauf es ankommt: zuhören, das Wesentliche finden, den Rest weglassen. Websites baue ich nach demselben Prinzip.</p>
+        <p style="margin-top:1em">Du redest mit mir, nicht mit einem Projektbüro. Kein Sitzungsmarathon, kein Angebot über vierzehn Seiten.</p>
+        <p style="margin-top:1.3em;font-size:.88rem" class="still">Shops und Bestellsysteme baue ich nicht. Das ist ein anderes Handwerk — das sage ich dir lieber vorher als nachher.</p>
+      </div>
+    </div>
+
+    <div class="fusszeile">
+      <div class="logo" style="font-size:.98rem"><span class="fleck"><i></i><i></i><i></i></span>AVA</div>
+      <nav><a href="#">Kostenrechner</a><a href="#">Kontakt</a><a href="#">Impressum</a><a href="#">Datenschutz</a></nav>
+      <span>© 2026 · von Hand gebaut · kein Baukastensystem</span>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+// Die Reiter sind die Navigation des Faechers: der aktive Reiter faehrt aus und
+// zeigt, auf welchem Blatt man steht.
+const reiter = [...document.querySelectorAll('.reiter')];
+const blaetter = reiter.map(r => document.getElementById(r.dataset.ziel));
+
+reiter.forEach(r => r.addEventListener('click', () => {
+  document.getElementById(r.dataset.ziel).scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+}));
+
+const beobachter = new IntersectionObserver((eintraege) => {
+  eintraege.forEach(e => {
+    if (!e.isIntersecting) return;
+    const i = blaetter.indexOf(e.target);
+    reiter.forEach((r, j) => r.setAttribute('aria-current', String(j === i)));
+  });
+}, { threshold: .5 });
+blaetter.forEach(b => beobachter.observe(b));
+
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const auftritt = new IntersectionObserver((e) => {
+    e.forEach(x => { if (x.isIntersecting) { x.target.classList.add('da'); auftritt.unobserve(x.target); } });
+  }, { threshold: .18 });
+  document.querySelectorAll('.auf-an').forEach(el => auftritt.observe(el));
+} else {
+  document.querySelectorAll('.auf-an').forEach(el => el.classList.add('da'));
+}
+</script>

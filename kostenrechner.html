@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Kostenrechner — Webdesign Olten | AVA</title>
+<meta name="description" content="In sechs Fragen zum Preisrahmen für deine Website. Ohne Konto, ohne Telefonnummer. Danach ein verbindliches Festpreisangebot.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&family=Young+Serif&display=swap" rel="stylesheet">
+
+<!--
+THESIS: Der Rechner qualifiziert, statt Kontaktdaten abzugreifen. Der Preis steht
+vor dem Formular, nicht dahinter. Er verweigert die uebliche Leadstrecke, in der
+die Zahl erst nach der Mailadresse kommt.
+OWN-WORLD: Dieselbe Welt wie die Startseite — Schiefer, Creme, Signalorange,
+Young Serif und Schibsted Grotesk. Eine Frage pro Bildschirm, keine Karten.
+STORY: Sechs Fragen, sofort ein Rahmen, dann entscheidet der Besucher selbst, ob
+er seine Daten hergibt.
+FIRST VIEWPORT: Fortschrittsbalken oben, Frage gross gesetzt, Antworten als breite
+Zeilen, Zurueck links und Weiter rechts unten.
+FORM: Vierte Richtung, Fortsetzung der Startseite.
+FINISH: unreviewed und undokumentiert ist unfertig; dieser Bau endet mit dem Finish-Review, dem Verdikt und DESIGN.md
+-->
+
+<style>
+:root{
+  /* Muss mit der Startseite uebereinstimmen — Schiefer, Creme, Signalorange. */
+  --grund:#1b2a33;
+  --grund-tief:#0e1820;
+  --grund-licht:#2e4557;
+  --grund-hoch:#263a47;
+  --papier:#f2ede2;
+  --papier-still:#ddd4c3;
+  --signal:#ff8a4c;
+  --signal-hell:#ff9f6d;
+  --auf-grund:#e4eaee;
+  --auf-grund-still:#a8b8c4;
+  --tinte:#15202a;
+  --tinte-still:#565f6a;
+  --linie:#2f4553;
+  --linie-hell:#3f5e70;
+  --grund-klar:rgba(27,42,51,0);
+  /* Textskala. Fuenf Stufen, mehr braucht die Seite nicht. Ueberschriften laufen
+     ueber clamp() und stehen bewusst ausserhalb dieser Leiter. */
+  --txt-xs:.78rem;
+  --txt-s:.875rem;
+  --txt-m:.95rem;
+  --txt-base:1rem;
+  --txt-l:1.06rem;
+
+  --serif:"Young Serif",Georgia,serif;
+  --sans:"Schibsted Grotesk",system-ui,-apple-system,sans-serif;
+  --spalte:min(860px,calc(100% - 2 * clamp(22px,5vw,56px)));
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+/* Gleicher Verlauf wie die Startseite, damit der Seitenwechsel nicht auffaellt. */
+html{background:var(--grund-tief)}
+body{
+  /* Derselbe vollstaendige Verlauf wie im Hero der Startseite — die Rechnerseite
+     ist im Wesentlichen ein Bildschirm hoch, also gehoert er hier ganz hinein. */
+  background:radial-gradient(125% 95% at 10% 4%,var(--grund-licht) 0%,var(--grund) 50%,var(--grund-tief) 100%);
+  color:var(--auf-grund);
+  font-family:var(--sans);font-size:clamp(16px,1.04vw,17.5px);line-height:1.6;
+  -webkit-font-smoothing:antialiased;min-height:100svh;
+  display:flex;flex-direction:column;
+}
+a{color:inherit}
+::selection{background:var(--signal);color:var(--tinte)}
+:focus-visible{outline:2px solid var(--signal);outline-offset:3px;border-radius:2px}
+html{scrollbar-color:var(--linie) var(--grund-tief);scrollbar-width:thin}
+::-webkit-scrollbar{width:11px}
+::-webkit-scrollbar-track{background:var(--grund-tief)}
+::-webkit-scrollbar-thumb{background:var(--linie);border:3px solid var(--grund-tief);border-radius:99px}
+
+.spalte{width:var(--spalte);margin-inline:auto}
+h1,h2,h3{font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.06}
+h1{font-size:clamp(1.85rem,3.7vw,2.9rem)}
+h2{font-size:clamp(1.5rem,2.6vw,2.1rem)}
+h3{font-size:var(--txt-l)}
+p{max-width:62ch}
+.still{color:var(--auf-grund-still)}
+
+/* ---------- Kopf mit Fortschritt ---------- */
+.kopf{
+  position:sticky;top:0;z-index:20;background:var(--grund-tief);
+  border-bottom:1px solid var(--linie);
+}
+.kopf .spalte{display:flex;align-items:center;justify-content:space-between;gap:18px;height:60px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:var(--txt-l);letter-spacing:-.02em;text-decoration:none}
+.logo .zeichen{
+  width:25px;height:25px;background:var(--signal);display:grid;place-items:center;
+  color:var(--tinte);font-family:var(--serif);font-size:var(--txt-m);line-height:1;padding-top:2px;
+}
+.zaehler{font-size:var(--txt-xs);letter-spacing:.13em;text-transform:uppercase;font-weight:700;color:var(--auf-grund-still)}
+.balken{height:3px;background:var(--linie)}
+/* Der Fortschritt laeuft ueber transform, nicht ueber width — sonst rechnet der
+   Browser bei jedem Schritt das Layout neu. */
+.balken i{display:block;height:100%;background:var(--signal);width:100%;transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+
+/* ---------- Bühne ---------- */
+.buehne{flex:1;display:flex;align-items:center;padding-block:clamp(38px,7vh,80px)}
+.frage{display:none;flex-direction:column;gap:clamp(20px,3vh,30px)}
+.frage.dran{display:flex}
+@media(prefers-reduced-motion:no-preference){
+  .frage.dran{animation:auftauchen .5s cubic-bezier(.16,1,.3,1)}
+  @keyframes auftauchen{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+}
+.frage .hilfe{color:var(--auf-grund-still);max-width:56ch;margin-top:-8px}
+
+/* Antworten: breite Zeilen, keine Karten. */
+.antworten{display:flex;flex-direction:column;gap:10px}
+.antwort{
+  display:flex;align-items:flex-start;gap:15px;width:100%;text-align:left;
+  background:transparent;border:1px solid var(--linie);color:var(--auf-grund);
+  font:inherit;padding:16px 18px;cursor:pointer;
+  transition:border-color .2s ease,background .2s ease,padding-left .2s ease;
+}
+.antwort:hover{border-color:var(--linie-hell);background:rgba(255,255,255,.035);padding-left:22px}
+.antwort .kreis{
+  width:19px;height:19px;border:2px solid var(--linie);border-radius:50%;
+  flex:none;margin-top:3px;position:relative;transition:border-color .2s ease;
+}
+.antwort .kreis::after{
+  content:"";position:absolute;inset:3px;border-radius:50%;background:var(--signal);
+  transform:scale(0);transition:transform .22s cubic-bezier(.16,1,.3,1);
+}
+.antwort[aria-pressed="true"]{border-color:var(--signal);background:rgba(255,138,76,.08)}
+.antwort[aria-pressed="true"] .kreis{border-color:var(--signal)}
+.antwort[aria-pressed="true"] .kreis::after{transform:scale(1)}
+.antwort b{font-weight:700;display:block}
+.antwort span{display:block;font-size:var(--txt-s);color:var(--auf-grund-still);margin-top:2px}
+
+.feld{display:flex;flex-direction:column;gap:7px;margin-top:2px}
+.feld label{font-size:var(--txt-s);font-weight:700;color:var(--auf-grund-still)}
+.feld input,.feld textarea{
+  background:var(--grund-tief);border:1px solid var(--linie);color:var(--auf-grund);
+  font:inherit;padding:13px 15px;width:100%;
+  transition:border-color .2s ease;
+}
+.feld input:hover,.feld textarea:hover{border-color:var(--linie-hell)}
+.feld input::placeholder,.feld textarea::placeholder{color:#71889a}
+.feld textarea{min-height:96px;resize:vertical}
+.zusatzfeld{display:none}
+.zusatzfeld.zeigen{display:flex}
+
+/* ---------- Steuerung ---------- */
+.steuerung{
+  border-top:1px solid var(--linie);background:var(--grund-tief);
+  position:sticky;bottom:0;z-index:15;
+}
+.steuerung .spalte{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px}
+.zurueck{
+  background:none;border:0;color:var(--auf-grund-still);font:inherit;font-weight:600;
+  cursor:pointer;padding:10px 2px;display:flex;align-items:center;gap:9px;
+  transition:color .2s ease;
+}
+.zurueck:hover{color:var(--auf-grund)}
+.zurueck[hidden]{visibility:hidden;display:flex}
+.knopf{
+  display:inline-flex;align-items:center;gap:11px;
+  background:var(--signal);color:var(--tinte);font-weight:700;font-size:var(--txt-base);
+  padding:15px 25px;border:0;cursor:pointer;text-decoration:none;
+  transition:background .2s ease,transform .2s ease,box-shadow .2s ease,opacity .2s ease;
+}
+.knopf:hover:not(:disabled){background:var(--signal-hell);transform:translateY(-2px);box-shadow:0 14px 30px -14px rgba(255,138,76,.7)}
+.knopf:active{transform:translateY(0)}
+.knopf:disabled{opacity:.38;cursor:not-allowed}
+.knopf .pfeil{transition:transform .2s ease}
+.knopf:hover:not(:disabled) .pfeil{transform:translateX(4px)}
+
+/* ---------- Ergebnis ---------- */
+.ergebnis{display:none;flex-direction:column;gap:clamp(22px,3.4vh,34px)}
+.ergebnis.dran{display:flex}
+
+.papier{background:var(--papier);color:var(--tinte);padding:clamp(26px,4vw,44px)}
+.papier h2{color:var(--tinte)}
+.papier p{color:var(--tinte-still)}
+.rahmen{
+  display:flex;flex-wrap:wrap;align-items:baseline;gap:12px 18px;
+  border-bottom:2px solid var(--tinte);padding-bottom:16px;margin-bottom:20px;
+}
+.rahmen .zahl{font-family:var(--serif);font-size:clamp(2.1rem,5vw,3.3rem);line-height:1}
+.platzhalter{border-bottom:2px dotted currentColor;padding-bottom:2px}
+.chip{
+  display:inline-block;font-size:var(--txt-xs);letter-spacing:.13em;text-transform:uppercase;
+  font-weight:800;padding:4px 8px;background:var(--tinte);color:var(--papier);
+}
+.uebersicht{display:flex;flex-direction:column;gap:0;margin-top:4px}
+.uebersicht div{
+  display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:space-between;
+  padding:11px 0;border-bottom:1px solid var(--papier-still);font-size:var(--txt-m);
+}
+.uebersicht div:last-child{border-bottom:0}
+.uebersicht dt{color:var(--tinte-still)}
+.uebersicht dd{font-weight:700;text-align:right}
+.separat{
+  margin-top:20px;padding:16px 18px;border:1px dashed var(--tinte-still);
+  font-size:var(--txt-m);color:var(--tinte-still);
+}
+
+.formular{display:flex;flex-direction:column;gap:14px}
+.paar{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:640px){.paar{grid-template-columns:1fr 1fr}}
+.formular .knopf{align-self:flex-start;margin-top:4px}
+.klarzeile{font-size:var(--txt-s);color:var(--auf-grund-still);max-width:52ch}
+
+footer{border-top:1px solid var(--linie);padding-block:30px;font-size:var(--txt-s)}
+footer .spalte{display:flex;flex-wrap:wrap;gap:16px 34px;justify-content:space-between}
+footer nav{display:flex;flex-wrap:wrap;gap:8px 22px;color:var(--auf-grund-still)}
+footer nav a{text-decoration:none}
+footer nav a:hover{color:var(--signal)}
+
+.nurleser{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+
+<header class="kopf">
+  <div class="spalte">
+    <a class="logo" href="index.html"><span class="zeichen">A</span>AVA</a>
+    <span class="zaehler" id="zaehler">Frage 1 von 6</span>
+  </div>
+  <div class="balken"><i id="balken"></i></div>
+</header>
+
+<main class="buehne">
+  <div class="spalte">
+
+    <div class="frage dran" data-schluessel="umfang">
+      <h1>Was brauchst du?</h1>
+      <p class="hilfe">Wenn du unsicher bist: nimm das Kleinere. Ich sage dir nachher, wenn mehr sinnvoll wäre.</p>
+      <div class="antworten">
+        <button class="antwort" data-wert="eine" data-text="Eine Seite"><span class="kreis"></span><span><b>Eine Seite</b><span>Alles Wichtige auf einer Länge. Reicht für die meisten Betriebe.</span></span></button>
+        <button class="antwort" data-wert="firma" data-text="Firmenwebsite, 3 bis 5 Seiten"><span class="kreis"></span><span><b>Firmenwebsite, 3 bis 5 Seiten</b><span>Wenn Leistungen, Team oder Standorte wirklich getrennt gehören.</span></span></button>
+        <button class="antwort" data-wert="gross" data-text="Grössere Website, ab 6 Seiten"><span class="kreis"></span><span><b>Grössere Website, ab 6 Seiten</b><span>Mehrere Angebote oder Standorte. Hier schaue ich vorher genau hin.</span></span></button>
+        <button class="antwort" data-wert="erneuern" data-text="Bestehende Website erneuern"><span class="kreis"></span><span><b>Bestehende Website erneuern</b><span>Sie steht schon, soll aber wieder in die Gegenwart.</span></span></button>
+      </div>
+    </div>
+
+    <div class="frage" data-schluessel="bestand">
+      <h1>Gibt es schon eine Website?</h1>
+      <p class="hilfe">Falls ja, schaue ich sie mir vor dem Angebot an.</p>
+      <div class="antworten">
+        <button class="antwort" data-wert="nein" data-text="Nein, es gibt noch nichts"><span class="kreis"></span><span><b>Nein, es gibt noch nichts</b><span>Wir fangen bei null an. Oft der einfachere Weg.</span></span></button>
+        <button class="antwort" data-wert="ersetzen" data-text="Ja, sie soll ersetzt werden"><span class="kreis"></span><span><b>Ja, sie soll ersetzt werden</b><span>Neu gebaut, Inhalte übernehmen wir wo es sich lohnt.</span></span></button>
+        <button class="antwort" data-wert="ueberarbeiten" data-text="Ja, sie soll überarbeitet werden"><span class="kreis"></span><span><b>Ja, sie soll überarbeitet werden</b><span>Ich prüfe zuerst, ob das günstiger ist als ein Neubau. Manchmal ist es das nicht.</span></span></button>
+      </div>
+      <div class="feld zusatzfeld" id="urlfeld">
+        <label for="url">Adresse deiner Website (freiwillig)</label>
+        <input type="url" id="url" name="url" placeholder="www.deinbetrieb.ch" autocomplete="url">
+      </div>
+    </div>
+
+    <div class="frage" data-schluessel="texte">
+      <h1>Wie steht es um die Texte?</h1>
+      <p class="hilfe">Der häufigste Grund, warum Websites monatelang liegen bleiben.</p>
+      <div class="antworten">
+        <button class="antwort" data-wert="da" data-text="Texte sind vorhanden"><span class="kreis"></span><span><b>Sind vorhanden</b><span>Ich ordne und kürze sie, schreibe aber nichts Neues.</span></span></button>
+        <button class="antwort" data-wert="teil" data-text="Texte teilweise vorhanden"><span class="kreis"></span><span><b>Teilweise</b><span>Ein Teil steht, den Rest schreiben wir gemeinsam.</span></span></button>
+        <button class="antwort" data-wert="ich" data-text="Ich schreibe die Texte"><span class="kreis"></span><span><b>Bitte übernimm das</b><span>Ich schreibe sie nach einem Gespräch mit dir. Kostet extra, spart Monate.</span></span></button>
+      </div>
+    </div>
+
+    <div class="frage" data-schluessel="bilder">
+      <h1>Und um die Bilder?</h1>
+      <p class="hilfe">Handyfotos vom Betrieb sind oft brauchbarer als Bilddatenbanken.</p>
+      <div class="antworten">
+        <button class="antwort" data-wert="da" data-text="Bilder sind vorhanden"><span class="kreis"></span><span><b>Sind vorhanden</b><span>Ich sichte, wähle aus und bereite sie fürs Netz auf.</span></span></button>
+        <button class="antwort" data-wert="teil" data-text="Bilder teilweise vorhanden"><span class="kreis"></span><span><b>Teilweise</b><span>Für die Lücken finden wir eine Lösung.</span></span></button>
+        <button class="antwort" data-wert="shooting" data-text="Fotos vor Ort nötig"><span class="kreis"></span><span><b>Ich brauche neue Fotos</b><span>Ich komme in den Betrieb und fotografiere. Wird separat offeriert, nicht im Rahmen unten.</span></span></button>
+      </div>
+    </div>
+
+    <div class="frage" data-schluessel="logo">
+      <h1>Hast du ein Logo und einen Auftritt?</h1>
+      <p class="hilfe">Farben, Schrift, Logo. Muss nicht perfekt sein, nur vorhanden.</p>
+      <div class="antworten">
+        <button class="antwort" data-wert="da" data-text="Logo und Auftritt vorhanden"><span class="kreis"></span><span><b>Ja, beides</b><span>Ich baue die Website darauf auf.</span></span></button>
+        <button class="antwort" data-wert="teil" data-text="Nur ein Logo vorhanden"><span class="kreis"></span><span><b>Nur ein Logo</b><span>Farben und Schrift lege ich passend dazu fest.</span></span></button>
+        <button class="antwort" data-wert="neu" data-text="Auftritt soll neu gestaltet werden"><span class="kreis"></span><span><b>Nichts davon</b><span>Umfangreiche Markenarbeit offeriere ich separat, nicht im Rahmen unten.</span></span></button>
+      </div>
+    </div>
+
+    <div class="frage" data-schluessel="zeit">
+      <h1>Wann soll sie live sein?</h1>
+      <p class="hilfe">Ehrliche Antwort reicht. „Keine Ahnung“ ist auch eine.</p>
+      <div class="antworten">
+        <button class="antwort" data-wert="offen" data-text="Zeitlich offen"><span class="kreis"></span><span><b>Keine Eile</b><span>Wir nehmen uns die Zeit, die es braucht.</span></span></button>
+        <button class="antwort" data-wert="normal" data-text="In den nächsten zwei Monaten"><span class="kreis"></span><span><b>In den nächsten zwei Monaten</b><span>Der übliche Rahmen für ein Projekt dieser Grösse.</span></span></button>
+        <button class="antwort" data-wert="datum" data-text="Bis zu einem festen Datum"><span class="kreis"></span><span><b>Bis zu einem festen Datum</b><span>Eröffnung, Messe, Saisonstart. Sag mir welches.</span></span></button>
+      </div>
+      <div class="feld zusatzfeld" id="datumfeld">
+        <label for="datum">Bis wann?</label>
+        <input type="date" id="datum" name="datum">
+      </div>
+    </div>
+
+    <div class="ergebnis" id="ergebnis">
+      <div class="papier">
+        <h2 id="empfehlung">Dein Preisrahmen</h2>
+        <div class="rahmen" style="margin-top:18px">
+          <span class="zahl platzhalter" id="zahl">CHF ———</span>
+          <span class="chip">Zahlen noch nicht kalibriert</span>
+        </div>
+        <p>Ein unverbindlicher Richtwert auf Basis deiner Angaben. Nach kurzer Prüfung bekommst du ein verbindliches Festpreisangebot. Das gilt dann.</p>
+
+        <dl class="uebersicht" id="uebersicht"></dl>
+
+        <div class="separat" id="separat" hidden></div>
+      </div>
+
+      <div>
+        <h2>Soll ich mir das anschauen?</h2>
+        <p style="margin-top:.9em;margin-bottom:1.4em" class="still">Du hast den Rahmen bereits gesehen. Ob du dich meldest, entscheidest du jetzt in Ruhe.</p>
+
+        <form class="formular" id="formular" novalidate>
+          <div class="paar">
+            <div class="feld">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" required autocomplete="name" placeholder="Vor- und Nachname">
+            </div>
+            <div class="feld">
+              <label for="betrieb">Betrieb</label>
+              <input type="text" id="betrieb" name="betrieb" autocomplete="organization" placeholder="Name deines Betriebs">
+            </div>
+          </div>
+          <div class="paar">
+            <div class="feld">
+              <label for="mail">E-Mail</label>
+              <input type="email" id="mail" name="mail" required autocomplete="email" placeholder="name@betrieb.ch">
+            </div>
+            <div class="feld">
+              <label for="tel">Telefon (freiwillig)</label>
+              <input type="tel" id="tel" name="tel" autocomplete="tel" placeholder="079 000 00 00">
+            </div>
+          </div>
+          <div class="feld">
+            <label for="bemerkung">Was ich sonst noch wissen sollte</label>
+            <textarea id="bemerkung" name="bemerkung" placeholder="Was dein Betrieb macht, was dich an der jetzigen Lösung stört, was dir wichtig ist."></textarea>
+          </div>
+          <button class="knopf" type="submit">Anfrage schicken<span class="pfeil">→</span></button>
+          <span class="klarzeile">Kein Newsletter, kein Verteiler. Ich antworte persönlich, in der Regel innerhalb von zwei Arbeitstagen.</span>
+          <span class="klarzeile" style="color:var(--signal)" id="hinweisversand">Versand ist noch nicht aufgeschaltet. Die Adresse folgt mit der Marke.</span>
+        </form>
+      </div>
+    </div>
+
+    <p class="nurleser" role="status" aria-live="polite" id="ansage"></p>
+  </div>
+</main>
+
+<div class="steuerung" id="steuerung">
+  <div class="spalte">
+    <button class="zurueck" id="zurueck" hidden>← Zurück</button>
+    <button class="knopf" id="weiter" disabled>Weiter<span class="pfeil">→</span></button>
+  </div>
+</div>
+
+<footer>
+  <div class="spalte">
+    <span class="still">© 2026 · Webdesign aus Olten</span>
+    <nav><a href="index.html">Startseite</a><a href="#">Impressum</a><a href="#">Datenschutz</a></nav>
+  </div>
+</footer>
+
+<script>
+// Der Rechner. Eine Frage pro Bildschirm, Preis vor Formular.
+// Alle Betraege sind Platzhalter, bis die Preise an echten Projekten kalibriert
+// sind — deshalb steht neben jeder Zahl ein Hinweis-Chip.
+const fragen = [...document.querySelectorAll('.frage')];
+const ergebnis = document.getElementById('ergebnis');
+const weiter = document.getElementById('weiter');
+const zurueck = document.getElementById('zurueck');
+const balken = document.getElementById('balken');
+const zaehler = document.getElementById('zaehler');
+const ansage = document.getElementById('ansage');
+const steuerung = document.getElementById('steuerung');
+
+const antwort = {};   // schluessel -> wert
+const beschriftung = {}; // schluessel -> lesbarer Text
+let dran = 0;
+
+// Platzhalter-Preislogik. Grundwert nach Umfang, Zuschlaege nach Aufwand.
+const grund = {
+  eine:      [1400, 1900],
+  firma:     [2600, 3500],
+  gross:     [4200, 6000],
+  erneuern:  [1600, 2600]
+};
+const zuschlag = {
+  texte:  { da:[0,0], teil:[250,500], ich:[500,900] },
+  bilder: { da:[0,0], teil:[150,350], shooting:[0,0] },
+  logo:   { da:[0,0], teil:[200,450], neu:[0,0] },
+  zeit:   { offen:[0,0], normal:[0,0], datum:[150,400] }
+};
+const empfehlungen = {
+  eine:     'Eine Seite passt zu dir.',
+  firma:    'Eine Firmenwebsite passt zu dir.',
+  gross:    'Das wird eine grössere Website.',
+  erneuern: 'Wir erneuern, was schon steht.'
+};
+
+function zahl(n){ return n.toLocaleString('de-CH').replace(/[  ]/g, "'"); }
+
+function zeichnen(){
+  fragen.forEach((f, i) => f.classList.toggle('dran', i === dran));
+  const amEnde = dran >= fragen.length;
+  ergebnis.classList.toggle('dran', amEnde);
+  steuerung.style.display = amEnde ? 'none' : '';
+  zurueck.hidden = dran === 0;
+
+  if (amEnde) {
+    zaehler.textContent = 'Ergebnis';
+    balken.style.transform = 'scaleX(1)';
+    ansage.textContent = 'Ergebnis: dein Preisrahmen steht bereit.';
+    scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    return;
+  }
+
+  const schluessel = fragen[dran].dataset.schluessel;
+  weiter.disabled = !antwort[schluessel];
+  weiter.querySelector('.pfeil').previousSibling.textContent = dran === fragen.length - 1 ? 'Rahmen anzeigen' : 'Weiter';
+  zaehler.textContent = 'Frage ' + (dran + 1) + ' von ' + fragen.length;
+  balken.style.transform = 'scaleX(' + (dran / fragen.length) + ')';
+  ansage.textContent = 'Frage ' + (dran + 1) + ' von ' + fragen.length + ': ' + fragen[dran].querySelector('h1').textContent;
+}
+
+fragen.forEach(frage => {
+  const schluessel = frage.dataset.schluessel;
+  frage.querySelectorAll('.antwort').forEach(knopf => {
+    knopf.setAttribute('aria-pressed', 'false');
+    knopf.addEventListener('click', () => {
+      frage.querySelectorAll('.antwort').forEach(k => k.setAttribute('aria-pressed', 'false'));
+      knopf.setAttribute('aria-pressed', 'true');
+      antwort[schluessel] = knopf.dataset.wert;
+      beschriftung[schluessel] = knopf.dataset.text;
+
+      // Zusatzfelder tauchen nur auf, wenn die Antwort sie braucht.
+      const url = document.getElementById('urlfeld');
+      const datum = document.getElementById('datumfeld');
+      if (schluessel === 'bestand') url.classList.toggle('zeigen', knopf.dataset.wert !== 'nein');
+      if (schluessel === 'zeit') datum.classList.toggle('zeigen', knopf.dataset.wert === 'datum');
+
+      weiter.disabled = false;
+    });
+  });
+});
+
+weiter.addEventListener('click', () => {
+  if (dran === fragen.length - 1) rechnen();
+  dran++;
+  zeichnen();
+});
+zurueck.addEventListener('click', () => { dran = Math.max(0, dran - 1); zeichnen(); });
+
+function rechnen(){
+  const basis = grund[antwort.umfang] || grund.eine;
+  let von = basis[0], bis = basis[1];
+  for (const feld of ['texte','bilder','logo','zeit']) {
+    const z = zuschlag[feld] && zuschlag[feld][antwort[feld]];
+    if (z) { von += z[0]; bis += z[1]; }
+  }
+  if (antwort.bestand === 'ueberarbeiten') { von -= 200; bis -= 200; }
+
+  document.getElementById('empfehlung').textContent = empfehlungen[antwort.umfang] || 'Dein Preisrahmen';
+  document.getElementById('zahl').textContent = 'CHF ' + zahl(von) + ' – ' + zahl(bis);
+
+  const titel = {
+    umfang:'Umfang', bestand:'Ausgangslage', texte:'Texte',
+    bilder:'Bilder', logo:'Logo und Auftritt', zeit:'Zeitrahmen'
+  };
+  const liste = document.getElementById('uebersicht');
+  liste.innerHTML = '';
+  for (const schluessel of ['umfang','bestand','texte','bilder','logo','zeit']) {
+    if (!beschriftung[schluessel]) continue;
+    const zeile = document.createElement('div');
+    zeile.innerHTML = '<dt>' + titel[schluessel] + '</dt><dd>' + beschriftung[schluessel] + '</dd>';
+    liste.appendChild(zeile);
+  }
+
+  // Was bewusst nicht im Rahmen steckt, steht separat — sonst wird der Rahmen zur Mogelpackung.
+  const separat = [];
+  if (antwort.bilder === 'shooting') separat.push('Fotos vor Ort');
+  if (antwort.logo === 'neu') separat.push('Logo und visueller Auftritt');
+  const kasten = document.getElementById('separat');
+  if (separat.length) {
+    kasten.hidden = false;
+    kasten.textContent = 'Nicht im Rahmen enthalten und separat offeriert: ' + separat.join(' · ') +
+      '. Das sind eigene Arbeiten mit eigenem Aufwand. Ich rechne sie dir lieber einzeln aus, als sie hier grob draufzuschlagen.';
+  } else {
+    kasten.hidden = true;
+  }
+}
+
+document.getElementById('formular').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const hinweis = document.getElementById('hinweisversand');
+  hinweis.textContent = 'Versand ist in diesem Entwurf noch nicht angebunden. Sobald die Adresse steht, geht die Anfrage direkt an mich.';
+});
+
+zeichnen();
+</script>

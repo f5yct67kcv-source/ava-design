@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Webdesign Olten &amp; Region | AVA Design</title>
+<meta name="description" content="Webdesign in Olten und der Region: Ich baue Websites für Selbstständige und kleine Unternehmen von Hand, ohne Baukasten, zum Festpreis. Kostenrahmen in sechs Fragen, ohne Konto und ohne Telefonnummer.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&family=Young+Serif&display=swap" rel="stylesheet">
+
+<!--
+THESIS: Eine Person aus Olten baut Websites von Hand zum Festpreis. Die Seite
+zeigt das Gesicht im ersten Bild und den Preisweg statt eines Portfolios, weil
+es noch keines gibt. Sie verweigert das Referenzband und die Paketkarten-Tabelle.
+OWN-WORLD: Schiefer als kuehler getraenkter Grund, warmes Creme als Papier,
+Signalorange als einziges Signal. Young Serif als Stimme, Schibsted Grotesk fuer
+alles Funktionale. Karten gibt es nicht — es gibt Flaechen, Zeilen und ein rundes
+Portraet mit laufendem Schriftring.
+STORY: Der Besucher erkennt sein Problem, sieht wer dahintersteht, versteht den
+Ablauf und holt sich den Preisrahmen, ohne vorher telefonieren zu muessen.
+FIRST VIEWPORT: Schieferblaue Vollflaeche, Headline links ueber sieben Spalten,
+darunter Knopf in Signalorange und ruhiger Zweitweg, rechts das runde Portraet mit
+Schriftring, der Name und Ort traegt.
+FORM: Vierte Richtung, vom Nutzer gewaehlt nach drei gewuerfelten Vorschlaegen.
+FINISH: unreviewed und undokumentiert ist unfertig; dieser Bau endet mit dem Finish-Review, dem Verdikt und DESIGN.md
+-->
+
+<style>
+:root{
+  /* Schiefer: kuehler Grund, warmes Signal. Das Papier bleibt bewusst warm —
+     Creme gegen Blaugrau ist der Kontrast, der die hellen Flaechen traegt. */
+  --grund:#1b2a33;
+  --grund-tief:#0e1820;
+  --grund-hoch:#263a47;
+  /* Nur fuer die Lichtquellen im Verlauf. Heller geht nicht: darueber faellt der
+     stille Fliesstext unter 4.5:1. */
+  --grund-licht:#2e4557;
+  --papier:#f2ede2;
+  --papier-still:#ddd4c3;
+  --signal:#ff8a4c;
+  --signal-hell:#ff9f6d;
+  --auf-grund:#e4eaee;
+  --auf-grund-still:#a8b8c4;
+  --tinte:#15202a;
+  --tinte-still:#565f6a;
+  --linie:#2f4553;
+  --linie-hell:#3f5e70;
+  --ringschrift:#75909f;
+  /* Muss derselbe Farbwert wie --grund sein, nur durchsichtig: ein transparentes
+     Schwarz als Endpunkt gibt in manchen Browsern einen grauen Schleier. */
+  --grund-klar:rgba(27,42,51,0);
+  /* Streulicht der Signalfarbe. Muss derselbe Farbwert wie --signal sein. */
+  --signal-schwach:rgba(255,138,76,.42);
+
+  /* Textskala. Fuenf Stufen, mehr braucht die Seite nicht. Ueberschriften laufen
+     ueber clamp() und stehen bewusst ausserhalb dieser Leiter. */
+  --txt-xs:.78rem;
+  --txt-s:.875rem;
+  --txt-m:.95rem;
+  --txt-base:1rem;
+  --txt-l:1.06rem;
+
+  --serif:"Young Serif",Georgia,serif;
+  --sans:"Schibsted Grotesk",system-ui,-apple-system,sans-serif;
+  --spalte:min(1200px,calc(100% - 2 * clamp(22px,5vw,66px)));
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+/* Ein einziger Verlauf ueber das ganze Dokument, nicht einer pro Abschnitt:
+   Lichtquelle oben links, die Seite dunkelt nach unten weg. html bekommt eine
+   eigene Farbe, sonst wandert der Body-Hintergrund auf das Canvas und wird am
+   Wurzelelement statt am Body ausgemessen. Der Radius ist in Pixeln gesetzt,
+   nicht in Prozent — sonst zoege ihn die Seitenlaenge auseinander. */
+html{background:var(--grund-tief)}
+body{
+  /* Der Hero bringt seinen eigenen vollstaendigen Verlauf mit (siehe .hero) und
+     endet unten auf --grund-tief. Der Seitenverlauf startet deshalb ebenfalls
+     dunkel, hebt sich zur Mitte wieder an und faellt zum Fuss zurueck. Dadurch
+     entsteht an der Herokante keine Naht, und die Seite atmet hell-dunkel-hell.
+     Die mittlere Lichtquelle nutzt --grund-hoch, nicht --grund-licht: nichts
+     darf heller werden als der Scheitel im ersten Bild. */
+  background:
+    radial-gradient(1000px 780px at 96% 48%, var(--grund-hoch) 0%, var(--grund-klar) 70%),
+    linear-gradient(180deg,
+      var(--grund-tief) 0%,
+      var(--grund-tief) 21%,
+      var(--grund) 40%,
+      var(--grund) 60%,
+      var(--grund-tief) 100%);
+  color:var(--auf-grund);
+  font-family:var(--sans);font-size:clamp(16px,1.04vw,17.5px);line-height:1.6;
+  font-weight:400;-webkit-font-smoothing:antialiased;
+  /* clip statt hidden: hidden macht den Body zum eigenen Scroll-Container und
+     erzwingt overflow-y:auto auf derselben Achse. clip verhindert waagrechten
+     Ueberlauf, ohne einen Scroll-Container zu erzeugen. */
+  overflow-x:hidden;
+  overflow-x:clip;
+}
+a{color:inherit}
+img{max-width:100%;display:block}
+::selection{background:var(--signal);color:var(--tinte)}
+:focus-visible{outline:2px solid var(--signal);outline-offset:3px;border-radius:2px}
+
+html{scrollbar-color:var(--linie) var(--grund-tief);scrollbar-width:thin}
+::-webkit-scrollbar{width:11px}
+::-webkit-scrollbar-track{background:var(--grund-tief)}
+::-webkit-scrollbar-thumb{background:var(--linie);border:3px solid var(--grund-tief);border-radius:99px}
+::-webkit-scrollbar-thumb:hover{background:var(--linie-hell)}
+
+.spalte{width:var(--spalte);margin-inline:auto}
+
+h1,h2,h3{font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.02}
+h1{font-size:clamp(2.15rem,4.5vw,3.9rem);line-height:1.03}
+h2{font-size:clamp(1.95rem,3.9vw,3.2rem)}
+h3{font-size:clamp(1.2rem,1.85vw,1.5rem);line-height:1.15}
+p{max-width:62ch}
+.still{color:var(--auf-grund-still)}
+.gross{font-size:clamp(1.04rem,1.35vw,1.2rem);max-width:54ch}
+
+/* ---------- Knopf ---------- */
+.knopf{
+  display:inline-flex;align-items:center;gap:11px;
+  background:var(--signal);color:var(--tinte);
+  font-weight:700;font-size:var(--txt-base);letter-spacing:-.005em;
+  padding:16px 26px;border:0;cursor:pointer;text-decoration:none;
+  transition:background .2s ease,transform .2s ease,box-shadow .2s ease;
+}
+.knopf:hover{background:var(--signal-hell);transform:translateY(-2px);box-shadow:0 14px 32px -14px rgba(255,138,76,.7)}
+.knopf:active{transform:translateY(0)}
+.knopf .pfeil{transition:transform .2s ease}
+.knopf:hover .pfeil{transform:translateX(4px)}
+
+/* Der zweite Weg ist die sichtbare Alternative, nicht der zweite Knopf: stille
+   Textfarbe, Haarlinie statt fetter Unterstreichung, Signalfarbe erst im Hover.
+   Die Unterstreichung bleibt aber da — ohne sie ist ein Link neben einem Knopf
+   nur noch an der Position zu erkennen. */
+.zweitweg{
+  display:inline-block;
+  font-size:var(--txt-m);font-weight:500;color:var(--auf-grund-still);
+  text-decoration:underline;
+  text-decoration-color:var(--linie-hell);
+  text-decoration-color:color-mix(in srgb, var(--auf-grund-still) 42%, transparent);
+  text-underline-offset:5px;text-decoration-thickness:1px;
+  /* Vergroessert nur die Tastflaeche auf gut 40px, optisch aendert sich nichts:
+     die Unterstreichung haengt an der Grundlinie, nicht am Kasten. */
+  padding-block:9px;
+  transition:color .2s ease,text-decoration-color .2s ease;
+}
+.zweitweg:hover{color:var(--auf-grund);text-decoration-color:var(--signal)}
+.klarzeile{font-size:var(--txt-s);color:var(--auf-grund-still);max-width:44ch}
+
+/* ---------- Kopf ---------- */
+.kopf{position:absolute;inset:0 0 auto;z-index:10;padding-block:clamp(20px,2.6vw,32px)}
+.kopf .spalte{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:var(--txt-l);letter-spacing:-.02em}
+.logo .zeichen{
+  width:26px;height:26px;background:var(--signal);
+  display:grid;place-items:center;color:var(--tinte);
+  font-family:var(--serif);font-size:var(--txt-m);line-height:1;padding-top:2px;
+}
+.kopf .platz{font-size:var(--txt-xs);letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--auf-grund-still)}
+
+/* ---------- Hero ---------- */
+/* Hoehe gedeckelt: auf einem hohen Bildschirm schwimmt der Inhalt sonst in der
+   Mitte und oben steht eine leere Bahn. Der angeschnittene naechste Abschnitt
+   sagt ausserdem, dass es weitergeht. */
+.hero{
+  position:relative;min-height:min(100svh,820px);display:flex;align-items:center;
+  padding-block:clamp(92px,11vh,124px) clamp(32px,3.6vh,48px);
+  /* Der komplette Verlauf steckt im ersten Bild: Lichtquelle oben links, unten
+     ist er auf --grund-tief angekommen. Genau dort setzt der Seitenverlauf an. */
+  background:radial-gradient(125% 95% at 10% 4%,var(--grund-licht) 0%,var(--grund) 50%,var(--grund-tief) 100%);
+}
+/* Eine Spalte, von oben nach unten: Headline, dann Portraet und Vorspann
+   nebeneinander, dann der Knopf. Dadurch stimmt die Reihenfolge auf jedem
+   Schirm von selbst und braucht keine Umsortierung per CSS. */
+.heroraster{
+  display:flex;flex-direction:column;align-items:flex-start;
+  gap:clamp(20px,2.6vh,30px);
+}
+.heroraster h1{max-width:20ch}
+.heroraster h1 .zweite{color:var(--signal)}
+.handeln{display:flex;flex-wrap:wrap;gap:16px 26px;align-items:center}
+
+/* Portraet und Vorspann: gestapelt auf schmalen Schirmen, ab 820px nebeneinander
+   mit dem Text auf Kreismitte. */
+.vorstellung{
+  display:flex;flex-direction:column;align-items:flex-start;
+  gap:clamp(18px,2.4vw,32px);width:100%;
+}
+@media(min-width:820px){
+  .vorstellung{flex-direction:row;align-items:center}
+}
+
+/* Das Portraet ist eine Signatur, kein Objekt. Der laufende Schriftring nennt den
+   Namen, deshalb steht er nicht noch einmal darunter. */
+.portraet{flex:none}
+
+.rundfassung{
+  --ring:clamp(150px,15vw,190px);
+  position:relative;flex:none;width:var(--ring);height:var(--ring);
+}
+.portraet .ring{
+  position:absolute;inset:0;width:100%;height:100%;
+  animation:drehen 28s linear infinite;
+}
+@keyframes drehen{to{transform:rotate(-360deg)}}
+@media(prefers-reduced-motion:reduce){.portraet .ring{animation:none}}
+/* Tonal statt weiss: der Ring ist Signatur, nicht Ansage. Er darf die Headline
+   nicht anschreien. */
+.portraet .ring text{
+  fill:var(--ringschrift);font-family:var(--sans);font-size:9.4px;
+  font-weight:600;letter-spacing:.15em;
+}
+.portraet .ringlinie{
+  fill:none;stroke:var(--ringschrift);stroke-width:.9;
+  stroke-linecap:round;opacity:.75;
+}
+.portraet .rund{
+  position:absolute;inset:clamp(24px,3vw,34px);border-radius:50%;
+  background:var(--papier-still);
+  display:grid;place-items:center;text-align:center;padding:8px;
+  color:#5c5648;font-size:var(--txt-xs);font-weight:600;line-height:1.45;
+  box-shadow:0 20px 40px -22px rgba(0,0,0,.62);
+}
+
+
+@media(max-width:959px){
+  .hero{min-height:0;padding-bottom:clamp(34px,5vh,52px)}
+}
+
+/* ---------- Abschnitte ---------- */
+section{padding-block:clamp(66px,10vh,128px)}
+.strich{border-top:1px solid var(--linie)}
+/* Auf dem Desktop laeuft der Hero ohne Trennlinie in den naechsten Abschnitt: den
+   Uebergang traegt dort der Farbverlauf, eine Linie wuerde ihn zerschneiden.
+   Unter 960px bleibt sie — dort stehen zwei gestapelte Bloecke, die sie braucht. */
+@media(min-width:960px){
+  .hero + .strich{border-top:0;padding-top:clamp(32px,4vh,58px)}
+}
+.zweispalt{display:grid;grid-template-columns:1fr;gap:clamp(26px,4vw,66px);align-items:start}
+@media(min-width:920px){.zweispalt{grid-template-columns:1.02fr .98fr}}
+
+/* ---------- Was am Ende dasteht ----------
+   Kein Kartenraster: vier Textblöcke, nur durch Haarlinien getrennt. Dieselbe
+   Linienlogik wie bei .zeilen, aber zweispaltig — dadurch liest es sich als
+   Datenblatt und nicht als Leistungskacheln. */
+.saetze{
+  position:relative;
+  margin-top:clamp(28px,4vh,48px);
+  display:grid;grid-template-columns:1fr;
+  border-top:1px solid var(--linie);
+}
+
+/* Der Block, auf dem du bist, wird von seinen beiden Linien eingerahmt: die
+   Linie darueber und die darunter gehen an, nur ueber der Breite dieses Blocks.
+   Dadurch hebt sich der Text hervor, statt dass irgendwo Licht herumliegt.
+   Zwei Ebenen je Linie: eine scharfe 1px-Kante und ein weiches Band als
+   Streulicht, sonst ist eine Haarlinie kaum wahrnehmbar. */
+.saetze > div{position:relative}
+.saetze > div::before,
+.saetze > div::after{
+  content:"";position:absolute;left:0;right:0;height:11px;
+  pointer-events:none;opacity:0;transition:opacity .28s ease;
+  background-repeat:no-repeat;
+  background-image:
+    linear-gradient(var(--signal),var(--signal)),
+    linear-gradient(180deg,transparent,var(--signal-schwach),transparent);
+  background-size:100% 1px, 100% 100%;
+  background-position:0 5px, 0 0;
+}
+.saetze > div::before{top:-6px}
+.saetze > div::after{bottom:-6px}
+
+/* Zeigergeraete: reines CSS, kein Skript. Beruehrungsgeraete bekommen dieselbe
+   Hervorhebung ueber die Scrollposition (siehe Skript). */
+@media(hover:hover){
+  .saetze > div:hover::before,
+  .saetze > div:hover::after{opacity:1}
+}
+.saetze > div.aktiv::before,
+.saetze > div.aktiv::after{opacity:1}
+@media(prefers-reduced-motion:reduce){
+  .saetze > div::before,.saetze > div::after{transition:none}
+}
+.saetze > div{padding-block:clamp(20px,2.6vw,28px);border-bottom:1px solid var(--linie)}
+.saetze h3{margin-bottom:.45em}
+.saetze p{color:var(--auf-grund-still);font-size:var(--txt-m);max-width:46ch}
+@media(min-width:820px){
+  .saetze{grid-template-columns:1fr 1fr}
+  .saetze > div{padding-inline:clamp(24px,3vw,40px)}
+  .saetze > div:nth-child(odd){padding-left:0;border-right:1px solid var(--linie)}
+  .saetze > div:nth-child(even){padding-right:0}
+}
+
+/* ---------- Ablauf ---------- */
+.ablauf{position:relative;margin-top:clamp(34px,5vh,58px)}
+.ablauf .leitung{
+  position:absolute;left:15px;top:12px;bottom:12px;width:2px;
+  background:var(--linie);transform-origin:top;
+}
+.ablauf .leitung i{
+  position:absolute;inset:0;background:var(--signal);
+  transform:scaleY(0);transform-origin:top;
+  transition:transform 1.5s cubic-bezier(.16,1,.3,1);
+}
+.ablauf.laeuft .leitung i{transform:scaleY(1)}
+@media(min-width:820px){.ablauf .leitung{left:19px}}
+
+.schritt{
+  position:relative;display:grid;grid-template-columns:1fr;gap:8px;
+  padding:0 0 clamp(30px,4vh,46px) clamp(46px,5vw,62px);
+}
+.schritt:last-child{padding-bottom:0}
+.schritt .punkt{
+  position:absolute;left:8px;top:4px;width:18px;height:18px;
+  background:var(--grund);border:2px solid var(--linie);border-radius:50%;
+  transition:border-color .4s ease,background .4s ease;
+}
+.ablauf.laeuft .schritt .punkt{border-color:var(--signal)}
+.ablauf.laeuft .schritt:first-child .punkt{background:var(--signal)}
+@media(min-width:820px){
+  .schritt{grid-template-columns:minmax(0,13rem) 1fr;gap:8px 34px;align-items:baseline}
+  .schritt .punkt{left:12px}
+}
+.schritt p{color:var(--auf-grund-still);max-width:56ch}
+
+/* ---------- Angebot ---------- */
+.zeilen{margin-top:clamp(28px,4vh,48px);border-top:1px solid var(--linie)}
+.zeile{
+  display:grid;grid-template-columns:1fr;gap:6px;
+  padding:clamp(20px,2.7vw,30px) 0;border-bottom:1px solid var(--linie);
+  text-decoration:none;transition:padding-left .3s ease,background .3s ease;
+}
+@media(min-width:820px){.zeile{grid-template-columns:minmax(0,15rem) 1fr auto;gap:34px;align-items:baseline}}
+.zeile:hover{padding-left:14px;background:rgba(255,255,255,.035)}
+.zeile h3{transition:color .3s ease}
+.zeile:hover h3{color:var(--signal)}
+.zeile p{font-size:var(--txt-m);color:var(--auf-grund-still);max-width:52ch}
+.zeile .hin{color:var(--signal);font-size:var(--txt-s);font-weight:700;white-space:nowrap;opacity:0;transition:opacity .3s ease}
+.zeile:hover .hin{opacity:1}
+@media(max-width:819px){.zeile .hin{opacity:1}}
+
+/* ---------- Preis: die eine helle Flaeche ---------- */
+.papier{
+  background:var(--papier);color:var(--tinte);
+  padding:clamp(34px,5.4vw,76px);
+}
+.papier h2{color:var(--tinte)}
+.papier p{color:var(--tinte-still)}
+.papier .knopf{background:var(--tinte);color:var(--papier)}
+.papier .knopf:hover{background:#22323f;box-shadow:0 14px 32px -16px rgba(21,32,42,.8)}
+.papier .klarzeile{color:var(--tinte-still)}
+
+/* Die drei Konditionen als eine Zeile statt als eigener Block: Preis,
+   Ansprechpartner, Besitz. Im Hero machten sie einen zweiten Abschnitt auf,
+   hier sind sie die Fussnote zum Preisversprechen. */
+.beweiszeile{
+  grid-column:1 / -1;
+  display:flex;flex-wrap:wrap;gap:8px 14px;
+  margin-top:clamp(24px,3vw,38px);padding-top:clamp(18px,2.2vw,26px);
+  border-top:1px solid var(--papier-still);
+  font-size:var(--txt-s);font-weight:600;color:var(--tinte);max-width:none;
+}
+.beweiszeile span{display:flex;align-items:center;gap:14px}
+/* Als Zeile trennt das Quadrat zwischen den Punkten, es steht deshalb nur ab dem
+   zweiten. Sobald gestapelt wird, ist es ein Aufzaehlungszeichen und muss vor
+   jedem stehen — sonst haette der erste Punkt als einziger keins. */
+.beweiszeile span+span::before{
+  content:"";width:5px;height:5px;background:var(--signal);flex:none;
+}
+@media(max-width:620px){
+  .beweiszeile{flex-direction:column;gap:10px}
+  .beweiszeile span{gap:11px}
+  .beweiszeile span::before{
+    content:"";width:5px;height:5px;background:var(--signal);flex:none;
+  }
+}
+
+.rahmenblock{
+  border:2px solid var(--tinte);padding:clamp(22px,2.8vw,32px);
+  display:flex;flex-direction:column;gap:12px;align-items:flex-start;
+}
+.rahmenblock .zahl{font-family:var(--serif);font-size:clamp(2rem,4.4vw,3.1rem);line-height:1;color:var(--tinte)}
+.platzhalter{border-bottom:2px dotted currentColor;padding-bottom:2px}
+.chip{
+  display:inline-block;font-size:var(--txt-xs);letter-spacing:.13em;text-transform:uppercase;
+  font-weight:800;padding:4px 8px;background:var(--tinte);color:var(--papier);
+}
+
+/* ---------- Fuss ---------- */
+footer{border-top:1px solid var(--linie);padding-block:clamp(40px,5.5vh,64px);font-size:var(--txt-s)}
+footer .spalte{display:flex;flex-wrap:wrap;gap:26px 44px;justify-content:space-between;align-items:flex-start}
+footer nav{display:flex;flex-wrap:wrap;gap:8px 24px;color:var(--auf-grund-still)}
+footer nav a{text-decoration:none}
+footer nav a:hover{color:var(--signal)}
+
+@media(prefers-reduced-motion:no-preference){
+  /* Nur verstecken, wenn das Skript die Klasse gesetzt hat UND der Beobachter
+     laeuft. Ohne diese Bedingung ist der halbe Seiteninhalt weg, sobald die
+     Animation aus irgendeinem Grund nicht anspringt. */
+  html.auftritt-laeuft .auf{opacity:0;transform:translateY(18px);transition:opacity .75s cubic-bezier(.16,1,.3,1),transform .75s cubic-bezier(.16,1,.3,1)}
+  html.auftritt-laeuft .auf.da{opacity:1;transform:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .ablauf .leitung i{transform:scaleY(1);transition:none}
+}
+
+@media(max-width:600px){
+  .kopf .platz{display:none}
+}
+
+/* Auf schmalen Schirmen steht der zweite Weg direkt unter dem Knopf, nicht
+   irgendwo daneben umgebrochen. */
+@media(max-width:700px){
+  .handeln{flex-direction:column;align-items:flex-start;gap:6px}
+}
+
+</style>
+
+<header class="kopf">
+  <div class="spalte">
+    <div class="logo"><span class="zeichen">A</span>AVA</div>
+    <span class="platz">Markenname noch Platzhalter</span>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="spalte heroraster">
+    <h1>Du machst gute Arbeit.<br><span class="zweite">Man müsste sie online auch sehen.</span></h1>
+
+    <div class="vorstellung">
+      <div class="portraet">
+        <div class="rundfassung">
+        <!-- Der Pfad beginnt unten und laeuft im Uhrzeigersinn, dadurch sitzt die
+             Mitte des Pfades oben: startOffset 50% plus text-anchor middle zentriert
+             die Schrift ueber dem Scheitel. Die Haarlinie unten wird im Skript auf
+             die tatsaechlich gemessene Restluecke gesetzt, statt die Schrift mit
+             textLength auf eine Bogenlaenge zu pressen. -->
+        <svg class="ring" viewBox="-4 -4 108 108" aria-hidden="true">
+          <defs>
+            <path id="ringpfad" fill="none" d="M 50,91 A 41,41 0 0,1 50,9 A 41,41 0 0,1 50,91"></path>
+          </defs>
+          <path class="ringlinie"></path>
+          <text>
+            <textPath href="#ringpfad" startOffset="50%" text-anchor="middle">Adrian von Arb · Webdesign Olten</textPath>
+          </text>
+        </svg>
+        <div class="rund">[ Foto folgt ]</div>
+        </div>
+      </div>
+      <p class="gross">Ich baue Websites für Selbstständige und kleine Unternehmen in Olten und der Region, die ihr Handwerk können, aber online nicht stattfinden. Von Hand, ohne Baukasten, zum Festpreis. Shops und Bestellsysteme baue ich keine. Dafür alles andere richtig.</p>
+    </div>
+
+    <div class="handeln">
+      <a class="knopf" href="kostenrechner.html">Was kostet meine Website?<span class="pfeil">→</span></a>
+      <a class="zweitweg" href="#kontakt">Lieber kurz reden?</a>
+    </div>
+
+    <span class="klarzeile">Sechs Fragen, zwei Minuten. Am Ende steht ein Preisrahmen. Kein Konto, keine Telefonnummer nötig.</span>
+  </div>
+</section>
+
+<section class="strich">
+  <div class="spalte zweispalt auf">
+    <h2>Empfohlen wirst du längst.<br><span class="still">Gefunden wirst du nicht.</span></h2>
+    <div>
+      <p class="gross">Deine Kunden kommen über Mundpropaganda, und das funktioniert. Bis jemand deinen Namen hört, ihn abends googelt und nichts findet ausser einem Eintrag von 2014 und drei Bildern von der Konkurrenz.</p>
+      <p style="margin-top:1.2em" class="still">Eine Website ersetzt die Empfehlung nicht. Sie sorgt dafür, dass die Empfehlung nicht ins Leere läuft.</p>
+    </div>
+  </div>
+</section>
+
+<section class="strich">
+  <div class="spalte auf">
+    <h2>Was am Ende dasteht.</h2>
+    <p style="margin-top:1.2em" class="gross">Eine Website, die deinen Betrieb erklärt, statt ihn nur zu dekorieren. Vier Dinge gehören für mich dazu.</p>
+
+    <div class="saetze">
+      <div>
+        <h3>In fünf Sekunden verständlich.</h3>
+        <p>Wer fremd auf deiner Seite landet, weiss sofort, was du machst, für wen und wie man dich erreicht. Mehr muss eine Startseite nicht leisten. Weniger darf sie nicht.</p>
+      </div>
+      <div>
+        <h3>Auf jedem Gerät richtig.</h3>
+        <p>Nicht nur am Desktop schön und danach fürs Handy zusammengedrückt. Die meisten schauen zuerst auf dem Telefon, oft im Stehen, mit einer Hand. Deshalb fange ich dort an.</p>
+      </div>
+      <div>
+        <h3>Individuell gebaut, nicht zusammengeklickt.</h3>
+        <p>Kein Baukasten-Look, keine unnötigen Erweiterungen, kein Template von der Stange. Deine Seite sieht nicht aus wie zwölf andere in deiner Branche.</p>
+      </div>
+      <div>
+        <h3>Sie gehört dir. Punkt.</h3>
+        <p>Domain, Dateien und Inhalte bleiben bei dir. Willst du irgendwann wechseln, nimmst du alles mit. Kein Konto, das dir jemand kündigen kann.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="strich">
+  <div class="spalte auf">
+    <h2>So läuft es ab.</h2>
+    <p style="margin-top:1.2em" class="gross">Vier Schritte, keine Überraschungen dazwischen. Du weisst vor dem ersten Gespräch, woran du bist.</p>
+
+    <div class="ablauf" id="ablauf">
+      <div class="leitung" aria-hidden="true"><i></i></div>
+
+      <div class="schritt">
+        <span class="punkt" aria-hidden="true"></span>
+        <h3>Du rechnest</h3>
+        <p>Sechs Fragen im Kostenrechner. Du siehst sofort, in welchem Rahmen dein Projekt liegt. Dafür brauchst du weder ein Konto noch deine Telefonnummer.</p>
+      </div>
+
+      <div class="schritt">
+        <span class="punkt" aria-hidden="true"></span>
+        <h3>Ich schaue hin</h3>
+        <p>Ich lese deine Angaben und schaue mir deinen Betrieb an. Dann bekommst du ein verbindliches Festpreisangebot. Wenn du weniger brauchst als du angekreuzt hast, sage ich dir das, auch wenn es mich Geld kostet.</p>
+      </div>
+
+      <div class="schritt">
+        <span class="punkt" aria-hidden="true"></span>
+        <h3>Wir bauen</h3>
+        <p>Ein Gespräch über Inhalte, dann baue ich. Du siehst die Seite zwischendurch und sagst, was nicht stimmt. Kein Sitzungsmarathon, keine Freigabeschlaufen über drei Wochen.</p>
+      </div>
+
+      <div class="schritt">
+        <span class="punkt" aria-hidden="true"></span>
+        <h3>Es geht live</h3>
+        <p>Domain und Hosting sind eingerichtet, die Seite läuft. Änderungen später sind kein Abo, sondern eine Rechnung. Und nur dann, wenn du etwas willst.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="strich">
+  <div class="spalte auf">
+    <h2>Nicht jede Website braucht alles.<br><span class="still">Deine braucht das Richtige.</span></h2>
+    <div class="zeilen">
+      <a class="zeile" href="kostenrechner.html">
+        <h3>Eine Seite</h3>
+        <p>Was du machst, für wen, wie man dich erreicht. Auf einer Länge, ohne Umwege. Für die meisten Betriebe reicht genau das.</p>
+        <span class="hin">Einschätzen →</span>
+      </a>
+      <a class="zeile" href="kostenrechner.html">
+        <h3>Firmenwebsite</h3>
+        <p>Drei bis fünf Seiten, wenn Leistungen, Team oder Standorte wirklich getrennt gehören und nicht nur, weil ein Menü sonst leer aussieht.</p>
+        <span class="hin">Einschätzen →</span>
+      </a>
+      <a class="zeile" href="kostenrechner.html">
+        <h3>Bestehendes erneuern</h3>
+        <p>Deine Seite steht, sieht aber aus wie 2016 und lädt wie 2011. Ich schaue zuerst hin und sage dir dann ehrlich: aufhübschen oder neu bauen.</p>
+        <span class="hin">Einschätzen →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="preis" style="padding-bottom:0">
+  <div class="spalte auf">
+    <div class="papier zweispalt">
+      <div>
+        <h2>Kein „ab“.<br>Keine Überraschung.</h2>
+        <p style="margin-top:1.2em" class="gross">Ein Startpreis ist ein Köder. Er steht gross auf der Seite und hat mit dem, was am Ende auf der Rechnung steht, wenig zu tun.</p>
+        <p style="margin-top:1em">Bei mir umgekehrt: du beantwortest sechs Fragen, siehst sofort einen Rahmen, und danach bekommst du einen Festpreis, der hält. Unter tausend Franken gibt es bei mir nichts — dafür auch keine monatliche Baukastenrechnung, die nie aufhört.</p>
+      </div>
+      <div class="rahmenblock">
+        <span style="font-size:var(--txt-xs);letter-spacing:.16em;text-transform:uppercase;font-weight:800;color:var(--tinte-still)">Dein Rahmen</span>
+        <span class="zahl platzhalter">CHF ———</span>
+        <span class="chip">Preise noch nicht kalibriert</span>
+        <a class="knopf" href="kostenrechner.html" style="margin-top:6px">Rechner starten<span class="pfeil">→</span></a>
+        <span class="klarzeile">Unverbindlich. Du entscheidest danach, ob du dich meldest.</span>
+      </div>
+      <p class="beweiszeile">
+        <span>Festpreis statt „ab“</span>
+        <span>Direkt mit dem, der sie baut</span>
+        <span>Die Seite gehört dir</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="strich" id="kontakt" style="margin-top:0">
+  <div class="spalte zweispalt auf">
+    <h2>Wer das macht.</h2>
+    <div>
+      <p class="gross">Ich bin Adrian. Seit Jahren filme ich Hochzeiten und habe dabei gelernt, worauf es ankommt: zuhören, das Wesentliche finden, den Rest weglassen. Websites baue ich nach demselben Prinzip.</p>
+      <p style="margin-top:1.1em">Du redest mit mir, nicht mit einem Projektbüro. Es gibt kein Angebot über vierzehn Seiten und keine Runde, in der vier Leute mitreden, die deinen Betrieb nie gesehen haben.</p>
+      <p style="margin-top:1.1em" class="still">Shops und Bestellsysteme baue ich nicht. Ich sage dir das lieber jetzt als in Woche sechs.</p>
+      <div class="handeln" style="margin-top:1.8em">
+        <a class="knopf" href="kostenrechner.html">Kosten berechnen<span class="pfeil">→</span></a>
+        <a class="zweitweg" href="#">Schreib mir direkt</a>
+      </div>
+      <span class="klarzeile" style="display:block;margin-top:12px">E-Mail-Adresse folgt, sobald die Marke steht.</span>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="spalte">
+    <div class="logo"><span class="zeichen">A</span>AVA</div>
+    <nav>
+      <a href="kostenrechner.html">Kostenrechner</a><a href="#kontakt">Kontakt</a><a href="#">Impressum</a><a href="#">Datenschutz</a>
+    </nav>
+    <span class="still">© 2026 · Webdesign aus Olten und Region · von Hand gebaut, ohne Baukastensystem</span>
+  </div>
+</footer>
+
+<script>
+// Ein einziger inszenierter Moment: die Leitung des Ablaufs zeichnet sich,
+// wenn der Abschnitt ins Bild kommt. Alles andere bewegt sich nur auf Bedienung.
+const reduziert = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const ablauf = document.getElementById('ablauf');
+if (ablauf) {
+  if (reduziert) {
+    ablauf.classList.add('laeuft');
+  } else {
+    const leitungBeobachter = new IntersectionObserver((eintraege) => {
+      eintraege.forEach(e => {
+        if (!e.isIntersecting) return;
+        ablauf.classList.add('laeuft');
+        leitungBeobachter.unobserve(e.target);
+      });
+    }, { threshold: .3 });
+    leitungBeobachter.observe(ablauf);
+    setTimeout(() => ablauf.classList.add('laeuft'), 2000);
+  }
+}
+
+// Auftritt der Abschnitte. Grundregel: der Inhalt ist sichtbar, die Animation ist
+// die Zugabe — nie umgekehrt. Versteckt wird erst, wenn das Skript laeuft, und
+// eine Sicherung deckt den Fall ab, dass der Beobachter trotzdem nie feuert
+// (gedrosselte Tabs, Vorschaufenster, aeltere Browser).
+const aufElemente = [...document.querySelectorAll('.auf')];
+const zeigen = el => el.classList.add('da');
+
+if (reduziert || !('IntersectionObserver' in window)) {
+  aufElemente.forEach(zeigen);
+} else {
+  document.documentElement.classList.add('auftritt-laeuft');
+  const auftritt = new IntersectionObserver((eintraege) => {
+    eintraege.forEach(e => {
+      if (!e.isIntersecting) return;
+      zeigen(e.target);
+      auftritt.unobserve(e.target);
+    });
+  }, { threshold: .12 });
+  aufElemente.forEach(el => auftritt.observe(el));
+
+  // Sicherung: nach zwei Sekunden ist alles sichtbar, egal was der Beobachter tut.
+  setTimeout(() => aufElemente.forEach(zeigen), 2000);
+}
+
+// Die Haarlinie schliesst genau die Luecke, die die Schrift unten frei laesst.
+// Gemessen statt geschaetzt, sonst verschiebt sich alles sobald Text, Schriftgrad
+// oder Laufweite sich aendern.
+function ringLinieSetzen(){
+  const text = document.querySelector('.ring text');
+  const linie = document.querySelector('.ringlinie');
+  if (!text || !linie) return;
+
+  const r = 41, umfang = 2 * Math.PI * r, luft = 7; // luft = Grad Abstand je Seite
+  const luecke = Math.max(0, umfang - text.getComputedTextLength());
+  const grad = (luecke / umfang) * 360 - 2 * luft;
+
+  if (grad < 8) { linie.removeAttribute('d'); return; }
+
+  // Luecke sitzt unten, weil die Schrift oben zentriert ist.
+  const punkt = g => [
+    (50 + r * Math.sin(g * Math.PI / 180)).toFixed(2),
+    (50 - r * Math.cos(g * Math.PI / 180)).toFixed(2)
+  ];
+  const [x1, y1] = punkt(180 - grad / 2);
+  const [x2, y2] = punkt(180 + grad / 2);
+  linie.setAttribute('d', `M ${x1},${y1} A ${r},${r} 0 0,1 ${x2},${y2}`);
+}
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(ringLinieSetzen);
+else addEventListener('load', ringLinieSetzen);
+
+// Die Hervorhebung per Zeiger macht CSS allein. Hier geht es nur um Geraete
+// ohne Zeiger: dort uebernimmt die Scrollposition. Der Block, der gerade das
+// mittlere Zehntel des Bildschirms kreuzt, ist der aktive — und die Klasse geht
+// beim Herausscrollen wieder weg, in beide Richtungen, beliebig oft.
+const saetzeBloecke = document.querySelectorAll('.saetze > div');
+if (saetzeBloecke.length && !matchMedia('(hover: hover)').matches
+    && 'IntersectionObserver' in window) {
+  const leseband = new IntersectionObserver((eintraege) => {
+    eintraege.forEach(e => e.target.classList.toggle('aktiv', e.isIntersecting));
+  }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+  saetzeBloecke.forEach(b => leseband.observe(b));
+}
+</script>

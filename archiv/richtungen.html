@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Drei Stilrichtungen — Archiv</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300..800&display=swap" rel="stylesheet">
+<style>
+:root{--grund:#e8e6e1;--blatt:#fff;--tinte:#191917;--still:#6a6862;--linie:#c9c6bf}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--grund);color:var(--tinte);font:400 16px/1.6 "Public Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.spalte{width:min(1360px,calc(100% - 2*clamp(20px,5vw,56px)));margin-inline:auto;padding-block:clamp(36px,6vh,64px)}
+h1{font-size:clamp(1.9rem,4vw,2.9rem);letter-spacing:-.035em;line-height:1.02;font-weight:800}
+.sub{color:var(--still);max-width:66ch;margin-top:14px}
+.gitter{display:grid;grid-template-columns:1fr;gap:clamp(18px,2.4vw,30px);margin-top:clamp(30px,5vh,50px)}
+@media(min-width:900px){.gitter{grid-template-columns:repeat(3,1fr)}}
+.karte{background:var(--blatt);border:1px solid var(--linie);display:flex;flex-direction:column;transition:border-color .25s,transform .25s,box-shadow .25s}
+.karte:hover{border-color:var(--tinte);transform:translateY(-3px);box-shadow:0 18px 40px -26px rgba(0,0,0,.55)}
+.rahmen{position:relative;aspect-ratio:4/3;overflow:hidden;border-bottom:1px solid var(--linie);background:#fff}
+.rahmen iframe{position:absolute;top:0;left:0;width:1440px;height:1080px;border:0;transform-origin:0 0;pointer-events:none}
+.kopf{padding:18px 20px 20px;display:flex;flex-direction:column;gap:9px}
+.kopf .z{display:flex;align-items:baseline;justify-content:space-between;gap:14px}
+.kopf b{font-size:1.08rem;letter-spacing:-.02em}
+.kopf .nr{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--still);font-weight:700}
+.kopf p{font-size:.92rem;color:var(--still)}
+.chips{display:flex;gap:5px;margin-top:2px}
+.chips i{width:22px;height:12px;display:block;border:1px solid rgba(0,0,0,.14)}
+.oeffnen{margin-top:6px;font-weight:700;font-size:.9rem}
+.hinweis{margin-top:clamp(34px,5vh,56px);border-top:1px solid var(--linie);padding-top:22px;color:var(--still);font-size:.92rem;max-width:74ch}
+.hinweis b{color:var(--tinte)}
+</style>
+
+<div class="spalte">
+  <h1>Drei Stilrichtungen</h1>
+  <p class="sub">Echte Seiten, keine Moodboards — jede Richtung ist eine eigene Welt mit eigenem Hero, eigenem Beweis-Abschnitt und eigener Preis-Haltung. Klick öffnet die Richtung in voller Grösse. Inhalt und Struktur sind bewusst überall gleich, damit du die Gestaltung vergleichst und nicht die Texte.</p>
+
+  <div class="gitter">
+    <a class="karte" href="richtung-1-schaufenster.html">
+      <div class="rahmen"><iframe src="richtung-1-schaufenster.html" title="Richtung 1" scrolling="no" loading="lazy"></iframe></div>
+      <div class="kopf">
+        <div class="z"><b>Schaufenster</b><span class="nr">01</span></div>
+        <div class="chips"><i style="background:#101822"></i><i style="background:#f7f1e4"></i><i style="background:#f5a83c"></i></div>
+        <p>Fassade bei Nacht. Ein Fenster leuchtet und trägt den Satz. Der Kippschalter oben rechts dreht das Licht aus — und zeigt, wie der Betrieb online gerade dasteht.</p>
+        <span class="oeffnen">Öffnen →</span>
+      </div>
+    </a>
+
+    <a class="karte" href="richtung-2-messinstrument.html">
+      <div class="rahmen"><iframe src="richtung-2-messinstrument.html" title="Richtung 2" scrolling="no" loading="lazy"></iframe></div>
+      <div class="kopf">
+        <div class="z"><b>Messinstrument</b><span class="nr">02</span></div>
+        <div class="chips"><i style="background:#e4e4e0"></i><i style="background:#15171a"></i><i style="background:#cf3016"></i></div>
+        <p>Gebürsteter Stahl, gravierte Skala, eine rote Messmarke. Der Kostenrechner steht nicht am Ende, sondern im ersten Bild: Regler schieben, ablesen, anfragen.</p>
+        <span class="oeffnen">Öffnen →</span>
+      </div>
+    </a>
+
+    <a class="karte" href="richtung-3-musterfaecher.html">
+      <div class="rahmen"><iframe src="richtung-3-musterfaecher.html" title="Richtung 3" scrolling="no" loading="lazy"></iframe></div>
+      <div class="kopf">
+        <div class="z"><b>Musterfächer</b><span class="nr">03</span></div>
+        <div class="chips"><i style="background:#b4432c"></i><i style="background:#24405e"></i><i style="background:#d9a128"></i></div>
+        <p>Sechs volle Farbblätter wie im Musterkoffer des Malers. Die Reiter am rechten Rand sind die Navigation. Wer wenig Referenzen hat, zeigt Muster statt Versprechen.</p>
+        <span class="oeffnen">Öffnen →</span>
+      </div>
+    </a>
+  </div>
+
+  <p class="hinweis">
+    <b>Was noch Platzhalter ist:</b> Markenname (überall „AVA“), Logo, Portraitfoto, alle Preiszahlen, Kontakt / Impressum / Datenschutz. Preiswerte sind sichtbar als Platzhalter markiert — echte Zahlen kommen erst rein, wenn kalibriert.
+    <br><br>
+    <b>Was echt ist:</b> die vier genannten Projekte. Vor dem Livegang die Freigabe von Praxis, Cottage und Garden Park einholen.
+  </p>
+</div>
+
+<script>
+// Vorschauen massstabsgetreu: die iframes rendern in 1440 Breite und werden auf
+// die Kartenbreite heruntergerechnet.
+function passen(){
+  document.querySelectorAll('.rahmen').forEach(function(r){
+    var f = r.querySelector('iframe');
+    var s = r.clientWidth / 1440;
+    f.style.transform = 'scale(' + s + ')';
+    f.style.height = (r.clientHeight / s) + 'px';
+  });
+}
+passen();
+addEventListener('resize', passen);
+addEventListener('load', passen);
+</script>
