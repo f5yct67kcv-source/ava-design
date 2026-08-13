@@ -340,6 +340,24 @@ section{padding-block:clamp(66px,10vh,128px)}
 }
 .ablauf.laeuft .schritt .punkt{border-color:var(--signal)}
 .ablauf.laeuft .schritt:first-child .punkt{background:var(--signal)}
+
+/* Die Knoten atmen. Der Kern des Halos bleibt durchsichtig, damit der Punkt
+   selbst scharf bleibt und nur sein Rand mitglüht. Alle vier bekommen die
+   Animation im selben Moment, also laufen sie ohne Versatz im Gleichtakt. */
+.schritt .punkt::after{
+  content:"";position:absolute;left:50%;top:50%;
+  width:46px;height:46px;margin:-23px 0 0 -23px;
+  border-radius:50%;pointer-events:none;opacity:0;
+  background:radial-gradient(circle closest-side,
+    rgba(255,138,76,0) 50%,
+    rgba(255,138,76,.30) 68%,
+    rgba(255,138,76,0) 100%);
+}
+.ablauf.laeuft .schritt .punkt::after{animation:knotenpuls 3.4s ease-in-out infinite}
+@keyframes knotenpuls{
+  0%,100%{opacity:.25;transform:scale(.85)}
+  50%    {opacity:1;transform:scale(1.08)}
+}
 @media(min-width:820px){
   .schritt{grid-template-columns:minmax(0,13rem) 1fr;gap:8px 34px;align-items:baseline}
   .schritt .punkt{left:12px}
@@ -425,6 +443,7 @@ footer nav a:hover{color:var(--signal)}
 }
 @media(prefers-reduced-motion:reduce){
   .ablauf .leitung i{transform:scaleY(1);transition:none}
+  .ablauf.laeuft .schritt .punkt::after{animation:none;opacity:.5;transform:scale(1)}
 }
 
 @media(max-width:600px){
