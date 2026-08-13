@@ -259,29 +259,32 @@ section{padding-block:clamp(66px,10vh,128px)}
    Dadurch hebt sich der Text hervor, statt dass irgendwo Licht herumliegt.
    Zwei Ebenen je Linie: eine scharfe 1px-Kante und ein weiches Band als
    Streulicht, sonst ist eine Haarlinie kaum wahrnehmbar. */
-.saetze > div{position:relative}
+.saetze > div{position:relative;--zellpad-links:0px}
 .saetze > div::before,
 .saetze > div::after{
-  content:"";position:absolute;left:0;right:0;height:11px;
-  pointer-events:none;opacity:0;transition:opacity .28s ease;
+  content:"";position:absolute;
+  left:var(--zellpad-links);width:clamp(34px,9%,60px);height:9px;
+  pointer-events:none;opacity:0;
+  transform:scaleX(.3);transform-origin:left;
+  transition:opacity .22s ease, transform .38s cubic-bezier(.16,1,.3,1);
   background-repeat:no-repeat;
   background-image:
     linear-gradient(var(--signal),var(--signal)),
     linear-gradient(180deg,transparent,var(--signal-schwach),transparent);
   background-size:100% 1px, 100% 100%;
-  background-position:0 5px, 0 0;
+  background-position:0 4px, 0 0;
 }
-.saetze > div::before{top:-6px}
-.saetze > div::after{bottom:-6px}
+.saetze > div::before{top:-5px}
+.saetze > div::after{bottom:-5px}
 
 /* Zeigergeraete: reines CSS, kein Skript. Beruehrungsgeraete bekommen dieselbe
    Hervorhebung ueber die Scrollposition (siehe Skript). */
 @media(hover:hover){
   .saetze > div:hover::before,
-  .saetze > div:hover::after{opacity:1}
+  .saetze > div:hover::after{opacity:1;transform:scaleX(1)}
 }
 .saetze > div.aktiv::before,
-.saetze > div.aktiv::after{opacity:1}
+.saetze > div.aktiv::after{opacity:1;transform:scaleX(1)}
 @media(prefers-reduced-motion:reduce){
   .saetze > div::before,.saetze > div::after{transition:none}
 }
@@ -290,8 +293,10 @@ section{padding-block:clamp(66px,10vh,128px)}
 .saetze p{color:var(--auf-grund-still);font-size:var(--txt-m);max-width:46ch}
 @media(min-width:820px){
   .saetze{grid-template-columns:1fr 1fr}
-  .saetze > div{padding-inline:clamp(24px,3vw,40px)}
-  .saetze > div:nth-child(odd){padding-left:0;border-right:1px solid var(--linie)}
+  /* --zellpad-links haelt die Marke buendig zum Textanfang. In der rechten
+     Spalte beginnt der Text erst nach dem Innenabstand, in der linken bei null. */
+  .saetze > div{padding-inline:clamp(24px,3vw,40px);--zellpad-links:clamp(24px,3vw,40px)}
+  .saetze > div:nth-child(odd){padding-left:0;border-right:1px solid var(--linie);--zellpad-links:0px}
   .saetze > div:nth-child(even){padding-right:0}
 }
 
@@ -685,12 +690,33 @@ else addEventListener('load', ringLinieSetzen);
 // ohne Zeiger: dort uebernimmt die Scrollposition. Der Block, der gerade das
 // mittlere Zehntel des Bildschirms kreuzt, ist der aktive — und die Klasse geht
 // beim Herausscrollen wieder weg, in beide Richtungen, beliebig oft.
-const saetzeBloecke = document.querySelectorAll('.saetze > div');
-if (saetzeBloecke.length && !matchMedia('(hover: hover)').matches
-    && 'IntersectionObserver' in window) {
-  const leseband = new IntersectionObserver((eintraege) => {
-    eintraege.forEach(e => e.target.classList.toggle('aktiv', e.isIntersecting));
-  }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+const saetzeBloecke = [...document.querySelectorAll('.saetze > div')];
+if (saetzeBloecke.length && 'IntersectionObserver' in window) {
+  const zeiger = matchMedia('(hover: hover)');
+
+  // Genau ein Block ist aktiv: der, dessen Mitte der Bildschirmmitte am
+  // naechsten liegt. Alle zu nehmen, die das Band schneiden, waere im
+  // zweispaltigen Raster falsch — dort liegen zwei Zellen auf gleicher Hoehe.
+  function aktivenSetzen(){
+    if (zeiger.matches) {                       // Zeigergeraet: der Hover regelt es
+      saetzeBloecke.forEach(b => b.classList.remove('aktiv'));
+      return;
+    }
+    const mitte = innerHeight / 2;
+    let bester = null, kleinsterAbstand = Infinity;
+    saetzeBloecke.forEach(b => {
+      const r = b.getBoundingClientRect();
+      const abstand = Math.abs(r.top + r.height / 2 - mitte);
+      if (abstand < kleinsterAbstand) { kleinsterAbstand = abstand; bester = b; }
+    });
+    const naheGenug = kleinsterAbstand < innerHeight * 0.3;
+    saetzeBloecke.forEach(b => b.classList.toggle('aktiv', naheGenug && b === bester));
+  }
+
+  const leseband = new IntersectionObserver(aktivenSetzen,
+    { rootMargin: '-35% 0px -35% 0px', threshold: 0 });
   saetzeBloecke.forEach(b => leseband.observe(b));
+  // Faellt der Zeiger weg oder kommt dazu, wird sofort umgeschaltet.
+  zeiger.addEventListener('change', aktivenSetzen);
 }
 </script>
