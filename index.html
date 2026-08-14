@@ -262,7 +262,19 @@ p{max-width:62ch}
   display:grid;place-items:center;text-align:center;padding:8px;
   color:#5c5648;font-size:var(--txt-xs);font-weight:600;line-height:1.45;
   box-shadow:0 20px 40px -22px rgba(0,0,0,.62);
+  /* Vorbereitet fuer das echte Foto: sobald ein img drinsteht, beschneidet es
+     der Kreis von selbst. Der Wechsel ist dann eine Zeile im Markup, es muss
+     nichts am Stil geaendert werden. */
+  overflow:hidden;
 }
+/* Das Foto wird absolut gesetzt statt im Raster ausgerichtet. Ein Bild laesst
+   sich nicht dehnen — es hat ein eigenes Seitenverhaeltnis, und weder
+   place-self:stretch noch height:100% bringen es dazu, den Kreis zu fuellen.
+   Mit inset:0 bekommt es eine feste Flaeche, object-fit:cover beschneidet den
+   Ueberschuss. Der Innenabstand faellt weg, sobald ein Bild da ist — er ist nur
+   fuer den Schriftplatzhalter da. */
+.portraet .rund:has(img){padding:0}
+.portraet .rund img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 
 
 @media(max-width:959px){

@@ -21,6 +21,24 @@ von Google Fonts.
   weist ein Hinweis neben der Zahl darauf hin.
 - **Foto** fehlt. Quadratisch, Tageslicht, Blick in die Kamera. Kommt in den
   runden Platzhalter im ersten Bild.
+
+  Der Platz ist vorbereitet. Foto als `foto.jpg` ins Projekt legen, dann in
+  `index.html` diese Zeile
+
+  ```html
+  <div class="rund">[ Foto folgt ]</div>
+  ```
+
+  ersetzen durch
+
+  ```html
+  <div class="rund"><img src="foto.jpg" alt="Adrian von Arb"></div>
+  ```
+
+  Mehr braucht es nicht: der Kreis beschneidet das Bild selbst, hochkant wie
+  quer wie quadratisch — alle drei Fälle geprüft. Mindestens 400 Pixel
+  Kantenlänge, sonst wird es unscharf: der Kreis wird bis 190 Pixel breit, und
+  auf Bildschirmen mit doppelter Pixeldichte sind das 380 echte Bildpunkte.
 - **Markenname** ist provisorisch AVA.
 - **Kontaktweg** fehlt: keine E-Mail-Adresse, keine Telefonnummer hinterlegt.
 - **Impressum und Datenschutz** sind leere Links. Die Datenschutzerklärung ist
