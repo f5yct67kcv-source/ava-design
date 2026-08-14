@@ -285,6 +285,17 @@ section{padding-block:clamp(50px,7.5vh,80px)}
 @media(min-width:960px){
   .hero + section{padding-top:clamp(32px,4vh,58px)}
 }
+/* Auf dem Handy faellt der Abstand kleiner aus als am Schirm, obwohl das
+   Verhaeltnis zum Zeilenabstand dasselbe waere. Grund ist die Spaltenbreite:
+   331 Pixel auf dem Handy gegen 1200 am Schirm. Derselbe Abstand ist neben einer
+   schmalen Spalte proportional viel groesser und liest sich als Leerlauf. Dazu
+   scrollt man am Telefon linear durch — die Grenze muss weniger laut sein als
+   dort, wo das Auge ueber eine breite Flaeche wandert.
+   96 statt 122 Pixel zwischen zwei Abschnitten, gegen 41 Pixel groessten Abstand
+   im Inneren also gut das Doppelte. */
+@media(max-width:819px){
+  section{padding-block:clamp(44px,5.9vh,58px)}
+}
 .zweispalt{display:grid;grid-template-columns:1fr;gap:clamp(26px,4vw,66px);align-items:start}
 @media(min-width:920px){.zweispalt{grid-template-columns:1.02fr .98fr}}
 
