@@ -119,8 +119,15 @@ html{scrollbar-color:var(--linie) var(--grund-tief);scrollbar-width:thin}
    lag bei 1.8 und damit fast auf dem Wert einer Grotesk, Playfair 900 liegt bei
    8.3. Nicht 900 wird h3: dort waeren die Haarstriche bei 24 Pixel Schriftgroesse
    unter einem halben Pixel und wuerden ausfransen. */
+/* text-wrap:balance gleicht die Zeilenlängen einer Überschrift aus, statt die
+   letzte Zeile als Rest übrig zu lassen. Ohne das brach die Hauptzeile in 684
+   und 168 Pixel — „sehen." hing allein unten. Mit Ausgleich sind es 388 und 465.
+   Das gilt bei jeder Fensterbreite, ein fest gesetzter Umbruch dagegen stimmt
+   nur bei genau einer. Nur für Überschriften, nicht für Fliesstext: dort kostet
+   der Ausgleich Rechenzeit ohne Gewinn. */
 h1,h2{font-family:var(--serif);font-weight:900;letter-spacing:-.022em;line-height:1.06}
 h3{font-family:var(--serif);font-weight:700;letter-spacing:-.015em;line-height:1.15}
+h1,h2,h3{text-wrap:balance}
 h1{font-size:clamp(2.15rem,4.5vw,3.9rem)}
 h2{font-size:clamp(1.95rem,3.9vw,3.2rem)}
 /* Die zweite Zeile ist die Pointe. Sie traegt nicht durch Fettung — sie ist
@@ -128,6 +135,7 @@ h2{font-size:clamp(1.95rem,3.9vw,3.2rem)}
    die engere Laufweite und die volle Farbe. Groesse nachgemessen: angeglichen
    wird die x-Hoehe, denn die bestimmt, wie gross eine Zeile wirkt. */
 h1 .zweite,h2 .zweite{
+  display:block;
   font-family:var(--sans);font-weight:600;
   font-size:.98em;letter-spacing:-.04em;
 }
@@ -492,7 +500,7 @@ footer nav a:hover{color:var(--signal)}
 <main>
 <section class="hero">
   <div class="spalte heroraster">
-    <h1>Du machst gute Arbeit.<br><span class="zweite">Man müsste sie online auch sehen.</span></h1>
+    <h1>Du machst gute Arbeit.<span class="zweite">Man müsste sie online auch sehen.</span></h1>
 
     <div class="vorstellung">
       <div class="portraet">
@@ -528,7 +536,7 @@ footer nav a:hover{color:var(--signal)}
 
 <section class="strich">
   <div class="spalte zweispalt auf">
-    <h2>Empfohlen wirst du längst.<br><span class="zweite">Gefunden wirst du nicht.</span></h2>
+    <h2>Empfohlen wirst du längst.<span class="zweite">Gefunden wirst du nicht.</span></h2>
     <div>
       <p class="gross">Deine Kunden kommen über Mundpropaganda, und das funktioniert. Bis jemand deinen Namen hört, ihn abends googelt und nichts findet ausser einem Eintrag von 2014 und drei Bildern von der Konkurrenz.</p>
       <p style="margin-top:1.2em" class="still">Eine Website ersetzt die Empfehlung nicht. Sie sorgt dafür, dass die Empfehlung nicht ins Leere läuft.</p>
@@ -599,7 +607,7 @@ footer nav a:hover{color:var(--signal)}
 
 <section class="strich">
   <div class="spalte auf">
-    <h2>Nicht jede Website braucht alles.<br><span class="zweite">Deine braucht das Richtige.</span></h2>
+    <h2>Nicht jede Website braucht alles.<span class="zweite">Deine braucht das Richtige.</span></h2>
     <div class="zeilen">
       <a class="zeile" href="kostenrechner.html">
         <h3>Eine Seite</h3>
@@ -624,7 +632,7 @@ footer nav a:hover{color:var(--signal)}
   <div class="spalte auf">
     <div class="papier zweispalt">
       <div>
-        <h2>Kein „ab“.<br><span class="zweite">Keine Überraschung.</span></h2>
+        <h2>Kein „ab“.<span class="zweite">Keine Überraschung.</span></h2>
         <p style="margin-top:1.2em" class="gross">Ein Startpreis ist ein Köder. Er steht gross auf der Seite und hat mit dem, was am Ende auf der Rechnung steht, wenig zu tun.</p>
         <p style="margin-top:1em">Bei mir umgekehrt: du beantwortest sechs Fragen, siehst sofort einen Rahmen, und danach bekommst du einen Festpreis, der hält. Unter tausend Franken gibt es bei mir nichts — dafür auch keine monatliche Baukastenrechnung, die nie aufhört.</p>
       </div>
