@@ -270,29 +270,40 @@ p{max-width:62ch}
 }
 
 /* ---------- Abschnitte ---------- */
-section{padding-block:clamp(66px,10vh,128px)}
-.strich{border-top:1px solid var(--linie)}
-/* Auf dem Desktop laeuft der Hero ohne Trennlinie in den naechsten Abschnitt: den
-   Uebergang traegt dort der Farbverlauf, eine Linie wuerde ihn zerschneiden.
-   Unter 960px bleibt sie — dort stehen zwei gestapelte Bloecke, die sie braucht. */
+/* Keine Trennlinien zwischen den Abschnitten. Sie laufen von Kante zu Kante und
+   legen ein Raster ueber die Seite — daran erkennt man ein Theme von der Stange.
+   Getrennt wird ueber Abstand, und den grossen Ueberschriften ist der Anfang
+   eines Abschnitts ohnehin anzusehen.
+   Die Polsterung ist am groessten Abstand innerhalb eines Abschnitts bemessen:
+   der liegt bei 45 Pixeln, zwischen zwei Abschnitten stehen damit rund das
+   Dreifache. Vier- bis fuenffach las sich als Loch statt als Absatz. Eine
+   einzige Regel fuer alle Breiten, weil das Verhaeltnis auf dem Handy und am
+   Schirm dasselbe sein soll. */
+section{padding-block:clamp(50px,7.5vh,80px)}
+/* Der Hero traegt seinen Uebergang selbst im Farbverlauf, der naechste Abschnitt
+   darf deshalb enger anschliessen. */
 @media(min-width:960px){
-  .hero + .strich{border-top:0;padding-top:clamp(32px,4vh,58px)}
-}
-/* Auf schmalen Schirmen fallen die Trennlinien weg. Sie laufen dort von Kante zu
-   Kante und legen damit ein sichtbares Raster ueber die Seite — das ist der
-   Baukasten-Eindruck. Getrennt wird stattdessen durch Abstand: die grossen
-   Ueberschriften markieren den Anfang eines Abschnitts ohnehin deutlich genug.
-   Die Polsterung ist auf den groessten Abstand innerhalb eines Abschnitts
-   bezogen: der liegt bei 41 Pixeln, zwischen zwei Abschnitten stehen mit
-   60 Pixeln je Seite rund 120 — also knapp das Dreifache. Das reicht, damit die
-   Grenze eindeutig bleibt. Vorher war es das Viereinhalbfache, und das las sich
-   als Loch statt als Absatz. */
-@media(max-width:819px){
-  .strich{border-top:0}
-  section{padding-block:clamp(50px,7.4vh,72px)}
+  .hero + section{padding-top:clamp(32px,4vh,58px)}
 }
 .zweispalt{display:grid;grid-template-columns:1fr;gap:clamp(26px,4vw,66px);align-items:start}
 @media(min-width:920px){.zweispalt{grid-template-columns:1.02fr .98fr}}
+
+/* Ein Abschnitt bricht die Reihe. Alle anderen Ueberschriften beginnen an
+   derselben linken Kante bei 120 Pixeln — das ist ruhig, aber ueber sieben
+   Abschnitte auch eintoenig. Zentriert wird ausgerechnet dieser, weil darunter
+   ein symmetrisches Viererraster liegt: die Ueberschrift steht damit auf der
+   Mittelachse ihres eigenen Inhalts. Bei der Zeitleiste, die links am
+   Knotenstrang haengt, oder bei den zweispaltigen Abschnitten haette eine
+   zentrierte Ueberschrift keinen Bezug und wuerde nur verrutscht aussehen.
+   Nur ab 820px: einspaltig auf dem Handy gibt es keine Reihe zu brechen, und
+   linksbuendig liest sich dort besser. */
+@media(min-width:820px){
+  .mitte{text-align:center}
+  .mitte .gross{margin-inline:auto}
+  /* Das Raster darunter bleibt linksbuendig — zentrierter Fliesstext in vier
+     Zellen waere nur schwerer zu lesen. */
+  .mitte .saetze{text-align:left}
+}
 
 /* ---------- Was am Ende dasteht ----------
    Kein Kartenraster: vier Textblöcke, nur durch Haarlinien getrennt. Dieselbe
@@ -563,7 +574,7 @@ footer nav a:hover{color:var(--signal)}
   </div>
 </section>
 
-<section class="strich">
+<section>
   <div class="spalte zweispalt auf">
     <h2>Empfohlen wirst du längst.<span class="zweite">Gefunden wirst du nicht.</span></h2>
     <div>
@@ -573,8 +584,8 @@ footer nav a:hover{color:var(--signal)}
   </div>
 </section>
 
-<section class="strich">
-  <div class="spalte auf">
+<section>
+  <div class="spalte auf mitte">
     <h2>Was am Ende dasteht.</h2>
     <p style="margin-top:1.2em" class="gross">Eine Website, die deinen Betrieb erklärt, statt ihn nur zu dekorieren. Vier Dinge gehören für mich dazu.</p>
 
@@ -599,7 +610,7 @@ footer nav a:hover{color:var(--signal)}
   </div>
 </section>
 
-<section class="strich">
+<section>
   <div class="spalte auf">
     <h2>So läuft es ab.</h2>
     <p style="margin-top:1.2em" class="gross">Vier Schritte, keine Überraschungen dazwischen. Du weisst vor dem ersten Gespräch, woran du bist.</p>
@@ -634,7 +645,7 @@ footer nav a:hover{color:var(--signal)}
   </div>
 </section>
 
-<section class="strich">
+<section>
   <div class="spalte auf">
     <h2>Nicht jede Website braucht alles.<span class="zweite">Deine braucht das Richtige.</span></h2>
     <div class="zeilen">
@@ -681,7 +692,7 @@ footer nav a:hover{color:var(--signal)}
   </div>
 </section>
 
-<section class="strich" id="kontakt" style="margin-top:0">
+<section id="kontakt" style="margin-top:0">
   <div class="spalte zweispalt auf">
     <h2>Wer das macht.</h2>
     <div>
