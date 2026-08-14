@@ -282,11 +282,14 @@ section{padding-block:clamp(66px,10vh,128px)}
    Kante und legen damit ein sichtbares Raster ueber die Seite — das ist der
    Baukasten-Eindruck. Getrennt wird stattdessen durch Abstand: die grossen
    Ueberschriften markieren den Anfang eines Abschnitts ohnehin deutlich genug.
-   Der Abstand steigt dabei von 81 auf 96 Pixel, weil er nun allein traegt, was
-   sich vorher auf Linie und Abstand verteilt hat. */
+   Die Polsterung ist auf den groessten Abstand innerhalb eines Abschnitts
+   bezogen: der liegt bei 41 Pixeln, zwischen zwei Abschnitten stehen mit
+   60 Pixeln je Seite rund 120 — also knapp das Dreifache. Das reicht, damit die
+   Grenze eindeutig bleibt. Vorher war es das Viereinhalbfache, und das las sich
+   als Loch statt als Absatz. */
 @media(max-width:819px){
   .strich{border-top:0}
-  section{padding-block:clamp(78px,11.8vh,108px)}
+  section{padding-block:clamp(50px,7.4vh,72px)}
 }
 .zweispalt{display:grid;grid-template-columns:1fr;gap:clamp(26px,4vw,66px);align-items:start}
 @media(min-width:920px){.zweispalt{grid-template-columns:1.02fr .98fr}}
