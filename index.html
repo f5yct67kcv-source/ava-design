@@ -109,24 +109,29 @@ html{scrollbar-color:var(--linie) var(--grund-tief);scrollbar-width:thin}
 
 .spalte{width:var(--spalte);margin-inline:auto}
 
-/* Playfair Display statt Young Serif. Young Serif hat kaum Strichkontrast, Stamm
-   und Haarstrich sind fast gleich dick — neben einer Grotesk liest sich das wie
-   dieselbe Schrift in anderer Laune. Playfair hat dicke Stämme und feine
-   Serifen, und erst dieser Unterschied ist auf Anhieb sichtbar.
-   Gewicht 800, weil Playfair bei 400 zart wirkt und weil der Strichkontrast mit
-   dem Gewicht steigt: je fetter der Stamm, desto deutlicher der Haarstrich. */
-h1,h2,h3{font-family:var(--serif);font-weight:800;letter-spacing:-.02em;line-height:1.06}
-h1{font-size:clamp(2.15rem,4.5vw,3.9rem);line-height:1.06}
+/* Zwei Schriften nebeneinander werden nicht durch die Form unterschieden, sondern
+   durch das Gewicht. Gemessen am Stamm eines O bei 120 Pixel: beim Vorbild ist
+   die Serifenzeile 31 Einheiten dick, die Groteskzeile 20 — die Serife ist also
+   anderthalb mal so fett. Vorher standen hier beide auf 23, also exakt gleich
+   schwer, und genau deshalb war der Wechsel nicht zu sehen.
+   Playfair 900 kommt auf 25, Grotesk 600 auf 17: Verhältnis 1.47 gegen 1.55.
+   Dazu der Strichkontrast der Serife selbst, gemessen dick zu dünn: Young Serif
+   lag bei 1.8 und damit fast auf dem Wert einer Grotesk, Playfair 900 liegt bei
+   8.3. Nicht 900 wird h3: dort waeren die Haarstriche bei 24 Pixel Schriftgroesse
+   unter einem halben Pixel und wuerden ausfransen. */
+h1,h2{font-family:var(--serif);font-weight:900;letter-spacing:-.022em;line-height:1.06}
+h3{font-family:var(--serif);font-weight:700;letter-spacing:-.015em;line-height:1.15}
+h1{font-size:clamp(2.15rem,4.5vw,3.9rem)}
 h2{font-size:clamp(1.95rem,3.9vw,3.2rem)}
-/* Die zweite Zeile einer Überschrift ist bei allen vieren die Pointe, nicht der
-   Nachsatz. Der Schriftwechsel trennt die beiden Teile schärfer, als Farbe es
-   kann. Die Grösse ist nachgemessen: angeglichen wird die x-Höhe, denn die
-   bestimmt, wie gross eine Zeile wirkt, nicht die Versalhöhe. */
+/* Die zweite Zeile ist die Pointe. Sie traegt nicht durch Fettung — sie ist
+   bewusst leichter als die Serife darueber —, sondern durch die andere Form,
+   die engere Laufweite und die volle Farbe. Groesse nachgemessen: angeglichen
+   wird die x-Hoehe, denn die bestimmt, wie gross eine Zeile wirkt. */
 h1 .zweite,h2 .zweite{
-  font-family:var(--sans);font-weight:800;
-  font-size:.98em;letter-spacing:-.035em;
+  font-family:var(--sans);font-weight:600;
+  font-size:.98em;letter-spacing:-.04em;
 }
-h3{font-size:clamp(1.2rem,1.85vw,1.5rem);line-height:1.15}
+h3{font-size:clamp(1.2rem,1.85vw,1.5rem)}
 p{max-width:62ch}
 .still{color:var(--auf-grund-still)}
 .gross{font-size:clamp(1.04rem,1.35vw,1.2rem);max-width:54ch}

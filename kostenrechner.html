@@ -75,7 +75,10 @@ html{scrollbar-color:var(--linie) var(--grund-tief);scrollbar-width:thin}
 ::-webkit-scrollbar-thumb{background:var(--linie);border:3px solid var(--grund-tief);border-radius:99px}
 
 .spalte{width:var(--spalte);margin-inline:auto}
-h1,h2,h3{font-family:var(--serif);font-weight:800;letter-spacing:-.02em;line-height:1.1}
+/* Gleiche Gewichte wie die Startseite, sonst wechselt die Stimme beim Seitenwechsel.
+   h3 bleibt leichter: bei kleiner Schriftgroesse fransen die Haarstriche von 900 aus. */
+h1,h2{font-family:var(--serif);font-weight:900;letter-spacing:-.022em;line-height:1.1}
+h3{font-family:var(--serif);font-weight:700;letter-spacing:-.015em;line-height:1.1}
 h1{font-size:clamp(1.85rem,3.7vw,2.9rem)}
 h2{font-size:clamp(1.5rem,2.6vw,2.1rem)}
 h3{font-size:var(--txt-l)}
