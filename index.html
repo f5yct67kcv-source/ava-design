@@ -139,6 +139,19 @@ h1 .zweite,h2 .zweite{
   font-family:var(--sans);font-weight:600;
   font-size:.98em;letter-spacing:-.04em;
 }
+/* Der Zweiklang der Abschnittsüberschriften läuft über Helligkeit, nicht über
+   Orange. Die Serifenzeile ist der Aufschlag und tritt zurück, die Groteskzeile
+   ist die Pointe und steht voll da. Orange bleibt der einen Zeile im ersten Bild
+   und dem Knopf vorbehalten — käme es viermal als Überschrift vor, wäre es keine
+   Handlungsaufforderung mehr, sondern Dekor, und der Knopf verlöre seinen Rang.
+   Der zurückgenommene Ton liegt bei 8.8:1 auf dem Grund, also weit über der
+   Lesbarkeitsschwelle: leiser heisst hier nicht blasser als nötig.
+   Nur zweiteilige Überschriften werden zurückgenommen — bei einer einzeiligen
+   gibt es keine Pointe, von der sie sich absetzen müsste, sie wäre ohne Gewinn
+   dunkler. Kennt ein Browser :has() nicht, fällt die Regel ganz weg und alles
+   bleibt hell, also der Zustand von vorher. */
+h2:has(.zweite){color:var(--auf-grund-still)}
+h2 .zweite{color:var(--auf-grund)}
 h3{font-size:clamp(1.2rem,1.85vw,1.5rem)}
 p{max-width:62ch}
 .still{color:var(--auf-grund-still)}
@@ -416,7 +429,10 @@ section{padding-block:clamp(66px,10vh,128px)}
   background:var(--papier);color:var(--tinte);
   padding:clamp(34px,5.4vw,76px);
 }
-.papier h2{color:var(--tinte)}
+/* Derselbe Zweiklang wie auf dem dunklen Grund, nur umgedreht: Aufschlag
+   zurueckgenommen, Pointe voll. */
+.papier h2{color:var(--tinte-still)}
+.papier h2 .zweite{color:var(--tinte)}
 .papier p{color:var(--tinte-still)}
 .papier .knopf{background:var(--tinte);color:var(--papier)}
 .papier .knopf:hover{background:#22323f;box-shadow:0 14px 32px -16px rgba(21,32,42,.8)}
