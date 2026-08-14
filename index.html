@@ -278,6 +278,16 @@ section{padding-block:clamp(66px,10vh,128px)}
 @media(min-width:960px){
   .hero + .strich{border-top:0;padding-top:clamp(32px,4vh,58px)}
 }
+/* Auf schmalen Schirmen fallen die Trennlinien weg. Sie laufen dort von Kante zu
+   Kante und legen damit ein sichtbares Raster ueber die Seite — das ist der
+   Baukasten-Eindruck. Getrennt wird stattdessen durch Abstand: die grossen
+   Ueberschriften markieren den Anfang eines Abschnitts ohnehin deutlich genug.
+   Der Abstand steigt dabei von 81 auf 96 Pixel, weil er nun allein traegt, was
+   sich vorher auf Linie und Abstand verteilt hat. */
+@media(max-width:819px){
+  .strich{border-top:0}
+  section{padding-block:clamp(78px,11.8vh,108px)}
+}
 .zweispalt{display:grid;grid-template-columns:1fr;gap:clamp(26px,4vw,66px);align-items:start}
 @media(min-width:920px){.zweispalt{grid-template-columns:1.02fr .98fr}}
 
