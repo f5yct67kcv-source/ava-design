@@ -659,6 +659,29 @@ const reduziert = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const ablauf = document.getElementById('ablauf');
 if (ablauf) {
+  // Die Leitung soll vom ersten bis zum letzten Knoten laufen und dort enden.
+  // In CSS geht das nicht: wo der letzte Knoten sitzt, haengt von der Hoehe des
+  // letzten Absatzes ab, und die kennt erst der Umbruch. Ohne das Nachrechnen
+  // haengen unter dem letzten Knoten rund 90 Pixel Leitung ins Leere, was
+  // aussieht, als ginge der Ablauf noch weiter.
+  const leitung = ablauf.querySelector('.leitung');
+  const knoten = ablauf.querySelectorAll('.schritt .punkt');
+  function leitungSpannen() {
+    if (!leitung || knoten.length < 2) return;
+    const bezug = ablauf.getBoundingClientRect();
+    const ersterKasten = knoten[0].getBoundingClientRect();
+    const letzterKasten = knoten[knoten.length - 1].getBoundingClientRect();
+    const oben = (ersterKasten.top + ersterKasten.height / 2) - bezug.top;
+    const unten = (letzterKasten.top + letzterKasten.height / 2) - bezug.top;
+    leitung.style.top = oben.toFixed(1) + 'px';
+    leitung.style.bottom = 'auto';
+    leitung.style.height = Math.max(0, unten - oben).toFixed(1) + 'px';
+  }
+  leitungSpannen();
+  addEventListener('resize', leitungSpannen);
+  // Schriften aendern die Zeilenumbrueche und damit die Knotenabstaende.
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(leitungSpannen);
+
   if (reduziert) {
     ablauf.classList.add('laeuft');
   } else {
