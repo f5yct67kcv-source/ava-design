@@ -357,8 +357,13 @@ section{padding-block:clamp(66px,10vh,128px)}
   70% {transform:scale(1);  box-shadow:0 0 0 14px rgba(255,138,76,0)}
   100%{transform:scale(.95);box-shadow:0 0 0 0    rgba(255,138,76,0)}
 }
+/* Auf dem Desktop stand der Titel früher in einer eigenen Spalte links. Die war
+   auf die Breite des längsten Titels ausgelegt und damit für die kurzen viel zu
+   breit — zwischen Titel und Text lagen bis zu 142 Pixel Leere, und der Text
+   sass 242 Pixel von seinem eigenen Knoten entfernt. Jetzt steht er direkt
+   unter dem Titel, also nah an dem Punkt, zu dem er gehört. */
 @media(min-width:820px){
-  .schritt{grid-template-columns:minmax(0,13rem) 1fr;gap:8px 34px;align-items:baseline}
+  .schritt{gap:11px;padding-bottom:clamp(38px,4.6vh,54px)}
   .schritt .punkt{left:13.25px}
 }
 .schritt p{color:var(--auf-grund-still);max-width:56ch}
