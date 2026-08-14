@@ -6,14 +6,14 @@
 <meta name="description" content="Webdesign in Olten und der Region: Ich baue Websites für Selbstständige und kleine Unternehmen von Hand, ohne Baukasten, zum Festpreis. Kostenrahmen in sechs Fragen, ohne Konto und ohne Telefonnummer.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&family=Young+Serif&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400..900&family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
 
 <!--
 THESIS: Eine Person aus Olten baut Websites von Hand zum Festpreis. Die Seite
 zeigt das Gesicht im ersten Bild und den Preisweg statt eines Portfolios, weil
 es noch keines gibt. Sie verweigert das Referenzband und die Paketkarten-Tabelle.
 OWN-WORLD: Schiefer als kuehler getraenkter Grund, warmes Creme als Papier,
-Signalorange als einziges Signal. Young Serif als Stimme, Schibsted Grotesk fuer
+Signalorange als einziges Signal. Playfair Display als Stimme, Schibsted Grotesk fuer
 alles Funktionale. Karten gibt es nicht — es gibt Flaechen, Zeilen und ein rundes
 Portraet mit laufendem Schriftring.
 STORY: Der Besucher erkennt sein Problem, sieht wer dahintersteht, versteht den
@@ -58,7 +58,7 @@ FINISH: unreviewed und undokumentiert ist unfertig; dieser Bau endet mit dem Fin
   --txt-base:1rem;
   --txt-l:1.06rem;
 
-  --serif:"Young Serif",Georgia,serif;
+  --serif:"Playfair Display",Georgia,serif;
   --sans:"Schibsted Grotesk",system-ui,-apple-system,sans-serif;
   --spalte:min(1200px,calc(100% - 2 * clamp(22px,5vw,66px)));
 }
@@ -109,16 +109,19 @@ html{scrollbar-color:var(--linie) var(--grund-tief);scrollbar-width:thin}
 
 .spalte{width:var(--spalte);margin-inline:auto}
 
-h1,h2,h3{font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.02}
-h1{font-size:clamp(2.15rem,4.5vw,3.9rem);line-height:1.03}
+/* Playfair Display statt Young Serif. Young Serif hat kaum Strichkontrast, Stamm
+   und Haarstrich sind fast gleich dick — neben einer Grotesk liest sich das wie
+   dieselbe Schrift in anderer Laune. Playfair hat dicke Stämme und feine
+   Serifen, und erst dieser Unterschied ist auf Anhieb sichtbar.
+   Gewicht 800, weil Playfair bei 400 zart wirkt und weil der Strichkontrast mit
+   dem Gewicht steigt: je fetter der Stamm, desto deutlicher der Haarstrich. */
+h1,h2,h3{font-family:var(--serif);font-weight:800;letter-spacing:-.02em;line-height:1.06}
+h1{font-size:clamp(2.15rem,4.5vw,3.9rem);line-height:1.06}
 h2{font-size:clamp(1.95rem,3.9vw,3.2rem)}
 /* Die zweite Zeile einer Überschrift ist bei allen vieren die Pointe, nicht der
-   Nachsatz. Sie in der Grotesk zu setzen trennt die beiden Teile schärfer, als
-   Farbe es kann — und sie ist der einzige Weg zu mehr Gewicht: Young Serif hat
-   nur einen Schnitt, in der Serife gibt es also gar keinen Gewichtskontrast.
-   Die 0.98 sind nachgemessen, nicht geschätzt: bei gleicher Punktgrösse ist die
-   x-Höhe der Grotesk 5 Prozent grösser, ihre Versalhöhe 6 Prozent kleiner.
-   Angeglichen wird die x-Höhe, denn die bestimmt, wie gross eine Zeile wirkt. */
+   Nachsatz. Der Schriftwechsel trennt die beiden Teile schärfer, als Farbe es
+   kann. Die Grösse ist nachgemessen: angeglichen wird die x-Höhe, denn die
+   bestimmt, wie gross eine Zeile wirkt, nicht die Versalhöhe. */
 h1 .zweite,h2 .zweite{
   font-family:var(--sans);font-weight:800;
   font-size:.98em;letter-spacing:-.035em;
@@ -167,7 +170,7 @@ p{max-width:62ch}
 .logo .zeichen{
   width:26px;height:26px;background:var(--signal);
   display:grid;place-items:center;color:var(--tinte);
-  font-family:var(--serif);font-size:var(--txt-m);line-height:1;padding-top:2px;
+  font-family:var(--serif);font-weight:800;font-size:var(--txt-m);line-height:1;padding-top:2px;
 }
 .kopf .platz{font-size:var(--txt-xs);letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--auf-grund-still)}
 

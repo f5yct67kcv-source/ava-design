@@ -6,14 +6,14 @@
 <meta name="description" content="In sechs Fragen zum Preisrahmen für deine Website. Ohne Konto, ohne Telefonnummer. Danach ein verbindliches Festpreisangebot.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&family=Young+Serif&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400..900&family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
 
 <!--
 THESIS: Der Rechner qualifiziert, statt Kontaktdaten abzugreifen. Der Preis steht
 vor dem Formular, nicht dahinter. Er verweigert die uebliche Leadstrecke, in der
 die Zahl erst nach der Mailadresse kommt.
 OWN-WORLD: Dieselbe Welt wie die Startseite — Schiefer, Creme, Signalorange,
-Young Serif und Schibsted Grotesk. Eine Frage pro Bildschirm, keine Karten.
+Playfair Display und Schibsted Grotesk. Eine Frage pro Bildschirm, keine Karten.
 STORY: Sechs Fragen, sofort ein Rahmen, dann entscheidet der Besucher selbst, ob
 er seine Daten hergibt.
 FIRST VIEWPORT: Fortschrittsbalken oben, Frage gross gesetzt, Antworten als breite
@@ -48,7 +48,7 @@ FINISH: unreviewed und undokumentiert ist unfertig; dieser Bau endet mit dem Fin
   --txt-base:1rem;
   --txt-l:1.06rem;
 
-  --serif:"Young Serif",Georgia,serif;
+  --serif:"Playfair Display",Georgia,serif;
   --sans:"Schibsted Grotesk",system-ui,-apple-system,sans-serif;
   --spalte:min(860px,calc(100% - 2 * clamp(22px,5vw,56px)));
 }
@@ -75,7 +75,7 @@ html{scrollbar-color:var(--linie) var(--grund-tief);scrollbar-width:thin}
 ::-webkit-scrollbar-thumb{background:var(--linie);border:3px solid var(--grund-tief);border-radius:99px}
 
 .spalte{width:var(--spalte);margin-inline:auto}
-h1,h2,h3{font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.06}
+h1,h2,h3{font-family:var(--serif);font-weight:800;letter-spacing:-.02em;line-height:1.1}
 h1{font-size:clamp(1.85rem,3.7vw,2.9rem)}
 h2{font-size:clamp(1.5rem,2.6vw,2.1rem)}
 h3{font-size:var(--txt-l)}
@@ -91,7 +91,7 @@ p{max-width:62ch}
 .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:var(--txt-l);letter-spacing:-.02em;text-decoration:none}
 .logo .zeichen{
   width:25px;height:25px;background:var(--signal);display:grid;place-items:center;
-  color:var(--tinte);font-family:var(--serif);font-size:var(--txt-m);line-height:1;padding-top:2px;
+  color:var(--tinte);font-family:var(--serif);font-weight:800;font-size:var(--txt-m);line-height:1;padding-top:2px;
 }
 .zaehler{font-size:var(--txt-xs);letter-spacing:.13em;text-transform:uppercase;font-weight:700;color:var(--auf-grund-still)}
 .balken{height:3px;background:var(--linie)}
