@@ -343,45 +343,42 @@ section{padding-block:clamp(66px,10vh,128px)}
 }
 .ablauf.laeuft .schritt .punkt{border-color:var(--signal);background:var(--signal)}
 
-/* Ein ruhiger Ring liegt dauerhaft um jeden Punkt. Darüber läuft alle 3.4
-   Sekunden ein Impuls nach aussen und verläuft. Beide Schichten sind weiche
-   Verläufe mit durchsichtigem Kern, damit der Punkt selbst scharf bleibt und
-   nur sein Umfeld reagiert. Kein Blitz, keine harte Kante. */
+/* Zwei Schichten mit durchsichtigem Kern, damit der Punkt selbst scharf bleibt
+   und nur sein Umfeld leuchtet. Unten ein breiter, ruhender Schein, der dem
+   Knoten Wärme gibt. Darüber der Ring, der durchgehend atmet — kein Anlauf,
+   keine Pause, er ist immer da und wird nur heller und dunkler. */
 .schritt .punkt::before,
 .schritt .punkt::after{
   content:"";position:absolute;inset:-1.5px;
   border-radius:50%;pointer-events:none;opacity:0;
 }
 .schritt .punkt::before{
-  transform:scale(2.2);
+  transform:scale(3.2);
   background:radial-gradient(circle closest-side,
-    rgba(255,138,76,0) 42%,
-    rgba(255,138,76,.16) 62%,
+    rgba(255,138,76,0) 30%,
+    rgba(255,138,76,.13) 55%,
     rgba(255,138,76,0) 100%);
   transition:opacity .6s ease;
 }
 .ablauf.laeuft .schritt .punkt::before{opacity:1}
 
-/* Der Impuls blüht auf die doppelte Punktbreite auf, hält dort kurz und löst
-   sich dann nach aussen auf. Der Kern bleibt bis 40 Prozent durchsichtig, das
-   liegt noch innerhalb des Punktes — so schliesst der Ring bündig an ihn an,
-   statt als zweiter Kreis daneben zu stehen. */
+/* Der Kern bleibt bis 40 Prozent durchsichtig, das liegt noch innerhalb des
+   Punktes — so schliesst der Ring bündig an ihn an, statt als zweiter Kreis
+   daneben zu stehen. Innen die hellere Signalfarbe, das gibt die Leuchtkraft,
+   ohne den Ring breiter zu machen. */
 .schritt .punkt::after{
-  transform:scale(1);
+  transform:scale(1.8);
   background:radial-gradient(circle closest-side,
-    rgba(255,138,76,0) 40%,
-    rgba(255,138,76,.46) 52%,
-    rgba(255,138,76,.40) 76%,
+    rgba(255,159,109,0) 40%,
+    rgba(255,159,109,.58) 53%,
+    rgba(255,138,76,.42) 76%,
     rgba(255,138,76,0) 100%);
 }
-.ablauf.laeuft .schritt .punkt::after{animation:impuls 3.4s cubic-bezier(.25,.8,.35,1) infinite}
+.ablauf.laeuft .schritt .punkt::after{animation:impuls 3.4s ease-in-out infinite}
 
 @keyframes impuls{
-  0%  {opacity:0;transform:scale(1)}
-  16% {opacity:1;transform:scale(2.05)}
-  34% {opacity:.85;transform:scale(2.2)}
-  72% {opacity:0;transform:scale(2.9)}
-  100%{opacity:0;transform:scale(2.9)}
+  0%,100%{opacity:.4;transform:scale(1.8)}
+  50%    {opacity:1;transform:scale(2.25)}
 }
 @media(min-width:820px){
   .schritt{grid-template-columns:minmax(0,13rem) 1fr;gap:8px 34px;align-items:baseline}
@@ -468,9 +465,9 @@ footer nav a:hover{color:var(--signal)}
 }
 @media(prefers-reduced-motion:reduce){
   .ablauf .leitung i{transform:scaleY(1);transition:none}
-  /* Der ruhende Ring bleibt, nur der Impuls hoert auf. */
+  /* Der Schein bleibt, der Ring haelt auf halber Helligkeit an. */
   .ablauf.laeuft .schritt .punkt::before{transition:none}
-  .ablauf.laeuft .schritt .punkt::after{animation:none}
+  .ablauf.laeuft .schritt .punkt::after{animation:none;opacity:.7;transform:scale(2)}
 }
 
 @media(max-width:600px){
