@@ -362,20 +362,26 @@ section{padding-block:clamp(66px,10vh,128px)}
 }
 .ablauf.laeuft .schritt .punkt::before{opacity:1}
 
+/* Der Impuls blüht auf die doppelte Punktbreite auf, hält dort kurz und löst
+   sich dann nach aussen auf. Der Kern bleibt bis 40 Prozent durchsichtig, das
+   liegt noch innerhalb des Punktes — so schliesst der Ring bündig an ihn an,
+   statt als zweiter Kreis daneben zu stehen. */
 .schritt .punkt::after{
   transform:scale(1);
   background:radial-gradient(circle closest-side,
-    rgba(255,138,76,0) 46%,
-    rgba(255,138,76,.30) 66%,
+    rgba(255,138,76,0) 40%,
+    rgba(255,138,76,.46) 52%,
+    rgba(255,138,76,.40) 76%,
     rgba(255,138,76,0) 100%);
 }
 .ablauf.laeuft .schritt .punkt::after{animation:impuls 3.4s cubic-bezier(.25,.8,.35,1) infinite}
 
 @keyframes impuls{
   0%  {opacity:0;transform:scale(1)}
-  12% {opacity:1;transform:scale(1.5)}
-  70% {opacity:0;transform:scale(3)}
-  100%{opacity:0;transform:scale(3)}
+  16% {opacity:1;transform:scale(2.05)}
+  34% {opacity:.85;transform:scale(2.2)}
+  72% {opacity:0;transform:scale(2.9)}
+  100%{opacity:0;transform:scale(2.9)}
 }
 @media(min-width:820px){
   .schritt{grid-template-columns:minmax(0,13rem) 1fr;gap:8px 34px;align-items:baseline}
