@@ -39,6 +39,17 @@ von Google Fonts.
   quer wie quadratisch — alle drei Fälle geprüft. Mindestens 400 Pixel
   Kantenlänge, sonst wird es unscharf: der Kreis wird bis 190 Pixel breit, und
   auf Bildschirmen mit doppelter Pixeldichte sind das 380 echte Bildpunkte.
+
+- **Zweites Foto** fehlt, im Abschnitt „Wer das macht". Hochformat 4:5, gleiche
+  Mechanik: `[ Portrait folgt ]` in `<div class="portraetplatz">` ersetzen durch
+  `<img src="portrait.jpg" alt="Adrian von Arb">`. Der Platz wird bis 340 Pixel
+  breit, also mindestens 680 Pixel Breite liefern.
+
+- **Glaubwürdigkeit** im Abschnitt „Wer das macht": Der Hinweis auf die
+  Hochzeitsfilme ist raus. Damit steht auf der ganzen Seite kein einziger Beleg
+  mehr, dass Adrian schon einmal etwas gebaut oder geliefert hat. Solange es
+  keine Referenzen gibt, sollte an dieser Stelle etwas anderes Konkretes stehen
+  — Jahre selbstständig, Zahl der Kunden, Ausbildung, irgendetwas Nachprüfbares.
 - **Markenname** ist provisorisch AVA.
 - **Kontaktweg** fehlt: keine E-Mail-Adresse, keine Telefonnummer hinterlegt.
 - **Impressum und Datenschutz** sind leere Links. Die Datenschutzerklärung ist

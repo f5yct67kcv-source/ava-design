@@ -276,6 +276,25 @@ p{max-width:62ch}
 .portraet .rund:has(img){padding:0}
 .portraet .rund img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 
+/* Der zweite Fotoplatz, im Abschnitt ueber die Person. Hochformat 4:5, weil das
+   der natuerliche Ausschnitt fuer einen stehenden Menschen ist. Gleiche Technik
+   wie beim runden Platz: das Bild wird absolut gesetzt und beschnitten, der
+   Wechsel ist eine Zeile im Markup. */
+.portraetplatz{
+  position:relative;margin-top:clamp(22px,3vw,34px);
+  /* 340 statt der vollen Spaltenbreite: bei 420 stand das Bild 237 Pixel weiter
+     unten als die Textspalte daneben, das las sich als Fehler. Gleichstand
+     braeuchte 288 Pixel Hoehe und damit ein zu kleines Portrait — 128 Pixel
+     Ueberhang sind sichtbar genug, um als Absicht durchzugehen. */
+  width:100%;max-width:340px;aspect-ratio:4 / 5;
+  background:var(--papier-still);overflow:hidden;
+  display:grid;place-items:center;text-align:center;padding:8px;
+  color:#5c5648;font-size:var(--txt-xs);font-weight:600;
+  box-shadow:0 24px 48px -26px rgba(0,0,0,.62);
+}
+.portraetplatz:has(img){padding:0}
+.portraetplatz img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
 
 @media(max-width:959px){
   .hero{min-height:0;padding-bottom:clamp(34px,5vh,52px)}
@@ -683,9 +702,12 @@ footer nav a:hover{color:var(--signal)}
 
 <section id="kontakt">
   <div class="spalte zweispalt auf">
-    <h2>Wer das macht.</h2>
     <div>
-      <p class="gross">Ich bin Adrian. Seit Jahren filme ich Hochzeiten und habe dabei gelernt, worauf es ankommt: zuhören, das Wesentliche finden, den Rest weglassen. Websites baue ich nach demselben Prinzip.</p>
+      <h2>Wer das macht.</h2>
+      <div class="portraetplatz">[ Portrait folgt ]</div>
+    </div>
+    <div>
+      <p class="gross">Ich bin Adrian. Ich höre zu, suche das Wesentliche und lasse den Rest weg. So arbeite ich, und so sieht deine Seite am Ende aus.</p>
       <p style="margin-top:1.1em">Du redest mit mir, nicht mit einem Projektbüro. Es gibt kein Angebot über vierzehn Seiten und keine Runde, in der vier Leute mitreden, die deinen Betrieb nie gesehen haben.</p>
       <p style="margin-top:1.1em" class="still">Shops und Bestellsysteme baue ich nicht. Ich sage dir das lieber jetzt als in Woche sechs.</p>
       <div class="handeln" style="margin-top:1.8em">
