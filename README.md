@@ -45,11 +45,16 @@ von Google Fonts.
   `<img src="portrait.jpg" alt="Adrian von Arb">`. Der Platz wird bis 340 Pixel
   breit, also mindestens 680 Pixel Breite liefern.
 
-- **Glaubwürdigkeit** im Abschnitt „Wer das macht": Der Hinweis auf die
-  Hochzeitsfilme ist raus. Damit steht auf der ganzen Seite kein einziger Beleg
-  mehr, dass Adrian schon einmal etwas gebaut oder geliefert hat. Solange es
-  keine Referenzen gibt, sollte an dieser Stelle etwas anderes Konkretes stehen
-  — Jahre selbstständig, Zahl der Kunden, Ausbildung, irgendetwas Nachprüfbares.
+- **Referenzen** fehlen noch, bewusst. Der Hinweis auf die Hochzeitsfilme ist
+  raus, damit steht aktuell kein Beleg auf der Seite. Mehrere Kundenprojekte
+  sind kurz vor Abschluss; die Seite geht ohnehin erst danach online. Sobald
+  drei Projekte live sind, kommt ein Referenzabschnitt zwischen „Nicht jede
+  Website braucht alles" und den Preisabschnitt.
+
+  **Währenddessen einsammeln, nicht nachher:** pro Projekt eine schriftliche
+  Freigabe des Kunden, ein bis zwei Bildschirmaufnahmen, und einen Satz dazu,
+  was die Seite für den Betrieb geändert hat. Danach fragen zu müssen kostet
+  Wochen und liefert schlechtere Antworten.
 - **Markenname** ist provisorisch AVA.
 - **Kontaktweg** fehlt: keine E-Mail-Adresse, keine Telefonnummer hinterlegt.
 - **Impressum und Datenschutz** sind leere Links. Die Datenschutzerklärung ist
