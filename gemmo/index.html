@@ -64,6 +64,9 @@ body{
 img{max-width:100%;display:block}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 :focus-visible{outline:2px solid var(--gruen);outline-offset:2px;border-radius:3px}
+/* Die Buehne wird nach jedem Wechsel fokussiert, damit Screenreader den neuen
+   Inhalt ansagen. Ein Rahmen um die ganze Seite waere dabei nur Laerm. */
+#buehne:focus{outline:none}
 .spalte{width:var(--spalte);margin-inline:auto}
 
 /* ---------- Kopf ---------- */
@@ -148,12 +151,20 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   padding:.2rem .65rem;font-size:.87rem;
 }
 .indikationen button:hover{border-color:var(--gruen);color:var(--gruen)}
-.kombis{list-style:none;display:grid;gap:.45rem}
+.kombis{list-style:none;display:grid;gap:.5rem}
 .kombis li{display:flex;gap:.5rem;align-items:baseline}
-.kombis li::before{content:"+";color:var(--gruen);font-weight:700}
-.kombis .partner{font-family:var(--serif);font-style:italic;border-bottom:1px solid var(--linie-stark)}
-.kombis button:hover .partner{color:var(--gruen);border-bottom-color:var(--gruen)}
-.kombis .tot{font-family:var(--serif);font-style:italic;color:var(--tinte-still)}
+.kombis li::before{content:"+";color:var(--gruen);font-weight:700;flex:none}
+.kombis .kombi{flex:1;min-width:0}
+.kombis .partner,.kombis .tot{font-family:var(--serif);font-style:italic}
+.kombis .partner{border-bottom:1px solid var(--linie-stark)}
+.kombis .partner:hover{color:var(--gruen);border-bottom-color:var(--gruen)}
+.kombis .tot{color:var(--tinte-still)}
+/* Das Plus zwischen zwei Partnern gehoert der Karte, nicht dem Verweis —
+   deshalb steht es ausserhalb der Knoepfe. */
+.kombis .plus{color:var(--gruen);font-weight:700;white-space:pre}
+/* Die Zeile ueber der Rueckseite, auf jeder Karte dieselbe. */
+.reihe{font-family:var(--serif);font-size:1.1rem;color:var(--tinte-still);
+  margin-top:2.2rem;padding-top:1rem;border-top:1px solid var(--linie)}
 .quelle{margin-top:2.2rem;padding-top:.8rem;border-top:1px solid var(--linie);
   font-size:.78rem;color:var(--tinte-still)}
 .offen{color:var(--fehlt);font-size:.9rem}
@@ -265,8 +276,13 @@ function el(tag,klasse,text){
 /* Jede Karte bekommt einmalig ihren Schluessel und ihren Suchtext. */
 KARTEN.forEach(function(k){
   k.id = schnipsel(k.lat);
+  /* Die Partnerpflanzen gehoeren in den Suchtext: wer »Cedrus libani« sucht,
+     soll auch die Karten finden, die sie nur als Partner nennen. */
   k.suchtext = flach([k.lat, k.de, k.untertitel, k.seelisch,
-    (k.indikationen || []).join(" ")].join(" "));
+    (k.indikationen || []).join(" "),
+    (k.kombinationen || []).map(function(komb){
+      return komb.partner.join(" ") + " " + komb.bei;
+    }).join(" ")].join(" "));
   k.vollstaendig = !!(k.untertitel && k.seelisch &&
     (k.indikationen || []).length && (k.kombinationen || []).length);
 });
@@ -407,6 +423,7 @@ function detail(k){
     ? el("p","unter",k.untertitel)
     : el("p","offen","Untertitel fehlt noch"));
 
+  wrap.appendChild(el("p","reihe","Phytopharmas Pflanzenkinder"));
   wrap.appendChild(abschnittSeelisch(k));
   wrap.appendChild(abschnittIndikationen(k));
   wrap.appendChild(abschnittKombinationen(k));
@@ -448,21 +465,24 @@ function abschnittKombinationen(k){
   if(!(k.kombinationen || []).length){ a.appendChild(el("p","offen","fehlt noch")); return a; }
   var ul = el("ul","kombis");
   k.kombinationen.forEach(function(komb){
-    var li = el("li");
-    var partnerkarte = karteNach(schnipsel(komb.partner));
-    if(partnerkarte){
-      var b = el("button");
-      b.appendChild(el("span","partner",komb.partner));
-      b.appendChild(document.createTextNode(" bei " + komb.bei));
-      b.addEventListener("click", function(){ gehe("karte/" + partnerkarte.id); });
-      li.appendChild(b);
-    }else{
-      /* Partner noch nicht abgeschrieben: Text steht trotzdem da, nur ohne Weg. */
-      var s = el("span");
-      s.appendChild(el("span","tot",komb.partner));
-      s.appendChild(document.createTextNode(" bei " + komb.bei));
-      li.appendChild(s);
-    }
+    var li = el("li"), zeile = el("span","kombi");
+    /* Eine Zeile kann mehrere Partner nennen (»Ribes nigrum + Fagus sylvatica
+       + Carpinus betulus bei Heuschnupfen«). Jeder Name wird einzeln verlinkt,
+       das Plus dazwischen bleibt Text — sonst waere unklar, wohin es fuehrt. */
+    komb.partner.forEach(function(name,i){
+      if(i) zeile.appendChild(el("span","plus"," + "));
+      var karte = karteNach(schnipsel(name));
+      if(karte){
+        var b = el("button","partner",name);
+        b.addEventListener("click", function(){ gehe("karte/" + karte.id); });
+        zeile.appendChild(b);
+      }else{
+        /* Partner noch nicht abgeschrieben: der Name steht da, nur ohne Weg. */
+        zeile.appendChild(el("span","tot",name));
+      }
+    });
+    zeile.appendChild(document.createTextNode(" bei " + komb.bei));
+    li.appendChild(zeile);
     ul.appendChild(li);
   });
   a.appendChild(ul);

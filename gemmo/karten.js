@@ -8,20 +8,25 @@
 
      lat          Botanischer Name, Vorderseite gross.       "Acer campestre"
      de           Deutscher Name, Vorderseite darunter.      "Feldahorn"
-     untertitel   Die kursive Zeile unter den Namen, ohne
-                  Anfuehrungszeichen.                        "Die ... Knospe"
+     untertitel   Die gruene kursive Zeile darunter, ohne
+                  Anfuehrungszeichen.                        "Die Knospe, die frei atmen lässt"
      seelisch     Absatz unter SEELISCHE ASPEKTE, ganz.
      indikationen Liste unter INDIKATIONEN, an den Kommas
-                  getrennt, jeder Eintrag wie gedruckt.      ["Gallensteine", ...]
+                  getrennt, jeder Eintrag wie gedruckt.      ["Asthma", ...]
      kombinationen Liste unter BEWAEHRTE KOMBINATIONEN. Jede
-                  Zeile beginnt mit + Partnerpflanze, danach
-                  folgt der Anlass. Beides getrennt ablegen:
-                  partner ist der botanische Name allein,
-                  damit die App auf die Partnerkarte
-                  verlinken kann.                            {partner:"Olea europaea", bei:"beginnender Arteriosklerose"}
-     bild         Dateiname des freigestellten Knospenbildes
-                  in gemmo/bilder/, oder "" solange keins da
-                  ist.                                       "acer-campestre.jpg"
+                  Zeile beginnt mit + und nennt eine oder
+                  mehrere Partnerpflanzen, danach folgt der
+                  Anlass. partner ist deshalb immer eine
+                  Liste, auch bei nur einem Namen — die App
+                  verlinkt jeden Namen einzeln auf seine
+                  Karte.                                     {partner:["Ribes nigrum","Fagus sylvatica"], bei:"Heuschnupfen"}
+     bild         Dateiname des Knospenbildes in
+                  gemmo/bilder/, oder "" solange keins da
+                  ist.                                       "sambucus-nigra.jpg"
+
+   NICHT hier ablegen: die Zeile »Phytopharmas Pflanzenkinder« und der Hinweis
+   aufs Buch. Beides steht auf jeder Rueckseite gleich und deshalb einmal in
+   der App statt fuenfzigmal hier.
 
    FEHLENDES bleibt leer ("" oder []). Die App zeigt dann »fehlt noch« an
    dieser Stelle und zaehlt oben mit, wie viele Karten vollstaendig sind.
@@ -57,10 +62,10 @@ window.KARTEN = [
       "wirkt gegen Pilze und Viren"
     ],
     kombinationen: [
-      { partner: "Olea europaea",      bei: "beginnender Arteriosklerose" },
-      { partner: "Ficus carica",       bei: "Nervosität und psychosomatischen Beschwerden sowie Bulimie" },
-      { partner: "Tilia tomentosa",    bei: "undefinierten Angststörungen (Phobien)" },
-      { partner: "Juniperus communis", bei: "erhöhten Blutfettwerten" }
+      { partner: ["Olea europaea"],      bei: "beginnender Arteriosklerose" },
+      { partner: ["Ficus carica"],       bei: "Nervosität und psychosomatischen Beschwerden sowie Bulimie" },
+      { partner: ["Tilia tomentosa"],    bei: "undefinierten Angststörungen (Phobien)" },
+      { partner: ["Juniperus communis"], bei: "erhöhten Blutfettwerten" }
     ],
     bild: ""
   },
@@ -69,9 +74,60 @@ window.KARTEN = [
     lat: "Sambucus nigra",
     de: "Schwarzer Holunder",
     untertitel: "Die zwischen Polaritäten vermittelnde Knospe",
-    seelisch: "",
-    indikationen: [],
-    kombinationen: [],
+    seelisch: "Die Schwarzer-Holunder-Knospe eignet sich für Menschen, die " +
+      "in einem ausgeprägten Schwarz-Weiß-Denken »gefangen« sind. Sie hilft, " +
+      "das Denken allmählich in ein »Sowohl-als-auch« zu überführen. Die " +
+      "Holunderknospe ist breit einsetzbar!",
+    indikationen: [
+      "Verstopfung",
+      "Muskelrheumatismus",
+      "Bronchitis",
+      "Husten",
+      "Allergien",
+      "Heuschnupfen",
+      "Asthma",
+      "Akne",
+      "Psoriasis",
+      "Neurodermitis",
+      "immunstimulierend",
+      "wundheilungsfördernd",
+      "grippale Infekte",
+      "Frühjahrs- und Herbstkuren"
+    ],
+    kombinationen: [
+      { partner: ["Ribes nigrum"],                                        bei: "chronischen Ischiasbeschwerden" },
+      { partner: ["Ribes nigrum", "Fagus sylvatica", "Carpinus betulus"], bei: "Heuschnupfen" },
+      { partner: ["Juniperus communis", "Ribes nigrum"],                  bei: "Gicht" },
+      { partner: ["Tilia tomentosa"],                                     bei: "Schwarz-Weiß-Denken" }
+    ],
+    bild: ""
+  },
+
+  {
+    lat: "Viburnum lantana",
+    de: "Wolliger Schneeball",
+    untertitel: "Die Knospe, die frei atmen lässt",
+    seelisch: "Hilft Spannungen zu lösen, vor allem, wenn diese mit " +
+      "Symptomen auf der Haut und im Atemtrakt einhergehen.",
+    indikationen: [
+      "Krampfartige Störungen des Respirationstraktes",
+      "Asthma",
+      "Atemnot mit psychischem Hintergrund",
+      "krampfartiger Husten",
+      "atopische Ekzeme",
+      "Neurodermitis",
+      "Morbus Basedow",
+      "Menstruationsbeschwerden durch seelische Konflikte",
+      "alle stressbedingten Atembeschwerden",
+      "stärkt die Lungenfunktion"
+    ],
+    kombinationen: [
+      { partner: ["Ribes nigrum", "Rosmarinus officinalis"], bei: "Asthma" },
+      { partner: ["Corylus avellana"],                       bei: "chronischer Bronchitis, Lungenemphysem" },
+      { partner: ["Cedrus libani"],                          bei: "trockenen Formen des atopischen Ekzems" },
+      { partner: ["Cornus sanguinea"],                       bei: "Schilddrüsenüberfunktion" },
+      { partner: ["Tilia tomentosa"],                        bei: "Neigung zu Hyperventilation" }
+    ],
     bild: ""
   }
 

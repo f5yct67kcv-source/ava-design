@@ -50,19 +50,25 @@ Bild wird bis 280 Pixel breit gezeigt, doppelte Pixeldichte gerechnet.
 
 ## Stand
 
-Zwei Karten sind angefangen, beide unvollständig — sie stammen aus dem einen
-Foto, das bisher da ist:
+Drei Karten sind erfasst, davon zwei vollständig:
 
-- **Acer campestre / Feldahorn** — Rückseite vollständig, Untertitel und Bild fehlen.
-- **Sambucus nigra / Schwarzer Holunder** — Vorderseite da, Rückseite fehlt ganz.
+- **Sambucus nigra / Schwarzer Holunder** — vollständig, Bild fehlt.
+- **Viburnum lantana / Wolliger Schneeball** — vollständig, Bild fehlt.
+- **Acer campestre / Feldahorn** — Rückseite steht, Untertitel und Bild fehlen.
 
-Es fehlen also 48 Karten und die Lücken der beiden. Zum Erfassen braucht es pro
-Karte zwei Aufnahmen, Vorder- und Rückseite, als Paar erkennbar.
+Es fehlen also 47 Karten. Zum Erfassen braucht es pro Karte zwei Aufnahmen,
+Vorder- und Rückseite, als Paar erkennbar.
 
-## Offen
+Die Bilder der Knospen sind noch keine da: `gemmo/bilder/` ist leer. Sie
+müssen als Dateien ins Projekt gelegt werden, aus einem Chatbild allein
+entsteht keine.
 
-- **Numerierung**: unklar, ob die Karten im Set eine Nummer tragen. Falls ja,
-  kommt ein Feld `nr` dazu und die Liste sortiert danach statt alphabetisch.
-- **»Phytopharmas Pflanzenkinder«** steht als Zeile über jeder Rückseite. Ob
-  das auf allen Karten gleich ist, zeigt sich beim Abschreiben; falls ja, wandert
-  es als feste Zeile in die App statt in jede Karte.
+## Geklärt
+
+- **»Phytopharmas Pflanzenkinder«** steht auf jeder Rückseite gleich und
+  liegt deshalb einmal in der App, nicht in jeder Karte.
+- **Keine Numerierung** auf den Karten sichtbar. Die Liste sortiert
+  alphabetisch nach dem botanischen Namen.
+- **Mehrere Partner pro Kombination** kommen vor (»Ribes nigrum + Fagus
+  sylvatica + Carpinus betulus bei Heuschnupfen«). `partner` ist deshalb
+  immer eine Liste, jeder Name wird einzeln verlinkt.
