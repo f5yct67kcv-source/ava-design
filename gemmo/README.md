@@ -50,25 +50,53 @@ Bild wird bis 280 Pixel breit gezeigt, doppelte Pixeldichte gerechnet.
 
 ## Stand
 
-Drei Karten sind erfasst, davon zwei vollständig:
+Sieben Karten liegen ab, sechs davon vollständig:
 
-- **Sambucus nigra / Schwarzer Holunder** — vollständig, Bild fehlt.
-- **Viburnum lantana / Wolliger Schneeball** — vollständig, Bild fehlt.
-- **Acer campestre / Feldahorn** — Rückseite steht, Untertitel und Bild fehlen.
+| Karte | fehlt noch |
+|---|---|
+| Alnus glutinosa / Schwarzerle (Roterle) | Bild |
+| Alnus incana / Grauerle | Bild |
+| Betula pendula / Hängebirke | Bild |
+| Ilex aquifolium / Stechpalme | Bild |
+| Sambucus nigra / Schwarzer Holunder | Bild |
+| Viburnum lantana / Wolliger Schneeball | Bild |
+| Acer campestre / Feldahorn | Untertitel, Bild |
 
-Es fehlen also 47 Karten. Zum Erfassen braucht es pro Karte zwei Aufnahmen,
-Vorder- und Rückseite, als Paar erkennbar.
+Es fehlen 43 Karten. Pro Karte zwei Aufnahmen, Rückseite und Vorderseite,
+in dieser Reihenfolge — daran werden die Paare erkannt.
 
-Die Bilder der Knospen sind noch keine da: `gemmo/bilder/` ist leer. Sie
-müssen als Dateien ins Projekt gelegt werden, aus einem Chatbild allein
-entsteht keine.
+`gemmo/bilder/` ist leer. Die Knospenbilder müssen als Dateien ins Projekt
+gelegt werden; aus einem Chatbild entsteht keine.
+
+## Zwei Stellen zum Nachschauen
+
+- **Zuordnung ohne Selbstbeleg.** Die Rückseiten von *Betula pendula* und
+  *Alnus incana* nennen ihre Pflanze im Text (»ist die Birke«, »Die Grauerle
+  eignet sich«) und belegen ihre Zuordnung damit selbst. Die von *Alnus
+  glutinosa* und *Ilex aquifolium* tun das nicht — dort stützt sich die
+  Paarung allein auf die Reihenfolge der Fotos. Beim nächsten Durchblättern
+  kurz prüfen.
+- **Pinus mugo oder Pinus montana?** Die Ilex-Karte schreibt »Pinus mugo«, die
+  Birken-Karte »Pinus montana«. Botanisch dieselbe Bergkiefer, im Set aber
+  zwei Schreibweisen. Beide stehen so da, wie sie gedruckt sind; die App hält
+  sie deshalb für zwei Pflanzen. Sobald die Karte selbst auftaucht, zeigt sich,
+  welche Schreibweise das Set führt — dann kann die andere darauf zeigen.
 
 ## Geklärt
 
 - **»Phytopharmas Pflanzenkinder«** steht auf jeder Rückseite gleich und
   liegt deshalb einmal in der App, nicht in jeder Karte.
-- **Keine Numerierung** auf den Karten sichtbar. Die Liste sortiert
-  alphabetisch nach dem botanischen Namen.
+- **Keine Numerierung** auf den Karten. Die Liste sortiert alphabetisch nach
+  dem botanischen Namen.
 - **Mehrere Partner pro Kombination** kommen vor (»Ribes nigrum + Fagus
   sylvatica + Carpinus betulus bei Heuschnupfen«). `partner` ist deshalb
   immer eine Liste, jeder Name wird einzeln verlinkt.
+- **Nicht jede Verbindung ist ein Plus.** »Rosa canina im Wechsel mit Ribes
+  nigrum« heisst abwechselnd, nicht zusammen. Dafür gibt es das Feld
+  `verbindung`.
+- **Das Bindewort vor dem Anlass wechselt** — »bei Gicht«, »beim
+  prämenstruellen Syndrom«, »zur Lymphreinigung«, », um die Cortisolproduktion
+  anzuregen«. Es steht deshalb im Text (`anlass`) und nicht im Code.
+- **Warnsätze** stehen mitten in den seelischen Aspekten (»Vorsicht: Nicht
+  während der Schwangerschaft und Stillzeit einnehmen!«). Sie bleiben im
+  Wortlaut und an ihrer Stelle; die App setzt sie beim Anzeigen farbig ab.

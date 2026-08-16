@@ -162,6 +162,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 /* Das Plus zwischen zwei Partnern gehoert der Karte, nicht dem Verweis —
    deshalb steht es ausserhalb der Knoepfe. */
 .kombis .plus{color:var(--gruen);font-weight:700;white-space:pre}
+.kombis .verbindung{white-space:pre}
+/* Warnsatz aus den seelischen Aspekten. Kein Kasten, kein Symbol — nur
+   die Farbe, die in dieser App ohnehin »hier stimmt etwas nicht« heisst. */
+.vorsicht{color:var(--fehlt);margin-top:.5rem}
 /* Die Zeile ueber der Rueckseite, auf jeder Karte dieselbe. */
 .reihe{font-family:var(--serif);font-size:1.1rem;color:var(--tinte-still);
   margin-top:2.2rem;padding-top:1rem;border-top:1px solid var(--linie)}
@@ -281,7 +285,7 @@ KARTEN.forEach(function(k){
   k.suchtext = flach([k.lat, k.de, k.untertitel, k.seelisch,
     (k.indikationen || []).join(" "),
     (k.kombinationen || []).map(function(komb){
-      return komb.partner.join(" ") + " " + komb.bei;
+      return komb.partner.join(" ") + " " + komb.anlass;
     }).join(" ")].join(" "));
   k.vollstaendig = !!(k.untertitel && k.seelisch &&
     (k.indikationen || []).length && (k.kombinationen || []).length);
@@ -438,7 +442,21 @@ function detail(k){
 function abschnittSeelisch(k){
   var a = el("section","abschnitt");
   a.appendChild(el("h2",null,"Seelische Aspekte"));
-  a.appendChild(k.seelisch ? el("p",null,k.seelisch) : el("p","offen","fehlt noch"));
+  if(!k.seelisch){ a.appendChild(el("p","offen","fehlt noch")); return a; }
+  /* Manche Karten setzen mitten in den Absatz einen Warnsatz (»Vorsicht: Nicht
+     waehrend der Schwangerschaft ... einnehmen!«). Der Wortlaut bleibt
+     unangetastet und an seiner Stelle — er wird nur sichtbar abgesetzt, damit
+     er beim Ueberfliegen nicht untergeht. Gefunden wird er am Wort, nicht an
+     einem eigenen Feld: sonst muesste man beim Abschreiben entscheiden, was
+     eine Warnung ist, und irgendwann entscheidet man falsch. */
+  var teilung = k.seelisch.indexOf("Vorsicht:");
+  if(teilung === -1){
+    a.appendChild(el("p",null,k.seelisch));
+  }else{
+    var davor = k.seelisch.slice(0,teilung).trim();
+    if(davor) a.appendChild(el("p",null,davor));
+    a.appendChild(el("p","vorsicht",k.seelisch.slice(teilung).trim()));
+  }
   return a;
 }
 
@@ -470,7 +488,12 @@ function abschnittKombinationen(k){
        + Carpinus betulus bei Heuschnupfen«). Jeder Name wird einzeln verlinkt,
        das Plus dazwischen bleibt Text — sonst waere unklar, wohin es fuehrt. */
     komb.partner.forEach(function(name,i){
-      if(i) zeile.appendChild(el("span","plus"," + "));
+      /* Meist steht ein Plus zwischen den Partnern, manchmal aber etwas
+         anderes (»Rosa canina im Wechsel mit Ribes nigrum«) — und das ist
+         keine Feinheit: zusammen genommen ist nicht abwechselnd genommen. */
+      if(i) zeile.appendChild(komb.verbindung
+        ? el("span","verbindung"," " + komb.verbindung + " ")
+        : el("span","plus"," + "));
       var karte = karteNach(schnipsel(name));
       if(karte){
         var b = el("button","partner",name);
@@ -481,7 +504,11 @@ function abschnittKombinationen(k){
         zeile.appendChild(el("span","tot",name));
       }
     });
-    zeile.appendChild(document.createTextNode(" bei " + komb.bei));
+    /* Der Anlass bringt sein Bindewort selbst mit — »bei Gicht«, »zur
+       Lymphreinigung«, », um die Cortisolproduktion anzuregen«. Vor einem
+       Komma darf kein Leerzeichen stehen. */
+    zeile.appendChild(document.createTextNode(
+      (komb.anlass.charAt(0) === "," ? "" : " ") + komb.anlass));
     li.appendChild(zeile);
     ul.appendChild(li);
   });
