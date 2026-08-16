@@ -2,7 +2,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<title>Gemmotherapie — Knospen</title>
+<title>Gemmotherapie Knospen</title>
 <meta name="robots" content="noindex,nofollow">
 
 <!--
@@ -55,6 +55,9 @@
   --k-warn:#9d4a22;
   --k-rand:#a9bd80;
   --k-schatten:0 1px 2px rgba(40,45,30,.10),0 18px 40px -22px rgba(40,45,30,.45);
+  /* Schrift auf dem gefuellten Knopf. Als eigener Wert und nicht in der
+     Medienabfrage: eine Farbe, die nur dort steht, gilt ausserhalb nicht. */
+  --knopf-schrift:#faf7f0;
 
   --serif:ui-serif,Georgia,"Iowan Old Style","Times New Roman",serif;
   --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
@@ -80,6 +83,7 @@
     --k-warn:#8e4220;
     --k-rand:#9cb073;
     --k-schatten:0 1px 2px rgba(0,0,0,.5),0 18px 44px -20px rgba(0,0,0,.8);
+    --knopf-schrift:#171a14;
   }
 }
 
@@ -259,11 +263,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   border:1px solid var(--linie-stark);background:transparent;
 }
 .knopf:hover{border-color:var(--gruen);color:var(--gruen)}
-.knopf-haupt{background:var(--gruen);border-color:var(--gruen);color:var(--papier);font-weight:600}
-.knopf-haupt:hover{background:var(--gruen-hell);border-color:var(--gruen-hell);color:var(--papier)}
-@media(prefers-color-scheme:dark){
-  .knopf-haupt,.knopf-haupt:hover{color:#171a14}
+.knopf-haupt{
+  background:var(--gruen);border-color:var(--gruen);
+  color:var(--knopf-schrift);font-weight:600;
 }
+.knopf-haupt:hover{background:var(--gruen-hell);border-color:var(--gruen-hell)}
 .nachsatz{
   max-width:29rem;margin:1.2rem auto 0;text-align:center;
   font-size:.76rem;color:var(--tinte-still);
@@ -371,11 +375,16 @@ var reiter = document.getElementById("reiter");
 
 /* Umlaute und ss faltweg, damit »Erkaeltung«, »Erkältung« und »ERKALTUNG«
    denselben Schluessel ergeben. NFD zerlegt den Umlaut in Buchstabe plus
-   Zeichen, die Ersetzung danach raeumt die Zeichen weg. */
+   Zeichen, die Ersetzung danach raeumt die Zeichen weg.
+   Der Bereich steht als \u0300-\u036f und nicht als die Zeichen selbst: die
+   sind unsichtbar, haengen sich beim Kopieren an den Nachbarbuchstaben, und
+   wird die Datei einmal ohne Zeichensatzangabe ausgeliefert, liest der Browser
+   sie falsch herum ein — dann ist der Bereich verkehrt und die ganze App
+   bleibt leer. */
 function flach(s){
   return String(s || "").toLowerCase()
     .replace(/ß/g,"ss")
-    .normalize("NFD").replace(/[̀-ͯ]/g,"");
+    .normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 }
 function schnipsel(s){
   return flach(s).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
