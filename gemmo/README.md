@@ -44,22 +44,70 @@ Die Karte hat ihre eigenen Farben, getrennt vom Rest der App: sie ist ein
 Gegenstand aus Papier und behält ihr Aussehen, egal wie die App gerade
 aussieht.
 
-## Drei Wege
+## Vier Wege
 
-| Weg | Für die Frage |
+Vom Startbildschirm aus gewählt, weil es vier verschiedene Absichten gibt.
+
+| Weg | Für die Absicht |
 |---|---|
-| **Karten** | »Zeig mir Weissdorn.« Die Karten liegen als Stapel aus, alphabetisch nach botanischem Namen. |
-| **Register** | »Was hilft bei Ekzemen?« Fällt automatisch aus den Indikationen aller Karten heraus, wird nicht separat gepflegt. |
-| **Lernen** | »Frag mich ab.« Dieselbe Karte, Vorderseite zuerst. Karteikasten nach Leitner, drei Fächer, Stand im Browser gespeichert. Leertaste dreht, 1 und 2 bewerten. |
+| **Karten** | Durchblättern, umdrehen, nichts wollen. Der Stapel liegt alphabetisch aus. |
+| **Lernen** | Vollbild. Vorderseite raten, umdrehen, sich selbst bewerten. Karteikasten nach Leitner, drei Fächer. Leertaste dreht, 1 und 2 bewerten. |
+| **Suchen** | Vom Symptom zur Knospe. Leeres Feld zeigt das ganze Register — das ist die blätterbare Form derselben Frage. |
+| **Prüfung** | Abgefragt werden, drei Stufen, mit Punkten und Bestwert. |
 
-Das Suchfeld sucht gleichzeitig in Namen, Untertiteln, seelischen Aspekten,
-Indikationen und Partnerpflanzen. Bei einem Treffer über die Indikation steht
-auf der Karte, welche es war.
+**Lernen und Prüfung sind nicht dasselbe.** Beim Lernen bewertet man sich
+selbst und darf grosszügig sein — das ist der Sinn eines Karteikastens. In der
+Prüfung entscheidet die Antwort. Beides hat seinen Platz, aber nicht denselben.
 
-Auf der Rückseite ist jede Indikation und jede Partnerpflanze anklickbar —
-die Indikation führt in die Suche (was hilft sonst noch dagegen?), die
-Partnerpflanze auf ihre eigene Karte, sobald die abgeschrieben ist. Ein Klick
-darauf dreht die Karte *nicht* um.
+Gesucht wird in Namen, Untertiteln, seelischen Aspekten, Indikationen und
+Partnerpflanzen. Bei einem Treffer über die Indikation steht auf der Kachel,
+welche es war — ohne das steht bei der Suche nach »Ekzem« eine Liste von
+Pflanzennamen da, in der nichts das Wort Ekzem enthält, und man traut der
+Suche nicht mehr.
+
+Auf der Rückseite ist jede Indikation und jede Partnerpflanze anklickbar — die
+Indikation führt in die Suche, die Partnerpflanze auf ihre eigene Karte, sobald
+die abgeschrieben ist. Ein Klick darauf dreht die Karte *nicht* um.
+
+## Die Prüfung
+
+Zehn Fragen pro Durchgang, gebaut aus den Karten und nie aus dem Gedächtnis
+der App. Gefragt wird nur aus vollständig erfassten Karten.
+
+| Stufe | Form | Punkte |
+|---|---|---|
+| **Leicht** | Vier Antworten zur Wahl | 10 je Treffer |
+| **Mittel** | Sechs Antworten, dazu Kombinationsfragen | 20 |
+| **Schwer** | Kein Vorschlag, selber schreiben | 40 |
+
+Dazu ein Serienbonus von 5 Punkten je Treffer in Folge, gedeckelt bei fünf —
+sonst entscheidet eine einzige gute Strecke den ganzen Durchgang.
+
+Sechs Fragetypen: lateinisch → deutsch, deutsch → lateinisch, Untertitel →
+Knospe, Indikation → Knospe, Knospe → Indikation, und Kombination → Partner.
+Jeder Typ sagt selbst, ob er mit dem vorhandenen Bestand möglich ist. Drei
+Regeln halten die Fragen ehrlich:
+
+- **Nur eindeutige Indikationen.** Steht »Asthma« auf drei Karten, taugt es
+  nicht als Frage — die hätte drei richtige Antworten und die Punktzahl wäre
+  Glückssache.
+- **Ablenker dürfen nicht doch stimmen.** Bei »Welche Indikation steht auf
+  Betula pendula?« werden die falschen Antworten gegen die echte Liste der
+  Karte geprüft.
+- **Keine doppelten Antworten.** *Ribes nigrum* steht auf fast jeder Karte als
+  Partner; ohne Aussortieren stünde der Name mehrfach in derselben Auswahl.
+
+Bei der Texteingabe entscheiden keine Tippfehler über die Punktzahl: verglichen
+wird nach der Umlautfaltung, ein Buchstabe daneben zählt noch, ab acht Zeichen
+zwei. »Sambucus nigre« ist gewusst, »Salbei« nicht.
+
+Nach jeder Antwort steht da, worum es ging — sonst lernt man beim Prüfen
+nichts, sondern erfährt nur, dass man es nicht wusste. Am Ende listet der
+Rückblick alle zehn Fragen; jede Zeile führt auf ihre Karte.
+
+Ein Durchgang wird nicht aufgehoben: wer die Prüfung verlässt, verliert ihn.
+Ein halb gespielter Durchgang, den man Tage später wiederfindet, wäre kein
+Ergebnis mehr.
 
 ## Karten erfassen
 
