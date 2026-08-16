@@ -516,7 +516,7 @@ var buehne = document.getElementById("buehne");
 /* Umlaute und ss faltweg, damit »Erkaeltung«, »Erkältung« und »ERKALTUNG«
    denselben Schluessel ergeben. NFD zerlegt den Umlaut in Buchstabe plus
    Zeichen, die Ersetzung danach raeumt die Zeichen weg.
-   Der Bereich steht als ̀-ͯ und nicht als die Zeichen selbst: die
+   Der Bereich steht als \u0300-\u036f und nicht als die Zeichen selbst: die
    sind unsichtbar, haengen sich beim Kopieren an den Nachbarbuchstaben, und
    wird die Datei einmal ohne Zeichensatzangabe ausgeliefert, liest der Browser
    sie falsch herum ein — dann ist der Bereich verkehrt und die ganze App
@@ -524,7 +524,7 @@ var buehne = document.getElementById("buehne");
 function flach(s){
   return String(s || "").toLowerCase()
     .replace(/ß/g,"ss")
-    .normalize("NFD").replace(/[̀-ͯ]/g,"");
+    .normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 }
 function schnipsel(s){
   return flach(s).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");

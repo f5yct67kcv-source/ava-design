@@ -144,6 +144,23 @@ in dieser Reihenfolge — daran werden die Paare erkannt.
 `gemmo/bilder/` ist leer. Die Knospenbilder müssen als Dateien ins Projekt
 gelegt werden; aus einem Chatbild entsteht keine.
 
+## Zwei Fallen, zweimal reingetappt
+
+Beides sind unsichtbare Zeichen im Quelltext, und beide legen die App
+vollständig lahm — sie zeigt dann keinen Fehler, sondern nichts.
+
+- **Der Bereich der Kombinationszeichen** in der Umlautfaltung steht als
+  `\u0300-\u036f` und nicht als die Zeichen selbst. Als Zeichen geschrieben
+  sind sie im Editor unsichtbar, hängen sich beim Kopieren an den
+  Nachbarbuchstaben — und wird die Datei einmal ohne Zeichensatzangabe
+  ausgeliefert, liest der Browser den Bereich verkehrt herum ein. Dann wirft
+  die Regex beim Laden, und der Bildschirm bleibt leer.
+- **Die Klammern der Kursivstellen** im Fragetext stehen als `\u0001` und
+  `\u0002`, aus demselben Grund.
+
+Wer die Datei neu schreibt, prüft danach: in `gemmo/index.html` darf kein
+Zeichen aus U+0300–U+036F, U+0001 oder U+0002 buchstäblich vorkommen.
+
 ## Zwei Stellen zum Nachschauen
 
 - **Zuordnung ohne Selbstbeleg.** Die Rückseiten von *Betula pendula* und
