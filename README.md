@@ -13,6 +13,7 @@ von Google Fonts.
 | `index.html` | Startseite |
 | `kostenrechner.html` | Kostenrechner, sechs Fragen, Preisrahmen vor dem Formular |
 | `archiv/` | Frühere Entwurfsrichtungen, nicht mehr aktuell |
+| `gemmo/` | Privates Nachschlagewerk zum Gemmotherapie-Kartenset, gehört nicht zur Website |
 
 ## Noch offen
 

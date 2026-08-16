@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Gemmotherapie — Knospen</title>
+<meta name="robots" content="noindex,nofollow">
+
+<!--
+  Privates Nachschlagewerk zum Kartenset »Gemmotherapie« von Chrischta Ganz
+  und Louis Hutter. Abschrift fuer den eigenen Gebrauch, nicht zur
+  Veroeffentlichung.
+
+  KEINE Schrift von aussen, keine Bibliothek, kein Build. Das Ding muss im Flugzeug,
+  im Keller und im Wald funktionieren — also nur Systemschriften und alles, was
+  es braucht, in drei Dateien: diese, karten.js, und die Bilder daneben.
+
+  DREI WEGE auf denselben Bestand, weil es drei verschiedene Fragen gibt:
+    Karten    — »zeig mir Weissdorn«         (ich weiss, was ich suche)
+    Register  — »was hilft bei Schlaflosigkeit?« (ich weiss nur das Symptom)
+    Lernen    — »frag mich ab«                (ich weiss noch nichts)
+  Das Suchfeld bedient die erste und die zweite Frage gleichzeitig: es sucht
+  in den Namen und in den Indikationen.
+-->
+
+<style>
+:root{
+  --papier:#faf7f0;
+  --papier-karte:#ffffff;
+  --tinte:#2b2f26;
+  --tinte-still:#6d7166;
+  --gruen:#5c7a33;
+  --gruen-hell:#7d9c50;
+  --linie:#e2ddd0;
+  --linie-stark:#cdc6b4;
+  --fehlt:#a8552f;
+  --schatten:0 1px 2px rgba(43,47,38,.06),0 8px 24px -12px rgba(43,47,38,.18);
+  --serif:ui-serif,Georgia,"Iowan Old Style","Times New Roman",serif;
+  --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --spalte:min(940px,calc(100% - 2 * clamp(16px,4vw,40px)));
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --papier:#191b17;
+    --papier-karte:#22251f;
+    --tinte:#e6e4da;
+    --tinte-still:#9b9d92;
+    --gruen:#9cbd68;
+    --gruen-hell:#b3d183;
+    --linie:#32362d;
+    --linie-stark:#454a3d;
+    --fehlt:#e0956e;
+    --schatten:0 1px 2px rgba(0,0,0,.3),0 8px 24px -12px rgba(0,0,0,.6);
+  }
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;background:var(--papier)}
+body{
+  background:var(--papier);color:var(--tinte);
+  font-family:var(--sans);font-size:16px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:5rem;
+}
+img{max-width:100%;display:block}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--gruen);outline-offset:2px;border-radius:3px}
+.spalte{width:var(--spalte);margin-inline:auto}
+
+/* ---------- Kopf ---------- */
+
+.kopf{
+  position:sticky;top:0;z-index:10;
+  background:var(--papier);
+  border-bottom:1px solid var(--linie);
+  padding-top:.9rem;
+}
+.kopfzeile{display:flex;align-items:baseline;gap:.75rem;flex-wrap:wrap}
+.titel{font-family:var(--serif);font-size:1.15rem;font-weight:600;letter-spacing:.01em}
+.stand{font-size:.78rem;color:var(--tinte-still);font-variant-numeric:tabular-nums}
+
+.suchzeile{display:flex;gap:.5rem;margin:.7rem 0 .6rem}
+.suche{
+  flex:1;min-width:0;
+  font:inherit;font-size:1rem;
+  color:var(--tinte);background:var(--papier-karte);
+  border:1px solid var(--linie-stark);border-radius:8px;
+  padding:.55rem .7rem;
+}
+.suche::placeholder{color:var(--tinte-still)}
+.loeschen{padding:.55rem .7rem;color:var(--tinte-still);font-size:.85rem}
+.loeschen[hidden]{display:none}
+
+.reiter{display:flex;gap:.25rem}
+.reiter button{
+  padding:.5rem .8rem;font-size:.9rem;color:var(--tinte-still);
+  border-bottom:2px solid transparent;margin-bottom:-1px;border-radius:3px 3px 0 0;
+}
+.reiter button[aria-current="true"]{color:var(--gruen);border-bottom-color:var(--gruen);font-weight:600}
+
+/* ---------- Kartenliste ---------- */
+
+.gitter{
+  display:grid;gap:.7rem;margin-top:1.2rem;
+  grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+}
+.eintrag{
+  display:block;width:100%;text-align:left;
+  background:var(--papier-karte);border:1px solid var(--linie);border-radius:10px;
+  padding:.8rem .9rem;box-shadow:var(--schatten);
+  transition:border-color .12s,transform .12s;
+}
+.eintrag:hover{border-color:var(--gruen-hell);transform:translateY(-1px)}
+.eintrag .lat{font-family:var(--serif);font-style:italic;font-size:1.05rem;display:block}
+.eintrag .de{font-family:var(--serif);font-size:1.05rem;display:block}
+.eintrag .unter{font-size:.82rem;color:var(--tinte-still);margin-top:.3rem;font-style:italic}
+.eintrag .treffer{font-size:.8rem;color:var(--gruen);margin-top:.35rem}
+.eintrag mark{background:none;color:var(--gruen);font-weight:600}
+.luecke{font-size:.78rem;color:var(--fehlt);margin-top:.35rem}
+
+.leer{margin-top:2rem;color:var(--tinte-still)}
+
+/* ---------- Detail ---------- */
+
+.detail{margin-top:1.4rem;max-width:640px}
+.zurueck{font-size:.88rem;color:var(--tinte-still);padding:.3rem 0;margin-bottom:.6rem}
+.zurueck:hover{color:var(--gruen)}
+.knospe{
+  width:100%;max-width:280px;margin:0 auto 1rem;border-radius:8px;
+}
+.knospe-fehlt{
+  max-width:280px;margin:0 auto 1rem;aspect-ratio:4/3;
+  border:1px dashed var(--linie-stark);border-radius:8px;
+  display:grid;place-items:center;color:var(--tinte-still);font-size:.82rem;text-align:center;padding:1rem;
+}
+.detail h1{font-family:var(--serif);font-weight:400;line-height:1.25}
+.detail h1 .lat{font-style:italic;display:block;font-size:1.7rem}
+.detail h1 .de{display:block;font-size:1.7rem}
+.detail .unter{font-family:var(--serif);font-style:italic;color:var(--gruen);margin-top:.5rem;font-size:1.05rem}
+
+.abschnitt{margin-top:1.6rem}
+.abschnitt h2{
+  font-size:.76rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--gruen);margin-bottom:.45rem;
+}
+.indikationen{list-style:none;display:flex;flex-wrap:wrap;gap:.35rem}
+.indikationen button{
+  border:1px solid var(--linie-stark);border-radius:99px;
+  padding:.2rem .65rem;font-size:.87rem;
+}
+.indikationen button:hover{border-color:var(--gruen);color:var(--gruen)}
+.kombis{list-style:none;display:grid;gap:.45rem}
+.kombis li{display:flex;gap:.5rem;align-items:baseline}
+.kombis li::before{content:"+";color:var(--gruen);font-weight:700}
+.kombis .partner{font-family:var(--serif);font-style:italic;border-bottom:1px solid var(--linie-stark)}
+.kombis button:hover .partner{color:var(--gruen);border-bottom-color:var(--gruen)}
+.kombis .tot{font-family:var(--serif);font-style:italic;color:var(--tinte-still)}
+.quelle{margin-top:2.2rem;padding-top:.8rem;border-top:1px solid var(--linie);
+  font-size:.78rem;color:var(--tinte-still)}
+.offen{color:var(--fehlt);font-size:.9rem}
+
+/* ---------- Register ---------- */
+
+.register{margin-top:1.2rem;display:grid;gap:.1rem}
+.register-zeile{
+  display:grid;grid-template-columns:minmax(0,1fr);gap:.15rem;
+  padding:.6rem 0;border-bottom:1px solid var(--linie);
+}
+@media(min-width:620px){
+  .register-zeile{grid-template-columns:minmax(0,15rem) minmax(0,1fr);gap:1rem;align-items:baseline}
+}
+.register-zeile dt{font-weight:600;font-size:.94rem}
+.register-zeile dd{display:flex;flex-wrap:wrap;gap:.15rem .5rem}
+.register-zeile dd button{font-family:var(--serif);font-style:italic;font-size:.94rem;color:var(--tinte-still)}
+.register-zeile dd button:hover{color:var(--gruen)}
+.buchstabe{
+  font-family:var(--serif);font-size:1.3rem;color:var(--gruen);
+  margin-top:1.4rem;padding-bottom:.2rem;border-bottom:2px solid var(--linie);
+}
+
+/* ---------- Lernen ---------- */
+
+.lernen{margin-top:1.4rem;max-width:520px}
+.faecher{display:flex;gap:1.2rem;font-size:.82rem;color:var(--tinte-still);margin-bottom:1rem;flex-wrap:wrap}
+.faecher b{color:var(--tinte);font-variant-numeric:tabular-nums}
+
+.lernkarte{
+  background:var(--papier-karte);border:1px solid var(--linie);border-radius:14px;
+  box-shadow:var(--schatten);padding:1.6rem 1.3rem;min-height:16rem;
+  display:flex;flex-direction:column;justify-content:center;text-align:center;
+}
+.lernkarte .lat{font-family:var(--serif);font-style:italic;font-size:1.5rem}
+.lernkarte .de{font-family:var(--serif);font-size:1.5rem}
+.lernkarte .unter{font-family:var(--serif);font-style:italic;color:var(--gruen);margin-top:.6rem}
+.rueckseite{text-align:left}
+.rueckseite .abschnitt{margin-top:1.1rem}
+.rueckseite .abschnitt:first-child{margin-top:0}
+.rueckseite p,.rueckseite li{font-size:.92rem}
+
+.knoepfe{display:flex;gap:.6rem;margin-top:1rem}
+.knopf{
+  flex:1;padding:.7rem 1rem;border-radius:9px;font-size:.95rem;
+  border:1px solid var(--linie-stark);background:var(--papier-karte);
+}
+.knopf:hover{border-color:var(--gruen)}
+.knopf-haupt{background:var(--gruen);border-color:var(--gruen);color:var(--papier);font-weight:600}
+@media(prefers-color-scheme:dark){.knopf-haupt{color:#171a14}}
+.knopf-haupt:hover{background:var(--gruen-hell);border-color:var(--gruen-hell)}
+.zuruecksetzen{margin-top:1.4rem;font-size:.82rem;color:var(--tinte-still);text-decoration:underline}
+</style>
+
+<header class="kopf">
+  <div class="spalte">
+    <div class="kopfzeile">
+      <span class="titel">Gemmotherapie</span>
+      <span class="stand" id="stand"></span>
+    </div>
+
+    <div class="suchzeile">
+      <input class="suche" id="suche" type="search" autocomplete="off" spellcheck="false"
+             placeholder="Pflanze oder Beschwerde suchen" aria-label="Suchen">
+      <button class="loeschen" id="loeschen" hidden>zurücksetzen</button>
+    </div>
+
+    <nav class="reiter" id="reiter">
+      <button data-weg="karten">Karten</button>
+      <button data-weg="register">Register</button>
+      <button data-weg="lernen">Lernen</button>
+    </nav>
+  </div>
+</header>
+
+<main class="spalte" id="buehne" tabindex="-1"></main>
+
+<script src="karten.js"></script>
+<script>
+(function(){
+"use strict";
+
+var KARTEN = window.KARTEN || [];
+var buehne = document.getElementById("buehne");
+var suchfeld = document.getElementById("suche");
+var loeschen = document.getElementById("loeschen");
+var reiter = document.getElementById("reiter");
+
+/* ---------- Grundlagen ---------- */
+
+/* Umlaute und ss faltweg, damit »Erkaeltung«, »Erkältung« und »ERKALTUNG«
+   denselben Schluessel ergeben. NFD zerlegt den Umlaut in Buchstabe plus
+   Zeichen, die Ersetzung danach raeumt die Zeichen weg. */
+function flach(s){
+  return String(s || "").toLowerCase()
+    .replace(/ß/g,"ss")
+    .normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+}
+function schnipsel(s){
+  return flach(s).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+}
+function el(tag,klasse,text){
+  var n = document.createElement(tag);
+  if(klasse) n.className = klasse;
+  if(text != null) n.textContent = text;
+  return n;
+}
+
+/* Jede Karte bekommt einmalig ihren Schluessel und ihren Suchtext. */
+KARTEN.forEach(function(k){
+  k.id = schnipsel(k.lat);
+  k.suchtext = flach([k.lat, k.de, k.untertitel, k.seelisch,
+    (k.indikationen || []).join(" ")].join(" "));
+  k.vollstaendig = !!(k.untertitel && k.seelisch &&
+    (k.indikationen || []).length && (k.kombinationen || []).length);
+});
+KARTEN.sort(function(a,b){ return a.lat.localeCompare(b.lat,"de"); });
+
+function karteNach(id){
+  for(var i=0;i<KARTEN.length;i++) if(KARTEN[i].id === id) return KARTEN[i];
+  return null;
+}
+
+/* Stand oben rechts: was fehlt, soll man sehen, ohne danach zu suchen. */
+(function stand(){
+  var fertig = KARTEN.filter(function(k){ return k.vollstaendig; }).length;
+  var text = fertig + " von 50 Karten erfasst";
+  if(KARTEN.length > fertig) text += " · " + (KARTEN.length - fertig) + " angefangen";
+  document.getElementById("stand").textContent = text;
+})();
+
+/* ---------- Weg und Adresse ---------- */
+
+/* Der Zustand steht in der Adresszeile, nicht in einer Variablen: dann trägt
+   der Zurueck-Knopf des Telefons die Navigation, und ein Lesezeichen auf eine
+   einzelne Knospe funktioniert. */
+function ziel(){
+  var h = location.hash.replace(/^#\/?/,"");
+  var teile = h.split("/");
+  return { weg: teile[0] || "karten", was: decodeURIComponent(teile[1] || "") };
+}
+function gehe(pfad){ location.hash = "#/" + pfad; }
+
+function zeichne(){
+  var z = ziel();
+  var knoepfe = reiter.querySelectorAll("button");
+  for(var i=0;i<knoepfe.length;i++){
+    var aktiv = knoepfe[i].dataset.weg === z.weg ||
+                (z.weg === "karte" && knoepfe[i].dataset.weg === "karten");
+    knoepfe[i].setAttribute("aria-current", aktiv ? "true" : "false");
+  }
+  buehne.innerHTML = "";
+  if(z.weg === "karte" && karteNach(z.was)) detail(karteNach(z.was));
+  else if(z.weg === "register") register();
+  else if(z.weg === "lernen") lernen();
+  else liste();
+}
+
+window.addEventListener("hashchange", function(){
+  zeichne();
+  buehne.focus({preventScroll:true});
+  window.scrollTo(0,0);
+});
+
+reiter.addEventListener("click", function(e){
+  var b = e.target.closest("button");
+  if(b) gehe(b.dataset.weg);
+});
+
+/* ---------- Suche ---------- */
+
+var frage = "";
+suchfeld.addEventListener("input", function(){
+  frage = suchfeld.value.trim();
+  loeschen.hidden = !frage;
+  /* Wer tippt, will Treffer sehen — nicht den Lernstapel. */
+  if(frage && ziel().weg !== "karten") gehe("karten");
+  else zeichne();
+});
+loeschen.addEventListener("click", function(){
+  suchfeld.value = ""; frage = ""; loeschen.hidden = true;
+  suchfeld.focus(); zeichne();
+});
+
+function gefiltert(){
+  if(!frage) return KARTEN;
+  var f = flach(frage);
+  return KARTEN.filter(function(k){ return k.suchtext.indexOf(f) !== -1; });
+}
+
+/* Zeigt, welche Indikation den Treffer ausgeloest hat. Ohne das steht bei der
+   Suche nach »Ekzem« eine Liste von Pflanzennamen da, in der nichts das Wort
+   Ekzem enthaelt, und man traut der Suche nicht mehr. */
+function trefferzeile(k){
+  var f = flach(frage);
+  if(!f) return null;
+  if(flach(k.lat).indexOf(f) !== -1 || flach(k.de).indexOf(f) !== -1) return null;
+  var passend = (k.indikationen || []).filter(function(i){ return flach(i).indexOf(f) !== -1; });
+  if(!passend.length) return null;
+  return passend.slice(0,3).join(", ") + (passend.length > 3 ? " …" : "");
+}
+
+/* ---------- Weg 1: Karten ---------- */
+
+function liste(){
+  var treffer = gefiltert();
+  if(!treffer.length){
+    buehne.appendChild(el("p","leer", frage
+      ? "Nichts gefunden zu »" + frage + "«. Möglich, dass die Karte noch nicht abgeschrieben ist."
+      : "Noch keine Karte erfasst. Die Abschriften kommen in karten.js."));
+    return;
+  }
+  var gitter = el("div","gitter");
+  treffer.forEach(function(k){
+    var b = el("button","eintrag");
+    b.appendChild(el("span","lat",k.lat));
+    b.appendChild(el("span","de",k.de));
+    if(k.untertitel) b.appendChild(el("span","unter",k.untertitel));
+    var t = trefferzeile(k);
+    if(t) b.appendChild(el("span","treffer",t));
+    if(!k.vollstaendig) b.appendChild(el("span","luecke","Rückseite fehlt noch"));
+    b.addEventListener("click", function(){ gehe("karte/" + k.id); });
+    gitter.appendChild(b);
+  });
+  buehne.appendChild(gitter);
+}
+
+/* ---------- Weg 2: eine Karte ---------- */
+
+function detail(k){
+  var wrap = el("article","detail");
+
+  var zurueck = el("button","zurueck","← alle Knospen");
+  zurueck.addEventListener("click", function(){ gehe("karten"); });
+  wrap.appendChild(zurueck);
+
+  if(k.bild){
+    var img = el("img","knospe");
+    img.src = "bilder/" + k.bild;
+    img.alt = "Knospe von " + k.de;
+    wrap.appendChild(img);
+  }else{
+    wrap.appendChild(el("div","knospe-fehlt","Bild der Knospe fehlt noch"));
+  }
+
+  var h = el("h1");
+  h.appendChild(el("span","lat",k.lat));
+  h.appendChild(el("span","de",k.de));
+  wrap.appendChild(h);
+  wrap.appendChild(k.untertitel
+    ? el("p","unter",k.untertitel)
+    : el("p","offen","Untertitel fehlt noch"));
+
+  wrap.appendChild(abschnittSeelisch(k));
+  wrap.appendChild(abschnittIndikationen(k));
+  wrap.appendChild(abschnittKombinationen(k));
+
+  wrap.appendChild(el("p","quelle",
+    "aus dem Buch »Gemmotherapie« von Chrischta Ganz und Louis Hutter · " +
+    "private Abschrift zum Nachschlagen"));
+
+  buehne.appendChild(wrap);
+}
+
+function abschnittSeelisch(k){
+  var a = el("section","abschnitt");
+  a.appendChild(el("h2",null,"Seelische Aspekte"));
+  a.appendChild(k.seelisch ? el("p",null,k.seelisch) : el("p","offen","fehlt noch"));
+  return a;
+}
+
+function abschnittIndikationen(k){
+  var a = el("section","abschnitt");
+  a.appendChild(el("h2",null,"Indikationen"));
+  if(!(k.indikationen || []).length){ a.appendChild(el("p","offen","fehlt noch")); return a; }
+  var ul = el("ul","indikationen");
+  k.indikationen.forEach(function(i){
+    var li = el("li"), b = el("button",null,i);
+    /* Von der Indikation zurueck ins Register: was hilft sonst noch dagegen? */
+    b.addEventListener("click", function(){
+      suchfeld.value = i; frage = i; loeschen.hidden = false; gehe("karten");
+    });
+    li.appendChild(b); ul.appendChild(li);
+  });
+  a.appendChild(ul);
+  return a;
+}
+
+function abschnittKombinationen(k){
+  var a = el("section","abschnitt");
+  a.appendChild(el("h2",null,"Bewährte Kombinationen"));
+  if(!(k.kombinationen || []).length){ a.appendChild(el("p","offen","fehlt noch")); return a; }
+  var ul = el("ul","kombis");
+  k.kombinationen.forEach(function(komb){
+    var li = el("li");
+    var partnerkarte = karteNach(schnipsel(komb.partner));
+    if(partnerkarte){
+      var b = el("button");
+      b.appendChild(el("span","partner",komb.partner));
+      b.appendChild(document.createTextNode(" bei " + komb.bei));
+      b.addEventListener("click", function(){ gehe("karte/" + partnerkarte.id); });
+      li.appendChild(b);
+    }else{
+      /* Partner noch nicht abgeschrieben: Text steht trotzdem da, nur ohne Weg. */
+      var s = el("span");
+      s.appendChild(el("span","tot",komb.partner));
+      s.appendChild(document.createTextNode(" bei " + komb.bei));
+      li.appendChild(s);
+    }
+    ul.appendChild(li);
+  });
+  a.appendChild(ul);
+  return a;
+}
+
+/* ---------- Weg 3: Register ---------- */
+
+/* Das Register wird nicht gepflegt, es faellt aus den Karten heraus. Sonst
+   laufen Karte und Register auseinander, sobald eine Indikation dazukommt. */
+function register(){
+  var nach = {};
+  KARTEN.forEach(function(k){
+    (k.indikationen || []).forEach(function(i){
+      var schluessel = flach(i);
+      if(!nach[schluessel]) nach[schluessel] = { wort:i, karten:[] };
+      nach[schluessel].karten.push(k);
+    });
+  });
+  var begriffe = Object.keys(nach).map(function(s){ return nach[s]; });
+  if(frage){
+    var f = flach(frage);
+    begriffe = begriffe.filter(function(b){ return flach(b.wort).indexOf(f) !== -1; });
+  }
+  begriffe.sort(function(a,b){ return a.wort.localeCompare(b.wort,"de"); });
+
+  if(!begriffe.length){
+    buehne.appendChild(el("p","leer", KARTEN.length
+      ? "Keine Indikation passt zu »" + frage + "«."
+      : "Noch keine Indikationen erfasst."));
+    return;
+  }
+
+  var dl = el("dl","register"), letzter = "";
+  begriffe.forEach(function(b){
+    var anfang = b.wort.charAt(0).toUpperCase();
+    if(anfang !== letzter){
+      letzter = anfang;
+      buehne.appendChild(el("h2","buchstabe",anfang));
+      dl = el("dl","register");
+      buehne.appendChild(dl);
+    }
+    var zeile = el("div","register-zeile");
+    zeile.appendChild(el("dt",null,b.wort));
+    var dd = el("dd");
+    b.karten.forEach(function(k){
+      var kn = el("button",null,k.lat);
+      kn.title = k.de;
+      kn.addEventListener("click", function(){ gehe("karte/" + k.id); });
+      dd.appendChild(kn);
+    });
+    zeile.appendChild(dd);
+    dl.appendChild(zeile);
+  });
+}
+
+/* ---------- Weg 4: Lernen ---------- */
+
+/* Karteikasten nach Leitner, drei Faecher. Fach 1 kommt jedes Mal dran,
+   Fach 2 jedes dritte Mal, Fach 3 jedes neunte — hier vereinfacht: gezogen
+   wird immer aus dem niedrigsten Fach, das noch etwas enthaelt. Das reicht
+   fuer fuenfzig Karten und braucht keine Datumsrechnung.
+   Der Stand liegt im Browser, nicht im Repo: er gehoert zum Geraet, nicht zum
+   Kartensatz. */
+var STAND = "gemmo-lernstand";
+function standLesen(){
+  try{ return JSON.parse(localStorage.getItem(STAND)) || {}; }
+  catch(e){ return {}; }
+}
+function standSchreiben(s){
+  try{ localStorage.setItem(STAND, JSON.stringify(s)); }catch(e){}
+}
+
+var aktuelle = null, umgedreht = false;
+
+function lernen(){
+  var lernbar = KARTEN.filter(function(k){
+    return k.seelisch || (k.indikationen || []).length;
+  });
+  var wrap = el("section","lernen");
+
+  if(!lernbar.length){
+    wrap.appendChild(el("p","leer",
+      "Zum Abfragen fehlen noch die Rückseiten. Sobald eine Karte " +
+      "seelische Aspekte oder Indikationen hat, taucht sie hier auf."));
+    buehne.appendChild(wrap);
+    return;
+  }
+
+  var stand = standLesen();
+  var faecher = [0,0,0];
+  lernbar.forEach(function(k){ faecher[(stand[k.id] || 1) - 1]++; });
+
+  var leiste = el("div","faecher");
+  ["Neu und schwierig","Sitzt halbwegs","Sitzt"].forEach(function(name,i){
+    var s = el("span",null,name + ": ");
+    s.appendChild(el("b",null,String(faecher[i])));
+    leiste.appendChild(s);
+  });
+  wrap.appendChild(leiste);
+
+  if(!aktuelle || lernbar.indexOf(aktuelle) === -1) aktuelle = ziehen(lernbar,stand);
+
+  var karte = el("div","lernkarte");
+  if(!umgedreht){
+    karte.appendChild(el("span","lat",aktuelle.lat));
+    karte.appendChild(el("span","de",aktuelle.de));
+    if(aktuelle.untertitel) karte.appendChild(el("span","unter",aktuelle.untertitel));
+  }else{
+    karte.classList.add("rueckseite");
+    if(aktuelle.seelisch) karte.appendChild(abschnittSeelisch(aktuelle));
+    if((aktuelle.indikationen || []).length) karte.appendChild(abschnittIndikationen(aktuelle));
+    if((aktuelle.kombinationen || []).length) karte.appendChild(abschnittKombinationen(aktuelle));
+  }
+  wrap.appendChild(karte);
+
+  var knoepfe = el("div","knoepfe");
+  if(!umgedreht){
+    var auf = el("button","knopf knopf-haupt","Umdrehen");
+    auf.addEventListener("click", function(){ umgedreht = true; zeichne(); });
+    knoepfe.appendChild(auf);
+  }else{
+    var nochmal = el("button","knopf","Nochmal");
+    nochmal.addEventListener("click", function(){ bewerten(lernbar,"nochmal"); });
+    var gewusst = el("button","knopf knopf-haupt","Gewusst");
+    gewusst.addEventListener("click", function(){ bewerten(lernbar,"gewusst"); });
+    knoepfe.appendChild(nochmal);
+    knoepfe.appendChild(gewusst);
+  }
+  wrap.appendChild(knoepfe);
+
+  var ganz = el("button","zuruecksetzen","Ganze Karte ansehen");
+  ganz.addEventListener("click", function(){ gehe("karte/" + aktuelle.id); });
+  wrap.appendChild(ganz);
+
+  buehne.appendChild(wrap);
+}
+
+function ziehen(lernbar,stand){
+  for(var fach=1; fach<=3; fach++){
+    var drin = lernbar.filter(function(k){
+      return (stand[k.id] || 1) === fach && k !== aktuelle;
+    });
+    if(drin.length) return drin[Math.floor(Math.random() * drin.length)];
+  }
+  return lernbar[Math.floor(Math.random() * lernbar.length)];
+}
+
+function bewerten(lernbar,urteil){
+  var stand = standLesen();
+  var fach = stand[aktuelle.id] || 1;
+  /* Nicht gewusst faellt immer ganz zurueck ins erste Fach, gewusst steigt um
+     eins. Das ist die ganze Leitner-Regel. */
+  stand[aktuelle.id] = urteil === "gewusst" ? Math.min(3, fach + 1) : 1;
+  standSchreiben(stand);
+  aktuelle = ziehen(lernbar,stand);
+  umgedreht = false;
+  zeichne();
+}
+
+/* Tastatur am Schreibtisch: Leertaste dreht um, 1 und 2 bewerten. */
+document.addEventListener("keydown", function(e){
+  if(ziel().weg !== "lernen" || e.target === suchfeld) return;
+  var lernbar = KARTEN.filter(function(k){ return k.seelisch || (k.indikationen||[]).length; });
+  if(!lernbar.length) return;
+  if(e.key === " "){ e.preventDefault(); umgedreht = !umgedreht; zeichne(); }
+  if(umgedreht && e.key === "1"){ bewerten(lernbar,"nochmal"); }
+  if(umgedreht && e.key === "2"){ bewerten(lernbar,"gewusst"); }
+});
+
+zeichne();
+
+})();
+</script>
