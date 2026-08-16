@@ -249,6 +249,18 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   display:grid;place-items:center;padding:1rem;text-align:center;
   color:var(--k-tinte-still);font-size:.78rem;
 }
+/* Dasselbe Feld, aber es nimmt eine Aufnahme entgegen. Der gestrichelte Rahmen
+   bleibt — er sagt schon »hier fehlt etwas«, und ein Knopf daraus zu machen
+   heisst nur, dass man ihn antippen darf. */
+.knospe-aufnehmen{cursor:pointer;color:var(--k-gruen);line-height:1.4}
+.knospe-aufnehmen:hover{border-color:var(--k-gruen);border-style:solid}
+.knospe-aufnehmen .klein{display:block;color:var(--k-tinte-still);font-size:.72rem;margin-top:.3em}
+.bildzeile{
+  max-width:29rem;margin:.7rem auto 0;text-align:center;
+  font-size:.8rem;color:var(--tinte-still);
+}
+.bildzeile button{text-decoration:underline;padding:.2rem .35rem}
+.bildzeile button:hover{color:var(--gruen)}
 .namen{margin-top:clamp(14px,3vw,22px)}
 .namen .lat{
   display:block;font-family:var(--serif);font-style:italic;
@@ -629,6 +641,120 @@ function merken(schluessel,vorgabe){
 var lernstand = merken("gemmo-lernstand", function(){ return {}; });
 var bestwerte = merken("gemmo-bestwerte", function(){ return {}; });
 
+/* ---------- Bilder auf dem Geraet ----------
+   Die Knospenbilder aus dem Set gehoeren nicht ins Repo — es sind fremde
+   Aufnahmen. Wer sie in der App haben will, fotografiert die Kartenvorderseite
+   selbst; die Aufnahme bleibt im Browser dieses Geraets.
+
+   IndexedDB und nicht localStorage: fuenfzig Aufnahmen sprengen die fuenf
+   Megabyte, die localStorage ueblicherweise hergibt, und zwar erst bei Karte
+   vierzig — also genau dann, wenn die Arbeit schon getan waere.
+
+   Beim Anzeigen gewinnt die eigene Aufnahme vor einer Datei in bilder/: sie
+   ist die spaetere, ausdrueckliche Entscheidung. */
+
+var BILDER = {};        /* Karten-Schluessel -> Objektadresse der Aufnahme */
+var LAGER_DA = false;
+
+function lager(){
+  return new Promise(function(gut,schlecht){
+    var db;
+    try{ db = indexedDB.open("gemmo-bilder", 1); }
+    catch(e){ schlecht(e); return; }
+    db.onupgradeneeded = function(){ db.result.createObjectStore("knospen"); };
+    db.onsuccess = function(){ gut(db.result); };
+    db.onerror = function(){ schlecht(db.error); };
+  });
+}
+function imLager(art, tun){
+  return lager().then(function(db){
+    return new Promise(function(gut,schlecht){
+      var laden = db.transaction("knospen", art).objectStore("knospen");
+      var frage = tun(laden);
+      frage.onsuccess = function(){ gut(frage.result); };
+      frage.onerror = function(){ schlecht(frage.error); };
+    });
+  });
+}
+
+/* Beim Start einmal alles holen und in den Speicher legen. Der Rest der App
+   zeichnet synchron; ein Bild, das erst nach dem Zeichnen eintrifft, muesste
+   ueberall nachgereicht werden. */
+function bilderLaden(){
+  if(!window.indexedDB) return Promise.resolve();
+  return imLager("readonly", function(laden){ return laden.getAllKeys(); })
+    .then(function(ids){
+      LAGER_DA = true;
+      if(!ids || !ids.length) return;
+      return Promise.all(ids.map(function(id){
+        return imLager("readonly", function(laden){ return laden.get(id); })
+          .then(function(brocken){ if(brocken) BILDER[id] = URL.createObjectURL(brocken); });
+      }));
+    })
+    .catch(function(){ LAGER_DA = false; });
+}
+
+function bildQuelle(k){
+  return BILDER[k.id] || (k.bild ? "bilder/" + k.bild : null);
+}
+function mitBild(){
+  return KARTEN.filter(function(k){ return !!bildQuelle(k); }).length;
+}
+
+/* Verkleinert die Aufnahme, bevor sie ins Lager geht. Ein Telefonfoto bringt
+   gut vier Megabyte mit, gezeigt wird das Bild 280 Punkte breit — 900 Punkte
+   sind auch auf einem dreifach dichten Schirm mehr als genug. */
+function verkleinern(datei){
+  return createImageBitmap(datei).then(function(bild){
+    var kante = 900;
+    var faktor = Math.min(1, kante / Math.max(bild.width, bild.height));
+    var breite = Math.round(bild.width * faktor);
+    var hoehe = Math.round(bild.height * faktor);
+    var tuch = document.createElement("canvas");
+    tuch.width = breite; tuch.height = hoehe;
+    tuch.getContext("2d").drawImage(bild, 0, 0, breite, hoehe);
+    bild.close();
+    return new Promise(function(gut){ tuch.toBlob(gut, "image/jpeg", 0.82); });
+  });
+}
+
+function bildAufnehmen(k, danach){
+  var eingabe = document.createElement("input");
+  eingabe.type = "file";
+  eingabe.accept = "image/*";
+  eingabe.addEventListener("change", function(){
+    var datei = eingabe.files && eingabe.files[0];
+    if(!datei) return;
+    verkleinern(datei)
+      .then(function(brocken){
+        return imLager("readwrite", function(laden){ return laden.put(brocken, k.id); })
+          .then(function(){
+            if(BILDER[k.id]) URL.revokeObjectURL(BILDER[k.id]);
+            BILDER[k.id] = URL.createObjectURL(brocken);
+          });
+      })
+      .then(danach)
+      .catch(function(fehler){ melden("Die Aufnahme liess sich nicht ablegen: " + fehler); });
+  });
+  eingabe.click();
+}
+
+function bildEntfernen(k, danach){
+  imLager("readwrite", function(laden){ return laden.delete(k.id); })
+    .then(function(){
+      if(BILDER[k.id]) URL.revokeObjectURL(BILDER[k.id]);
+      delete BILDER[k.id];
+    })
+    .then(danach)
+    .catch(function(fehler){ melden("Die Aufnahme liess sich nicht entfernen: " + fehler); });
+}
+
+function melden(text){
+  var p = el("p","bildzeile",text);
+  p.style.color = "var(--fehlt)";
+  buehne.appendChild(p);
+}
+
 /* ---------- Weg und Adresse ----------
    Der Zustand steht in der Adresszeile, nicht in einer Variablen: dann traegt
    der Zurueck-Knopf des Telefons die Navigation, und ein Lesezeichen auf eine
@@ -704,7 +830,8 @@ function startbild(){
 
   var wege = [
     { weg:"karten",   name:"Karten",  satz:"Durchblättern, umdrehen, nichts wollen.",
-      zahl:KARTEN.length + (KARTEN.length === 1 ? " Karte" : " Karten") },
+      zahl:KARTEN.length + (KARTEN.length === 1 ? " Karte" : " Karten") +
+           ", " + mitBild() + " mit Bild" },
     { weg:"lernen",   name:"Lernen",  satz:"Vollbild, Vorderseite raten, umdrehen, selbst bewerten.",
       zahl: sitzt ? sitzt + " sitzen schon" : "Karteikasten, drei Fächer" },
     { weg:"suchen",   name:"Suchen",  satz:"Vom Symptom zur Knospe. Auch das ganze Register.",
@@ -732,13 +859,13 @@ function startbild(){
    Eine Funktion fuer alle Orte, an denen eine Karte auftaucht: beim
    Nachschlagen und beim Lernen. Waeren es zwei, liefen sie auseinander. */
 
-function kartenblatt(k){
+function kartenblatt(k, mitAufnahme){
   var blatt = el("div","blatt");
   blatt.dataset.gedreht = "false";
 
   var dreh = el("div","dreh");
   dreh.appendChild(el("div","mass"));
-  var vorne = seiteVorne(k), hinten = seiteHinten(k);
+  var vorne = seiteVorne(k, mitAufnahme), hinten = seiteHinten(k);
   dreh.appendChild(vorne);
   dreh.appendChild(hinten);
   blatt.appendChild(dreh);
@@ -774,15 +901,24 @@ function kartenblatt(k){
   return blatt;
 }
 
-function seiteVorne(k){
+function seiteVorne(k, mitAufnahme){
   var seite = el("div","seite vorne"), rand = el("div","rand");
 
   var feld = el("div","knospe-feld");
-  if(k.bild){
+  var quelle = bildQuelle(k);
+  if(quelle){
     var img = document.createElement("img");
-    img.src = "bilder/" + k.bild;
+    img.src = quelle;
     img.alt = "Knospe von " + k.de;
     feld.appendChild(img);
+  }else if(mitAufnahme && LAGER_DA){
+    /* Ein Knopf im Blatt dreht die Karte nicht um — darum kuemmert sich der
+       Klickfaenger in kartenblatt(). */
+    var auf = knopf("knospe-leer knospe-aufnehmen","Knospe fotografieren", function(){
+      bildAufnehmen(k, function(){ zeichne(); });
+    });
+    auf.appendChild(el("span","klein","Kartenvorderseite, ganzes Bild — bleibt auf diesem Gerät"));
+    feld.appendChild(auf);
   }else{
     feld.appendChild(el("div","knospe-leer","Bild der Knospe fehlt noch"));
   }
@@ -887,11 +1023,14 @@ function kartenkachel(k, hervorhebung){
   var b = el("button","eintrag"), rand = el("div","rand");
 
   var feld = el("div","knospe-feld");
-  if(k.bild){
+  var quelle = bildQuelle(k);
+  if(quelle){
     var img = document.createElement("img");
-    img.src = "bilder/" + k.bild; img.alt = "";
+    img.src = quelle; img.alt = "";
     feld.appendChild(img);
   }else{
+    /* Hier kein Knopf: die Kachel ist selbst einer, und Knoepfe in Knoepfen
+       gibt es nicht. Aufgenommen wird auf der geoeffneten Karte. */
     feld.appendChild(el("div","knospe-leer","Bild fehlt"));
   }
   rand.appendChild(feld);
@@ -924,7 +1063,7 @@ function einzelkarte(id){
   var k = karteNach(id);
   if(!k){ gehe("karten"); return; }
 
-  var blatt = kartenblatt(k);
+  var blatt = kartenblatt(k, true);
   blatt.style.marginTop = "1.4rem";
   buehne.appendChild(blatt);
 
@@ -937,6 +1076,21 @@ function einzelkarte(id){
   blatt.beiDrehung = function(gedreht){
     drehen.textContent = gedreht ? "Zurückdrehen" : "Umdrehen";
   };
+
+  /* Nur wenn schon eine eigene Aufnahme da ist: das leere Feld auf der
+     Vorderseite ist selbst der Weg zur ersten. */
+  if(BILDER[k.id]){
+    var bildzeile = el("p","bildzeile");
+    bildzeile.appendChild(document.createTextNode("Eigene Aufnahme · "));
+    bildzeile.appendChild(knopf(null,"ersetzen", function(){
+      bildAufnehmen(k, function(){ zeichne(); });
+    }));
+    bildzeile.appendChild(document.createTextNode(" · "));
+    bildzeile.appendChild(knopf(null,"entfernen", function(){
+      bildEntfernen(k, function(){ zeichne(); });
+    }));
+    buehne.appendChild(bildzeile);
+  }
 
   buehne.appendChild(el("p","nachsatz",
     "Tippen dreht die Karte · private Abschrift zum Nachschlagen"));
@@ -1609,7 +1763,11 @@ function ergebnis(){
   buehne.appendChild(s);
 }
 
-zeichne();
+/* Erst das Bildlager, dann der erste Strich: der Rest der App zeichnet
+   synchron, und ein Bild, das nach dem Zeichnen eintrifft, muesste ueberall
+   nachgereicht werden. Faellt das Lager aus, wird trotzdem gezeichnet — dann
+   eben ohne Aufnahmen. */
+bilderLaden().then(zeichne, zeichne);
 
 })();
 </script>

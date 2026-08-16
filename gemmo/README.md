@@ -120,9 +120,31 @@ und zeigt, wie eine Karte aussieht. Zwei Regeln:
    dann »fehlt noch« an die Stelle und zählt oben mit, wie viele der 50 Karten
    vollständig sind.
 
-Bilder der Knospen kommen als JPG nach `gemmo/bilder/`, der Dateiname ins Feld
-`bild`. Freigestellt oder mit hellem Grund, mindestens 560 Pixel breit — das
-Bild wird bis 280 Pixel breit gezeigt, doppelte Pixeldichte gerechnet.
+## Die Knospenbilder
+
+Die Aquarelle des Sets gehören nicht ins Repo — es sind fremde Aufnahmen.
+Deshalb nimmt die App sie selbst entgegen: Karte öffnen, auf das leere Feld
+tippen, Kartenvorderseite fotografieren. Auf dem Telefon öffnet das direkt die
+Kamera.
+
+Die Aufnahme wird auf 900 Pixel Kantenlänge verkleinert und als JPEG in der
+IndexedDB des Browsers abgelegt — rund 40 bis 80 KB je Karte. Nicht
+localStorage: fünfzig Aufnahmen sprengen dessen fünf Megabyte, und zwar erst
+bei Karte vierzig, also genau dann, wenn die Arbeit schon getan wäre. Gezeigt
+wird das Bild 280 Punkte breit; 900 reichen auch auf einem dreifach dichten
+Schirm.
+
+**Die Aufnahmen bleiben auf dem Gerät.** Sie wandern nicht ins Repo, nicht in
+die Vorschau und nicht auf ein zweites Telefon — jeder Browser hat seine
+eigene Ablage. Wer sie überall haben will, legt sie stattdessen als JPG nach
+`gemmo/bilder/` und trägt den Dateinamen ins Feld `bild` ein. Beim Anzeigen
+gewinnt die eigene Aufnahme vor der Datei: sie ist die spätere, ausdrückliche
+Entscheidung.
+
+Auf der Karte ist das leere Feld selbst der Weg zur ersten Aufnahme; ist eine
+da, stehen unter der Karte »ersetzen« und »entfernen«. Im Stapel wird nicht
+fotografiert — die Kachel ist selbst ein Knopf, und Knöpfe in Knöpfen gibt es
+nicht.
 
 ## Stand
 
@@ -141,8 +163,8 @@ Sieben Karten liegen ab, sechs davon vollständig:
 Es fehlen 43 Karten. Pro Karte zwei Aufnahmen, Rückseite und Vorderseite,
 in dieser Reihenfolge — daran werden die Paare erkannt.
 
-`gemmo/bilder/` ist leer. Die Knospenbilder müssen als Dateien ins Projekt
-gelegt werden; aus einem Chatbild entsteht keine.
+`gemmo/bilder/` ist leer und bleibt es voraussichtlich: die Bilder kommen über
+die Kamera in die App, siehe oben.
 
 ## Zwei Fallen, zweimal reingetappt
 
@@ -158,8 +180,15 @@ vollständig lahm — sie zeigt dann keinen Fehler, sondern nichts.
 - **Die Klammern der Kursivstellen** im Fragetext stehen als `\u0001` und
   `\u0002`, aus demselben Grund.
 
-Wer die Datei neu schreibt, prüft danach: in `gemmo/index.html` darf kein
-Zeichen aus U+0300–U+036F, U+0001 oder U+0002 buchstäblich vorkommen.
+Wer die Datei neu schreibt, prüft danach — dafür liegt die Gegenprobe daneben:
+
+```bash
+python3 gemmo/gegenprobe.py gemmo/index.html gemmo/karten.js
+```
+
+Sie meldet jedes Zeichen aus U+0300–U+036F, U+0001 und U+0002, das buchstäblich
+in der Datei steht, und endet mit einem Fehlercode. Zweimal ist das schon
+passiert; beim dritten Mal soll es nicht wieder erst in der Vorschau auffallen.
 
 ## Zwei Stellen zum Nachschauen
 
