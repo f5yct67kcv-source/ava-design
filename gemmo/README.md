@@ -122,49 +122,71 @@ und zeigt, wie eine Karte aussieht. Zwei Regeln:
 
 ## Die Knospenbilder
 
-Die Aquarelle des Sets gehören nicht ins Repo — es sind fremde Aufnahmen.
-Deshalb nimmt die App sie selbst entgegen: Karte öffnen, auf das leere Feld
-tippen, Kartenvorderseite fotografieren. Auf dem Telefon öffnet das direkt die
-Kamera.
+Sie werden aus den Fotos der Kartenvorderseiten geschnitten und liegen als JPG
+in `gemmo/bilder/`, der Dateiname steht im Feld `bild`. Zwei Schritte, beide
+in `gemmo/werkzeug/`:
 
-Die Aufnahme wird auf 900 Pixel Kantenlänge verkleinert und als JPEG in der
-IndexedDB des Browsers abgelegt — rund 40 bis 80 KB je Karte. Nicht
-localStorage: fünfzig Aufnahmen sprengen dessen fünf Megabyte, und zwar erst
-bei Karte vierzig, also genau dann, wenn die Arbeit schon getan wäre. Gezeigt
-wird das Bild 280 Punkte breit; 900 reichen auch auf einem dreifach dichten
-Schirm.
+```bash
+python3 gemmo/werkzeug/karten_freistellen.py <fotos/> karten_gerade/
+python3 gemmo/werkzeug/knospen_ausschneiden.py karten_gerade/ gemmo/bilder/
+```
 
-**Die Aufnahmen bleiben auf dem Gerät.** Sie wandern nicht ins Repo, nicht in
-die Vorschau und nicht auf ein zweites Telefon — jeder Browser hat seine
-eigene Ablage. Wer sie überall haben will, legt sie stattdessen als JPG nach
-`gemmo/bilder/` und trägt den Dateinamen ins Feld `bild` ein. Beim Anzeigen
-gewinnt die eigene Aufnahme vor der Datei: sie ist die spätere, ausdrückliche
-Entscheidung.
+**Schritt 1** findet die Karte: sie ist auf jedem dieser Fotos die einzige
+grosse helle Fläche auf dunklem Granit. Schwelle setzen, Sprenkel des Steins
+wegerodieren, dann den Winkel suchen, unter dem das umschliessende Rechteck am
+kleinsten wird — das ist die Drehung der Karte. Danach gerade drehen,
+ausschneiden, hochkant stellen. Keine Zusammenhangsanalyse nötig; die Ausreisser
+fallen über Perzentile heraus.
 
-Auf der Karte ist das leere Feld selbst der Weg zur ersten Aufnahme; ist eine
-da, stehen unter der Karte »ersetzen« und »entfernen«. Im Stapel wird nicht
-fotografiert — die Kachel ist selbst ein Knopf, und Knöpfe in Knöpfen gibt es
-nicht.
+**Schritt 2** schneidet die Knospe aus. Sie ist auf der Karte das einzige grosse
+warmfarbige Gebilde — die Namen sind fast schwarz, Untertitel und Randlinie
+grün. Also: gesättigte warme Pixel suchen, Umriss nehmen, Papier ringsum stehen
+lassen.
+
+Zwei Feinheiten, die den Unterschied machen:
+
+- **Die Namenszeile wird gesucht, nicht geschätzt.** Eine feste Grenze reicht
+  nicht: bei der Grauerle läuft die Knospe tiefer als bei der Birke, und ein
+  Wert, der beiden passt, schneidet der einen die Spitze ab oder holt der
+  anderen die Kursivzeile ins Bild. Also wird die erste Zeile gesucht, in der
+  gesetzter Text beginnt — dunkel und farblos, was die Knospe nie ist.
+- **Der Papierton wird abgeglichen.** Im Foto kommt das Kartenpapier grau und
+  leicht blaustichig an (rund 211,211,213). In der App liegt der Ausschnitt
+  aber auf dem nachgebauten Papier (251,250,246) — ohne Abgleich sitzt ein
+  grauer Kasten auf hellem Grund. Je Kanal ein eigener Faktor hebt die hellste
+  Fläche auf den Papierton der App; das nimmt zugleich den Farbstich.
+
+**Ohne Foto vom Rechner** geht es auch direkt in der App: Karte öffnen, auf das
+leere Feld tippen, Kartenvorderseite fotografieren — auf dem Telefon öffnet das
+die Kamera. Die Aufnahme wird auf 900 Pixel verkleinert und in der IndexedDB
+des Browsers abgelegt. Nicht localStorage: fünfzig Aufnahmen sprengen dessen
+fünf Megabyte, und zwar erst bei Karte vierzig, also genau dann, wenn die
+Arbeit schon getan wäre.
+
+Diese Aufnahmen bleiben auf dem Gerät — sie wandern nicht ins Repo und nicht auf
+ein zweites Telefon. Beim Anzeigen gewinnt die eigene Aufnahme vor der Datei in
+`bilder/`: sie ist die spätere, ausdrückliche Entscheidung.
 
 ## Stand
 
-Sieben Karten liegen ab, sechs davon vollständig:
+Sieben Karten liegen ab, sechs vollständig und mit Bild:
 
 | Karte | fehlt noch |
 |---|---|
-| Alnus glutinosa / Schwarzerle (Roterle) | Bild |
-| Alnus incana / Grauerle | Bild |
-| Betula pendula / Hängebirke | Bild |
-| Ilex aquifolium / Stechpalme | Bild |
-| Sambucus nigra / Schwarzer Holunder | Bild |
-| Viburnum lantana / Wolliger Schneeball | Bild |
+| Alnus glutinosa / Schwarzerle (Roterle) | — |
+| Alnus incana / Grauerle | — |
+| Betula pendula / Hängebirke | — |
+| Ilex aquifolium / Stechpalme | — |
+| Sambucus nigra / Schwarzer Holunder | — |
+| Viburnum lantana / Wolliger Schneeball | — |
 | Acer campestre / Feldahorn | Untertitel, Bild |
 
-Es fehlen 43 Karten. Pro Karte zwei Aufnahmen, Rückseite und Vorderseite,
-in dieser Reihenfolge — daran werden die Paare erkannt.
+Vom Feldahorn gibt es nur eine Aufnahme der Rückseite, aus dem allerersten
+Foto. Solange die Vorderseite fehlt, fehlen Untertitel und Knospe.
 
-`gemmo/bilder/` ist leer und bleibt es voraussichtlich: die Bilder kommen über
-die Kamera in die App, siehe oben.
+Es fehlen 43 Karten. Pro Karte zwei Aufnahmen. **Reihenfolge: erst die
+Vorderseite, dann die Rückseite** — daran werden die Paare erkannt, und daran
+lässt sich die Zuordnung später auch belegen.
 
 ## Zwei Fallen, zweimal reingetappt
 
@@ -180,29 +202,23 @@ vollständig lahm — sie zeigt dann keinen Fehler, sondern nichts.
 - **Die Klammern der Kursivstellen** im Fragetext stehen als `\u0001` und
   `\u0002`, aus demselben Grund.
 
-Wer die Datei neu schreibt, prüft danach — dafür liegt die Gegenprobe daneben:
+Wer die Datei neu schreibt, prüft danach — dafür liegt die Gegenprobe in `gemmo/werkzeug/`:
 
 ```bash
-python3 gemmo/gegenprobe.py gemmo/index.html gemmo/karten.js
+python3 gemmo/werkzeug/gegenprobe.py gemmo/index.html gemmo/karten.js
 ```
 
 Sie meldet jedes Zeichen aus U+0300–U+036F, U+0001 und U+0002, das buchstäblich
 in der Datei steht, und endet mit einem Fehlercode. Zweimal ist das schon
 passiert; beim dritten Mal soll es nicht wieder erst in der Vorschau auffallen.
 
-## Zwei Stellen zum Nachschauen
+## Eine Stelle zum Nachschauen
 
-- **Zuordnung ohne Selbstbeleg.** Die Rückseiten von *Betula pendula* und
-  *Alnus incana* nennen ihre Pflanze im Text (»ist die Birke«, »Die Grauerle
-  eignet sich«) und belegen ihre Zuordnung damit selbst. Die von *Alnus
-  glutinosa* und *Ilex aquifolium* tun das nicht — dort stützt sich die
-  Paarung allein auf die Reihenfolge der Fotos. Beim nächsten Durchblättern
-  kurz prüfen.
-- **Pinus mugo oder Pinus montana?** Die Ilex-Karte schreibt »Pinus mugo«, die
-  Birken-Karte »Pinus montana«. Botanisch dieselbe Bergkiefer, im Set aber
-  zwei Schreibweisen. Beide stehen so da, wie sie gedruckt sind; die App hält
-  sie deshalb für zwei Pflanzen. Sobald die Karte selbst auftaucht, zeigt sich,
-  welche Schreibweise das Set führt — dann kann die andere darauf zeigen.
+**Pinus mugo oder Pinus montana?** Die Ilex-Karte schreibt »Pinus mugo«, die
+Birken-Karte »Pinus montana«. Botanisch dieselbe Bergkiefer, im Set aber zwei
+Schreibweisen. Beide stehen so da, wie sie gedruckt sind; die App hält sie
+deshalb für zwei Pflanzen. Sobald die Karte selbst auftaucht, zeigt sich,
+welche Schreibweise das Set führt — dann kann die andere darauf zeigen.
 
 ## Geklärt
 
@@ -210,6 +226,12 @@ passiert; beim dritten Mal soll es nicht wieder erst in der Vorschau auffallen.
   liegt deshalb einmal in der App, nicht in jeder Karte.
 - **Keine Numerierung** auf den Karten. Die Liste sortiert alphabetisch nach
   dem botanischen Namen.
+- **Die Zuordnung der Rückseiten stimmt.** Zwei Paare belegten sich selbst,
+  weil der Text die Pflanze nennt (»ist die Birke«, »Die Grauerle eignet
+  sich«); bei *Alnus glutinosa* und *Ilex aquifolium* stützte sie sich nur auf
+  die Reihenfolge im Chat. Die Dateinamen der Aufnahmen (IMG_2045 bis
+  IMG_2056) geben die echte Aufnahmereihenfolge her: lückenlos Vorderseite,
+  Rückseite, Vorderseite, Rückseite. Damit sind alle sechs Paare belegt.
 - **Mehrere Partner pro Kombination** kommen vor (»Ribes nigrum + Fagus
   sylvatica + Carpinus betulus bei Heuschnupfen«). `partner` ist deshalb
   immer eine Liste, jeder Name wird einzeln verlinkt.

@@ -117,7 +117,7 @@ window.KARTEN = [
       { partner: ["Viburnum lantana"],            anlass: "bei spastischer Bronchitis/Asthma bronchiale" },
       { partner: ["Vitis vinifera", "Ficus carica"], anlass: "bei chronisch entzündlichen Darmerkrankungen" }
     ],
-    bild: ""
+    bild: "alnus-glutinosa.jpg"
   },
 
   {
@@ -149,7 +149,7 @@ window.KARTEN = [
       { partner: ["Ficus carica", "Juglans regia"],         anlass: "bei Morbus Crohn" },
       { partner: ["Aesculus hippocastanum"],                anlass: "bei Hämorrhoiden" }
     ],
-    bild: ""
+    bild: "alnus-incana.jpg"
   },
 
   {
@@ -182,7 +182,7 @@ window.KARTEN = [
       { partner: ["Rosmarinus officinalis"],              anlass: "zur Leberzellentgiftung" },
       { partner: ["Juniperus communis"],                  anlass: "zur Ausleitung über die Nieren" }
     ],
-    bild: ""
+    bild: "betula-pendula.jpg"
   },
 
   {
@@ -214,7 +214,7 @@ window.KARTEN = [
       { partner: ["Betula pendula", "Pinus mugo"],   anlass: "bei chronischem Rheumatismus" },
       { partner: ["Alnus glutinosa"],                anlass: "bei Allergien" }
     ],
-    bild: ""
+    bild: "ilex-aquifolium.jpg"
   },
 
   {
@@ -247,7 +247,7 @@ window.KARTEN = [
       { partner: ["Juniperus communis", "Ribes nigrum"],                  anlass: "bei Gicht" },
       { partner: ["Tilia tomentosa"],                                     anlass: "bei Schwarz-Weiß-Denken" }
     ],
-    bild: ""
+    bild: "sambucus-nigra.jpg"
   },
 
   {
@@ -275,7 +275,7 @@ window.KARTEN = [
       { partner: ["Cornus sanguinea"],                       anlass: "bei Schilddrüsenüberfunktion" },
       { partner: ["Tilia tomentosa"],                        anlass: "bei Neigung zu Hyperventilation" }
     ],
-    bild: ""
+    bild: "viburnum-lantana.jpg"
   }
 
 ];

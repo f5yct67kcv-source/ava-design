@@ -695,7 +695,11 @@ function bilderLaden(){
 }
 
 function bildQuelle(k){
-  return BILDER[k.id] || (k.bild ? "bilder/" + k.bild : null);
+  if(BILDER[k.id]) return BILDER[k.id];
+  if(!k.bild) return null;
+  /* Sonst ein Dateiname neben der App — ausser die Vorschau hat das Bild
+     schon als vollstaendige Adresse eingebettet. */
+  return k.bild.indexOf("data:") === 0 ? k.bild : "bilder/" + k.bild;
 }
 function mitBild(){
   return KARTEN.filter(function(k){ return !!bildQuelle(k); }).length;
