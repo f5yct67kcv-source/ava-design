@@ -17,21 +17,49 @@ Browser öffnen und »Zum Home-Bildschirm«.
 Keine Bibliothek, kein Build, keine Schrift von aussen — die App läuft ohne
 Netz, sobald sie einmal geladen ist.
 
+## Die Karte ist das Objekt
+
+Nicht eine Seite mit Abschnitten, sondern ein Stück Papier mit zwei Seiten,
+das man umdreht. Tippen dreht, der Knopf darunter tut dasselbe und ist der Weg
+für die Tastatur. Nachgebaut sind Papierton, die eingerückte olivgrüne Linie,
+Knospe und Namen unten links auf der Vorderseite, grüne Versalien und
+laufender Indikationstext auf der Rückseite.
+
+Drei Abweichungen vom Druck, alle absichtlich:
+
+- **Das Grün ist eine Spur dunkler.** Der Originalton (rund `#7f9f38`) kommt
+  auf dem hellen Papier nur auf 3.4:1 und ist in den kleinen Versalien schwer
+  zu lesen. `#64802d` liegt bei 4.9:1 und ist danebengehalten nicht zu
+  unterscheiden.
+- **Nachts wird das Papier zurückgenommen** von Weiss auf ein warmes
+  Gebrochen-Weiss. Eine reinweisse Fläche auf fast schwarzem Grund blendet.
+  Die Tinte wandert mit, der Kontrast innerhalb der Karte bleibt gleich.
+- **Die Karte hält ihr Format**, solange die Rückseite kürzer ist als hoch
+  (1:1.5) — sonst wäre eine Karte mit drei Indikationen ein Zettel. Wird der
+  Text länger, wächst sie darüber hinaus, und die Vorderseite wächst mit.
+  Auf echtem Karton ist die Vorderseite ja auch nicht kürzer, sie hat nur
+  mehr Luft.
+
+Die Karte hat ihre eigenen Farben, getrennt vom Rest der App: sie ist ein
+Gegenstand aus Papier und behält ihr Aussehen, egal wie die App gerade
+aussieht.
+
 ## Drei Wege
 
 | Weg | Für die Frage |
 |---|---|
-| **Karten** | »Zeig mir Weissdorn.« Alphabetisch nach botanischem Namen. |
+| **Karten** | »Zeig mir Weissdorn.« Die Karten liegen als Stapel aus, alphabetisch nach botanischem Namen. |
 | **Register** | »Was hilft bei Ekzemen?« Fällt automatisch aus den Indikationen aller Karten heraus, wird nicht separat gepflegt. |
-| **Lernen** | »Frag mich ab.« Karteikasten nach Leitner, drei Fächer, Stand im Browser gespeichert. |
+| **Lernen** | »Frag mich ab.« Dieselbe Karte, Vorderseite zuerst. Karteikasten nach Leitner, drei Fächer, Stand im Browser gespeichert. Leertaste dreht, 1 und 2 bewerten. |
 
-Das Suchfeld sucht gleichzeitig in Namen, Untertiteln, seelischen Aspekten und
-Indikationen. Bei einem Treffer über die Indikation steht in der Trefferzeile,
-welche es war.
+Das Suchfeld sucht gleichzeitig in Namen, Untertiteln, seelischen Aspekten,
+Indikationen und Partnerpflanzen. Bei einem Treffer über die Indikation steht
+auf der Karte, welche es war.
 
-Die Partnerpflanzen unter »Bewährte Kombinationen« sind verlinkt: von *Acer
-campestre* führt ein Klick direkt zu *Olea europaea*, sobald deren Karte
-abgeschrieben ist.
+Auf der Rückseite ist jede Indikation und jede Partnerpflanze anklickbar —
+die Indikation führt in die Suche (was hilft sonst noch dagegen?), die
+Partnerpflanze auf ihre eigene Karte, sobald die abgeschrieben ist. Ein Klick
+darauf dreht die Karte *nicht* um.
 
 ## Karten erfassen
 
