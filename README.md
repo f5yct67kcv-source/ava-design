@@ -61,6 +61,31 @@ von Google Fonts.
   Pflicht, sobald der Rechner scharf geschaltet wird — er erhebt Name, E-Mail
   und Telefonnummer.
 
+## Vor dem Livegang
+
+Die SEO-Grundlage steht, aber sie ist bewusst stillgelegt. Alle Schalter sind
+im Code mit `LIVEGANG` markiert — `grep -rn LIVEGANG .` findet sie alle.
+
+1. **noindex entfernen** in `index.html` und `kostenrechner.html`. Solange die
+   Zeile steht, bleibt die Seite aus dem Suchindex. Das ist Absicht: mit
+   Platzhalterpreisen und toten Links waere eine Indexierung schaedlich, weil
+   Google die Entwurfsfassung behaelt und sie spaeter gegen die echte Domain
+   antreten laesst.
+2. **Domain einsetzen** — `DOMAIN.ch` ersetzen in `robots.txt`, `sitemap.xml`
+   und im JSON-LD am Ende von `index.html`. Dort auch `canonical` und `og:url`
+   einkommentieren.
+3. **Adresse und Telefon** im JSON-LD ergaenzen (drei Stellen mit `AUSFUELLEN`).
+   Ein LocalBusiness ohne Adresse wird von Google weitgehend ignoriert.
+4. **Markenname vereinheitlichen** — Titel und Fuss stehen noch auf AVA, der
+   Header bereits auf formateins.
+5. **Google Business Profile anlegen.** Bei lokalen Suchen dominiert das
+   Kartenpaket ueber den organischen Treffern. Das ist wirksamer als jede
+   Meta-Optimierung und kostet nichts.
+
+Was bereits liegt: `favicon.svg`, `teilen.png` (Open-Graph-Bild 1200x630),
+`robots.txt`, `sitemap.xml`, JSON-LD-Geruest, `lang="de-CH"`, Open Graph und
+Twitter Cards auf beiden Seiten.
+
 ## Lokal ansehen
 
 ```bash

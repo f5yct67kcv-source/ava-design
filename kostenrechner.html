@@ -1,9 +1,49 @@
 <!DOCTYPE html>
+<html lang="de-CH">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark">
 <title>Kostenrechner — Webdesign Olten | AVA</title>
 <meta name="description" content="In sechs Fragen zum Preisrahmen für deine Website. Ohne Konto, ohne Telefonnummer. Danach ein verbindliches Festpreisangebot.">
+
+<!-- ============================================================
+     SEO-Grundlage. Drei Dinge muessen vor dem Livegang passieren,
+     alle sind unten mit LIVEGANG markiert:
+     1. die noindex-Zeile entfernen
+     2. canonical und og:url einkommentieren, echte Domain einsetzen
+     3. Adresse und Telefon im JSON-LD am Seitenende ergaenzen
+     ============================================================ -->
+
+<!-- LIVEGANG: diese Zeile entfernen. Solange sie steht, haelt sie die
+     unfertige Seite aus dem Suchindex — mit Platzhalterpreisen, toten
+     Links und gemischtem Markennamen waere eine Indexierung schaedlich,
+     weil Google die Entwurfsfassung behaelt und sie spaeter gegen die
+     echte Domain antritt. -->
+<meta name="robots" content="noindex,nofollow">
+
+<!-- LIVEGANG: einkommentieren, sobald die Domain steht.
+<link rel="canonical" href="https://DOMAIN.ch/kostenrechner.html">
+<meta property="og:url" content="https://DOMAIN.ch/kostenrechner.html">
+-->
+
+<!-- Fuer geteilte Links in WhatsApp, Signal und sozialen Netzen. Ohne das
+     erscheint dort nur die nackte Adresse — bei einem Betrieb, der von
+     Weiterempfehlung lebt, ist das die teuerste Luecke. -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="de_CH">
+<meta property="og:site_name" content="formateins">
+<meta property="og:title" content="Kostenrechner — Webdesign Olten | formateins">
+<meta property="og:description" content="In sechs Fragen zum Preisrahmen für deine Website. Ohne Konto, ohne Telefonnummer.">
+<meta property="og:image" content="teilen.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="formateins — Webdesign aus Olten und Region">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="favicon.svg">
+<meta name="theme-color" content="#1b2a33">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400..900&family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">

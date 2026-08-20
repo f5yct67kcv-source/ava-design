@@ -1,0 +1,9 @@
+# LIVEGANG: Disallow-Zeile entfernen und die Sitemap-Adresse auf die echte
+# Domain setzen. Solange sie steht, bleibt der Entwurf aus dem Suchindex.
+User-agent: *
+Disallow: /
+
+# LIVEGANG: stattdessen dies verwenden —
+# User-agent: *
+# Allow: /
+# Sitemap: https://DOMAIN.ch/sitemap.xml

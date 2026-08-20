@@ -1,9 +1,49 @@
 <!DOCTYPE html>
+<html lang="de-CH">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark">
 <title>Webdesign Olten &amp; Region | AVA Design</title>
 <meta name="description" content="Webdesign in Olten und der Region: Ich baue Websites für Selbstständige und kleine Unternehmen von Hand, ohne Baukasten, zum Festpreis. Kostenrahmen in sechs Fragen, ohne Konto und ohne Telefonnummer.">
+
+<!-- ============================================================
+     SEO-Grundlage. Drei Dinge muessen vor dem Livegang passieren,
+     alle sind unten mit LIVEGANG markiert:
+     1. die noindex-Zeile entfernen
+     2. canonical und og:url einkommentieren, echte Domain einsetzen
+     3. Adresse und Telefon im JSON-LD am Seitenende ergaenzen
+     ============================================================ -->
+
+<!-- LIVEGANG: diese Zeile entfernen. Solange sie steht, haelt sie die
+     unfertige Seite aus dem Suchindex — mit Platzhalterpreisen, toten
+     Links und gemischtem Markennamen waere eine Indexierung schaedlich,
+     weil Google die Entwurfsfassung behaelt und sie spaeter gegen die
+     echte Domain antritt. -->
+<meta name="robots" content="noindex,nofollow">
+
+<!-- LIVEGANG: einkommentieren, sobald die Domain steht.
+<link rel="canonical" href="https://DOMAIN.ch/">
+<meta property="og:url" content="https://DOMAIN.ch/">
+-->
+
+<!-- Fuer geteilte Links in WhatsApp, Signal und sozialen Netzen. Ohne das
+     erscheint dort nur die nackte Adresse — bei einem Betrieb, der von
+     Weiterempfehlung lebt, ist das die teuerste Luecke. -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="de_CH">
+<meta property="og:site_name" content="formateins">
+<meta property="og:title" content="Webdesign Olten &amp; Region | formateins">
+<meta property="og:description" content="Websites für Selbstständige und kleine Unternehmen in Olten und der Region. Von Hand gebaut, ohne Baukasten, zum Festpreis.">
+<meta property="og:image" content="teilen.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="formateins — Webdesign aus Olten und Region">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="favicon.svg">
+<meta name="theme-color" content="#1b2a33">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400..900&family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
@@ -549,7 +589,7 @@ footer nav a:hover{color:var(--signal)}
 
 <header class="kopf">
   <div class="spalte">
-    <div class="logo"><span class="zeichen">A</span>AVA</div>
+    <div class="logo">formateins</div>
     <span class="platz">Markenname noch Platzhalter</span>
   </div>
 </header>
@@ -729,6 +769,53 @@ footer nav a:hover{color:var(--signal)}
     <span class="still">© 2026 · Webdesign aus Olten und Region · von Hand gebaut, ohne Baukastensystem</span>
   </div>
 </footer>
+
+<!-- ============================================================
+     Strukturierte Daten. Sagt Google explizit, was fuer ein Betrieb das ist,
+     wo er sitzt und welches Gebiet er bedient — statt es aus dem Fliesstext
+     erraten zu lassen. Der staerkste technische Hebel fuer lokale Suche.
+
+     LIVEGANG: die drei mit AUSFUELLEN markierten Werte ergaenzen. Ein
+     LocalBusiness ohne Adresse und Telefon wird von Google weitgehend
+     ignoriert — unvollstaendig bringt es fast nichts.
+     ============================================================ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "formateins",
+  "description": "Websites für Selbstständige und kleine Unternehmen in Olten und der Region. Von Hand gebaut, ohne Baukasten, zum Festpreis.",
+  "url": "https://DOMAIN.ch",
+  "image": "https://DOMAIN.ch/teilen.png",
+  "priceRange": "ab CHF 1000",
+  "founder": { "@type": "Person", "name": "Adrian von Arb" },
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "AUSFUELLEN",
+    "postalCode": "AUSFUELLEN",
+    "addressLocality": "Olten",
+    "addressRegion": "SO",
+    "addressCountry": "CH"
+  },
+  "telephone": "AUSFUELLEN",
+  "areaServed": [
+    { "@type": "City", "name": "Olten" },
+    { "@type": "AdministrativeArea", "name": "Kanton Solothurn" },
+    { "@type": "AdministrativeArea", "name": "Kanton Aargau" }
+  ],
+  "knowsLanguage": "de-CH",
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Leistungen",
+    "itemListElement": [
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Einseitige Website" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Firmenwebsite" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Bestehende Website erneuern" } }
+    ]
+  }
+}
+</script>
+
 
 <script>
 // Ein einziger inszenierter Moment: die Leitung des Ablaufs zeichnet sich,

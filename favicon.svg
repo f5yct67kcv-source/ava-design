@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Signalorange auf Schiefer, dieselben Werte wie auf der Seite. Ein SVG
+       statt ico: skaliert verlustfrei und ist ein Bruchteil so gross. -->
+  <rect width="64" height="64" fill="#1b2a33"/>
+  <text x="32" y="45" text-anchor="middle"
+        font-family="Helvetica Neue, Helvetica, Arial, sans-serif"
+        font-size="42" font-weight="800" fill="#ff8a4c">f</text>
+</svg>
