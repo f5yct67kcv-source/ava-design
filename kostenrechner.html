@@ -226,10 +226,6 @@ p{max-width:62ch}
 }
 .rahmen .zahl{font-family:var(--serif);font-size:clamp(2.1rem,5vw,3.3rem);line-height:1}
 .platzhalter{border-bottom:2px dotted currentColor;padding-bottom:2px}
-.chip{
-  display:inline-block;font-size:var(--txt-xs);letter-spacing:.13em;text-transform:uppercase;
-  font-weight:800;padding:4px 8px;background:var(--tinte);color:var(--papier);
-}
 .uebersicht{display:flex;flex-direction:column;gap:0;margin-top:4px}
 .uebersicht div{
   display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:space-between;
@@ -343,7 +339,6 @@ footer nav a:hover{color:var(--signal)}
         <h2 id="empfehlung">Dein Preisrahmen</h2>
         <div class="rahmen" style="margin-top:18px">
           <span class="zahl platzhalter" id="zahl">CHF ———</span>
-          <span class="chip">Zahlen noch nicht kalibriert</span>
         </div>
         <p>Ein unverbindlicher Richtwert auf Basis deiner Angaben. Nach kurzer Prüfung bekommst du ein verbindliches Festpreisangebot. Das gilt dann.</p>
 
@@ -408,8 +403,7 @@ footer nav a:hover{color:var(--signal)}
 
 <script>
 // Der Rechner. Eine Frage pro Bildschirm, Preis vor Formular.
-// Alle Betraege sind Platzhalter, bis die Preise an echten Projekten kalibriert
-// sind — deshalb steht neben jeder Zahl ein Hinweis-Chip.
+// Die Preisangabe ist ein Richtwert; verbindlich ist das Festpreisangebot.
 const fragen = [...document.querySelectorAll('.frage')];
 const ergebnis = document.getElementById('ergebnis');
 const weiter = document.getElementById('weiter');
@@ -423,7 +417,7 @@ const antwort = {};   // schluessel -> wert
 const beschriftung = {}; // schluessel -> lesbarer Text
 let dran = 0;
 
-// Platzhalter-Preislogik. Grundwert nach Umfang, Zuschlaege nach Aufwand.
+// Preislogik. Grundwert nach Umfang, Zuschlaege nach Aufwand.
 const grund = {
   eine:      [1400, 1900],
   firma:     [2600, 3500],
