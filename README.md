@@ -66,8 +66,12 @@ Schriften liegen selbst im Projekt (`schriften/`, `schriften.css`).
   U=https://ADRESSE-DER-SEITE/
   # Hoehe H vorher im Browser messen: document.documentElement.scrollHeight
   "$C" --headless=new --hide-scrollbars --force-device-scale-factor=1 --window-size=1440,H --screenshot=desk.png "$U"
-  "$C" --headless=new --hide-scrollbars --force-device-scale-factor=2 --window-size=390,H --screenshot=mobil.png "$U"
+  # Chrome ohne Kopf rendert nicht schmaler als rund 500 px. Die Handy-Aufnahme
+  # deshalb ueber eine Rahmenseite mit einem iframe von genau 390 px Breite
+  # machen und danach links 780 px (doppelte Dichte) ausschneiden.
+  "$C" --headless=new --hide-scrollbars --force-device-scale-factor=2 --window-size=600,H --screenshot=mobil.png "http://localhost:PORT/rahmen.html"   # quellen/rahmen.html
   cwebp -metadata none -q 62 desk.png -o arbeiten/johann-desktop.webp
+  sips -c H*2 780 --cropOffset 0 0 mobil.png
   cwebp -metadata none -q 62 -resize 440 0 mobil.png -o arbeiten/johann-mobil.webp
   ```
 
