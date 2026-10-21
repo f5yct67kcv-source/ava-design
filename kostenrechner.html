@@ -333,8 +333,10 @@ p{max-width:62ch}
 .faq summary:hover{color:var(--signal-hell)}
 .faq details p{color:var(--auf-grund-still);font-size:var(--txt-m);max-width:62ch;padding:0 0 20px}
 
-footer{border-top:1px solid var(--linie);padding-block:30px;font-size:var(--txt-s)}
-footer .spalte{display:flex;flex-wrap:wrap;gap:16px 34px;justify-content:space-between}
+/* Schlanke Fassung des Fusses der Startseite: eine Zeile, damit er nicht mit der Anfrage konkurriert. */
+footer{border-top:1px solid var(--linie);background:var(--grund-tief);padding-block:28px;font-size:var(--txt-s)}
+footer .spalte{display:flex;flex-wrap:wrap;gap:14px 34px;justify-content:space-between;align-items:center}
+footer .logo{font-size:1.3rem}
 footer nav{display:flex;flex-wrap:wrap;gap:8px 22px;color:var(--auf-grund-still)}
 footer nav a{text-decoration:none}
 footer nav a:hover{color:var(--signal)}
@@ -558,8 +560,9 @@ footer nav a:hover{color:var(--signal)}
 
 <footer>
   <div class="spalte">
-    <span class="still">© 2026 · Webdesign aus Olten</span>
+    <a class="logo" href="index.html" aria-label="formateins, zur Startseite"><span class="s">format</span><span class="p">eins</span></a>
     <nav><a href="index.html">Startseite</a><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></nav>
+    <span class="still">© 2026 formateins · Webdesign aus Olten</span>
   </div>
 </footer>
 
