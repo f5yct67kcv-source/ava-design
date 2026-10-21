@@ -238,6 +238,7 @@ p{max-width:62ch}
 .uebersicht div:last-child{border-bottom:0}
 .uebersicht dt{color:var(--tinte-still)}
 .uebersicht dd{font-weight:700;text-align:right}
+.laufend{margin-top:18px;font-size:var(--txt-m)}
 .separat{
   margin-top:20px;padding:16px 18px;border:1px dashed var(--tinte-still);
   font-size:var(--txt-m);color:var(--tinte-still);
@@ -317,6 +318,10 @@ footer nav a:hover{color:var(--signal)}
         <button class="antwort" data-wert="teil" data-text="Bilder teilweise vorhanden"><span class="kreis"></span><span><b>Teilweise</b><span>Für die Lücken finden wir eine Lösung.</span></span></button>
         <button class="antwort" data-wert="shooting" data-text="Fotos vor Ort nötig"><span class="kreis"></span><span><b>Ich brauche neue Fotos</b><span>Ich komme in den Betrieb und fotografiere. Wird separat offeriert, nicht im Rahmen unten.</span></span></button>
       </div>
+      <div class="feld zusatzfeld" id="ortfeld">
+        <label for="ort">Wo ist dein Betrieb? (freiwillig)</label>
+        <input type="text" id="ort" name="ort" placeholder="PLZ und Ort" autocomplete="address-level2">
+      </div>
     </div>
 
     <div class="frage" data-schluessel="logo">
@@ -354,6 +359,9 @@ footer nav a:hover{color:var(--signal)}
         <dl class="uebersicht" id="uebersicht"></dl>
 
         <div class="separat" id="separat" hidden></div>
+
+        <!-- Betrag pruefen, falls der Hoster die Preise aendert. -->
+        <p class="laufend">Dazu kommen jährlich rund CHF 150–250 für Hosting und Domain. Die laufen direkt beim Anbieter und auf deinen Namen, nicht über mich.</p>
       </div>
 
       <button class="zurueck aendern" id="aendern" type="button">← Angaben ändern</button>
@@ -517,6 +525,7 @@ fragen.forEach(frage => {
       const datum = document.getElementById('datumfeld');
       if (schluessel === 'bestand') url.classList.toggle('zeigen', knopf.dataset.wert !== 'nein');
       if (schluessel === 'zeit') datum.classList.toggle('zeigen', knopf.dataset.wert === 'datum');
+      if (schluessel === 'bilder') document.getElementById('ortfeld').classList.toggle('zeigen', knopf.dataset.wert === 'shooting');
 
       weiter.disabled = false;
     });
@@ -546,6 +555,8 @@ function antwortText(schluessel){
   if (schluessel === 'bestand' && antwort.bestand !== 'nein' && url) text += ' · ' + url;
   if (schluessel === 'zeit' && antwort.zeit === 'datum' && datum) text += ', bis ' + datumLesbar(datum);
   if (schluessel === 'zeit' && eilig) text += ' (Eilzuschlag eingerechnet)';
+  const ort = document.getElementById('ort').value.trim();
+  if (schluessel === 'bilder' && antwort.bilder === 'shooting' && ort) text += ' · ' + ort;
   return text;
 }
 
@@ -595,8 +606,10 @@ function rechnen(){
   const kasten = document.getElementById('separat');
   if (separat.length) {
     kasten.hidden = false;
-    kasten.textContent = 'Nicht im Rahmen enthalten und separat offeriert: ' + separat.join(' · ') +
-      '. Das sind eigene Arbeiten mit eigenem Aufwand. Ich rechne sie dir lieber einzeln aus, als sie hier grob draufzuschlagen.';
+    kasten.textContent = 'Nicht im Rahmen enthalten und separat offeriert: ' + separat.join(' · ') + '. ' +
+      (antwort.bilder === 'shooting'
+        ? 'Was ein Fototermin kostet, hängt stark von der Anfahrt ab. Ich rechne es dir lieber genau aus, als hier eine Zahl zu raten.'
+        : 'Das ist eine eigene Arbeit mit eigenem Aufwand. Ich rechne sie dir lieber einzeln aus, als sie hier grob draufzuschlagen.');
   } else {
     kasten.hidden = true;
   }
