@@ -297,6 +297,26 @@ p{max-width:62ch}
 .danke{display:flex;flex-direction:column;gap:.9em}
 .danke[hidden]{display:none}
 
+/* Kurzes FAQ unter dem Formular, ohne Skript: details/summary. */
+.faq{display:flex;flex-direction:column;margin-top:clamp(14px,3vh,30px)}
+.faq h2{margin:14px 0 10px}
+.faq details{border-bottom:1px solid var(--linie)}
+.faq details:first-of-type{border-top:1px solid var(--linie)}
+.faq summary{
+  list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:18px;
+  padding:17px 0;font-weight:700;transition:color .2s ease;
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{
+  content:"";flex:none;width:13px;height:13px;
+  background:linear-gradient(var(--signal),var(--signal)) center/100% 1.5px no-repeat,
+             linear-gradient(var(--signal),var(--signal)) center/1.5px 100% no-repeat;
+  transition:transform .3s cubic-bezier(.16,1,.3,1);
+}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq summary:hover{color:var(--signal-hell)}
+.faq details p{color:var(--auf-grund-still);font-size:var(--txt-m);max-width:62ch;padding:0 0 20px}
+
 footer{border-top:1px solid var(--linie);padding-block:30px;font-size:var(--txt-s)}
 footer .spalte{display:flex;flex-wrap:wrap;gap:16px 34px;justify-content:space-between}
 footer nav{display:flex;flex-wrap:wrap;gap:8px 22px;color:var(--auf-grund-still)}
@@ -465,6 +485,35 @@ footer nav a:hover{color:var(--signal)}
         <div class="danke" id="danke" hidden tabindex="-1">
           <p class="klarzeile" style="font-size:var(--txt-l);color:var(--auf-grund);max-width:52ch">Danke, deine Anfrage ist angekommen. Ich schaue mir deine Angaben an und melde mich in der Regel innerhalb von zwei Arbeitstagen.</p>
         </div>
+      </div>
+
+      <div class="faq">
+        <p class="etikett"><i aria-hidden="true"></i>Häufige Fragen</p>
+        <h2>Bevor du schreibst.</h2>
+        <details>
+          <summary>Wie genau ist der Rahmen?</summary>
+          <p>Der Rechner arbeitet mit denselben Ansätzen wie mein Angebot, der Festpreis liegt in aller Regel darin. Brauchst du weniger als angekreuzt, sage ich es dir, und der Preis sinkt. Kommt etwas dazu, das der Rechner nicht abfragt, erfährst du vorher, was und warum.</p>
+        </details>
+        <details>
+          <summary>Was ist im Preis enthalten?</summary>
+          <p>Gestaltung, Bau, Anpassung für Handy und Tablet, die Grundlage, damit Google die Seite findet, und die Einrichtung von Domain und Hosting bis zum Livegang. Nicht enthalten sind die jährlichen Kosten beim Hoster und was oben als separat ausgewiesen ist.</p>
+        </details>
+        <details>
+          <summary>Kostet mich die Anfrage etwas?</summary>
+          <p>Nein. Anfrage und Festpreisangebot sind kostenlos und unverbindlich. Du entscheidest erst, wenn du den Festpreis kennst.</p>
+        </details>
+        <details>
+          <summary>Wie lange dauert es?</summary>
+          <p>Üblich sind rund zwei Monate ab Zusage. Am meisten Zeit brauchen meist Texte und Bilder, nicht der Bau. Ein fester Termin in weniger als sechs Wochen geht auch, dann mit Eilzuschlag.</p>
+        </details>
+        <details>
+          <summary>Was kostet es nach dem Livegang?</summary>
+          <p>Nur Hosting und Domain, direkt beim Anbieter. Updates braucht deine Seite keine, weil kein Baukasten und kein CMS dahinterstecken, die gepflegt werden müssen. Änderungen wie neue Öffnungszeiten oder Preise mache ich, wenn du sie willst, und rechne sie nach Aufwand ab. Kein Abo.</p>
+        </details>
+        <details>
+          <summary>Gehört die Website dann mir?</summary>
+          <p>Ja. Domain und Hosting laufen auf deinen Namen, die Dateien gehören dir. Du kannst jederzeit wechseln, auch zu jemand anderem.</p>
+        </details>
       </div>
     </div>
 
