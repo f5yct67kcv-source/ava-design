@@ -304,6 +304,8 @@ p{max-width:62ch}
 @media(min-width:640px){.paar{grid-template-columns:1fr 1fr}}
 .formular .knopf{align-self:flex-start;margin-top:4px}
 .klarzeile{font-size:var(--txt-s);color:var(--auf-grund-still);max-width:52ch}
+/* Im Formular so breit wie die Felder darueber, sonst wirkt der Hinweis eingeklemmt. */
+.formular .klarzeile{max-width:none}
 .formstatus{color:var(--signal)}
 .formstatus:empty{display:none}
 .aendern{align-self:flex-start;margin-top:-6px}
