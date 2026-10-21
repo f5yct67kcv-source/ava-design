@@ -3,8 +3,8 @@
 Entwurf der eigenen Website. Webdesign für Selbstständige und kleine Unternehmen
 in Olten und der Region.
 
-Statisches HTML, kein Build-Schritt, keine Abhängigkeiten ausser zwei Schriften
-von Google Fonts.
+Statisches HTML, kein Build-Schritt, keine externen Abhängigkeiten. Die zwei
+Schriften liegen selbst im Projekt (`schriften/`, `schriften.css`).
 
 ## Dateien
 
@@ -72,10 +72,6 @@ von Google Fonts.
   Wochen und liefert schlechtere Antworten.
 - **Markenname** ist provisorisch AVA.
 - **Kontaktweg** fehlt: keine E-Mail-Adresse, keine Telefonnummer hinterlegt.
-- **Schriften kommen von Google Fonts.** Dabei geht die IP-Adresse jedes
-  Besuchers an Google in den USA; die Datenschutzerklaerung sagt das offen.
-  Besser: die Schriften selbst ausliefern, dann entfaellt der Abschnitt und die
-  Seite laedt schneller. Offen, bis die Dateien heruntergeladen sind.
 - **Datenschutzerklaerung geht davon aus**, dass `EMPFAENGER` ein Postfach bei
   Hostpoint ist. Wird an Hotmail oder einen anderen Anbieter weitergeleitet,
   muss dieser dort genannt werden.
