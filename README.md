@@ -14,6 +14,7 @@ Schriften liegen selbst im Projekt (`schriften/`, `schriften.css`).
 | `kostenrechner.html` | Kostenrechner, sieben Fragen, Preisrahmen vor dem Formular |
 | `anfrage.php` | Nimmt die Anfrage aus dem Rechner an und schickt sie als Mail |
 | `impressum.html`, `datenschutz.html` | Rechtsseiten, gemeinsame Gestaltung in `recht.css`, dauerhaft `noindex` |
+| `foto.webp`, `portrait.webp` | Fotos, siehe unten |
 | `schriften/`, `schriften.css` | Selbst ausgelieferte Schriften, siehe `schriften/LIZENZ.md` |
 | `quellen/` | Vorlagen fuer Teilen-Bild und Favicon, siehe unten |
 | `archiv/` | Frühere Entwurfsrichtungen, nicht mehr aktuell |
@@ -36,31 +37,18 @@ Schriften liegen selbst im Projekt (`schriften/`, `schriften.css`).
   bremst nach fuenf Anfragen pro Stunde und Absender, faengt Spam-Programme ueber
   ein unsichtbares Feld ab und nimmt nur Anfragen von der eigenen Seite an.
   Auf GitHub Pages laeuft kein PHP, dort schlaegt der Versand bewusst fehl.
-- **Foto** fehlt. Quadratisch, Tageslicht, Blick in die Kamera. Kommt in den
-  runden Platzhalter im ersten Bild.
+- **Fotos** sind drin, aus einer Vorlage mit 1448 Pixel Breite: `foto.webp`
+  (480 x 480, runder Platz im ersten Bild) und `portrait.webp` (680 x 850, 4:5,
+  Abschnitt „Wer das macht"). Vor dem Livegang aus dem Original neu schneiden,
+  damit sie auf Bildschirmen mit doppelter Pixeldichte scharf sind:
 
-  Der Platz ist vorbereitet. Foto als `foto.jpg` ins Projekt legen, dann in
-  `index.html` diese Zeile
-
-  ```html
-  <div class="rund">[ Foto folgt ]</div>
+  ```bash
+  cwebp -metadata none -q 80 -crop X Y B H -resize 480 480 original.jpg -o foto.webp
+  cwebp -metadata none -q 80 -crop X Y B H -resize 680 850 original.jpg -o portrait.webp
   ```
 
-  ersetzen durch
-
-  ```html
-  <div class="rund"><img src="foto.jpg" alt="Adrian von Arb"></div>
-  ```
-
-  Mehr braucht es nicht: der Kreis beschneidet das Bild selbst, hochkant wie
-  quer wie quadratisch — alle drei Fälle geprüft. Mindestens 400 Pixel
-  Kantenlänge, sonst wird es unscharf: der Kreis wird bis 190 Pixel breit, und
-  auf Bildschirmen mit doppelter Pixeldichte sind das 380 echte Bildpunkte.
-
-- **Zweites Foto** fehlt, im Abschnitt „Wer das macht". Hochformat 4:5, gleiche
-  Mechanik: `[ Portrait folgt ]` in `<div class="portraetplatz">` ersetzen durch
-  `<img src="portrait.jpg" alt="Adrian von Arb">`. Der Platz wird bis 340 Pixel
-  breit, also mindestens 680 Pixel Breite liefern.
+  Der Kreis wird bis 190 Pixel breit, das Hochformat bis 340, gebraucht werden
+  also mindestens 380 und 680 Pixel. `-metadata none` entfernt Kameradaten und Ort.
 
 - **Referenzen** fehlen noch, bewusst. Der Hinweis auf die Hochzeitsfilme ist
   raus, damit steht aktuell kein Beleg auf der Seite. Mehrere Kundenprojekte
