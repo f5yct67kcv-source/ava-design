@@ -69,14 +69,11 @@ FINISH: unreviewed und undokumentiert ist unfertig; dieser Bau endet mit dem Fin
   --grund-tief:#0e1820;
   --grund-licht:#2e4557;
   --grund-hoch:#263a47;
-  --papier:#f2ede2;
-  --papier-still:#ddd4c3;
   --signal:#ff8a4c;
   --signal-hell:#ff9f6d;
   --auf-grund:#e4eaee;
   --auf-grund-still:#a8b8c4;
   --tinte:#15202a;
-  --tinte-still:#565f6a;
   --linie:#2f4553;
   --linie-hell:#3f5e70;
   --grund-klar:rgba(27,42,51,0);
@@ -262,27 +259,44 @@ p{max-width:62ch}
 .ergebnis{display:none;flex-direction:column;gap:clamp(22px,3.4vh,34px)}
 .ergebnis.dran{display:flex}
 
-.papier{background:var(--papier);color:var(--tinte);padding:clamp(26px,4vw,44px)}
-.papier h2{color:var(--tinte)}
-.papier p{color:var(--tinte-still)}
-.rahmen{
-  display:flex;flex-wrap:wrap;align-items:baseline;gap:12px 18px;
-  border-bottom:2px solid var(--tinte);padding-bottom:16px;margin-bottom:20px;
+/* Ergebnis im selben Register wie die Fragen: dunkel, offen, Linien statt Karte. */
+.resultat{display:flex;flex-direction:column}
+.resultat .etikett{margin-bottom:16px}
+.betrag{
+  position:relative;display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;max-width:none;
+  margin-top:clamp(20px,3.4vh,30px);padding-bottom:clamp(20px,3.4vh,28px);border-bottom:1px solid var(--linie);
 }
-.rahmen .zahl{font-family:var(--serif);font-size:clamp(2.1rem,5vw,3.3rem);line-height:1}
-.platzhalter{border-bottom:2px dotted currentColor;padding-bottom:2px}
-.uebersicht{display:flex;flex-direction:column;gap:0;margin-top:4px}
+.betrag::after{content:"";position:absolute;left:0;bottom:-1px;width:72px;height:2px;background:var(--signal)}
+.waehrung{
+  margin-top:.7em;font-size:var(--txt-xs);letter-spacing:.16em;font-weight:700;color:var(--auf-grund-still);
+}
+.zahl{
+  font-family:var(--serif);font-weight:900;font-size:clamp(2.7rem,7.2vw,4.8rem);line-height:.95;
+  letter-spacing:-.025em;font-variant-numeric:lining-nums;color:var(--auf-grund);
+}
+.zahl .strich{color:var(--signal);font-weight:400;margin:0 .12em}
+.hinweis{margin-top:18px;max-width:56ch;font-size:var(--txt-m)}
+.uebersicht{display:flex;flex-direction:column;margin-top:clamp(22px,3.6vh,32px);counter-reset:zeile;border-top:1px solid var(--linie)}
 .uebersicht div{
-  display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:space-between;
-  padding:11px 0;border-bottom:1px solid var(--papier-still);font-size:var(--txt-m);
+  display:flex;flex-wrap:wrap;gap:4px 20px;justify-content:space-between;align-items:baseline;
+  padding:14px 0;border-bottom:1px solid var(--linie);
 }
-.uebersicht div:last-child{border-bottom:0}
-.uebersicht dt{color:var(--tinte-still)}
-.uebersicht dd{font-weight:700;text-align:right}
-.laufend{margin-top:18px;font-size:var(--txt-m)}
+.uebersicht dt{
+  display:flex;align-items:baseline;gap:14px;
+  font-size:var(--txt-xs);letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--auf-grund-still);
+}
+.uebersicht dt::before{counter-increment:zeile;content:counter(zeile,decimal-leading-zero);color:var(--signal);letter-spacing:.08em}
+.uebersicht dd{font-weight:600;text-align:right;font-size:var(--txt-m)}
+/* Schmal immer untereinander, sonst springen die Zeilen je nach Textlaenge hin und her. */
+@media(max-width:639px){
+  .uebersicht div{flex-direction:column;align-items:flex-start}
+  .uebersicht dd{text-align:left}
+}
+.resultat h2{text-wrap:balance}
+.laufend{margin-top:20px;font-size:var(--txt-s);color:var(--auf-grund-still);max-width:60ch}
 .separat{
-  margin-top:20px;padding:16px 18px;border:1px dashed var(--tinte-still);
-  font-size:var(--txt-m);color:var(--tinte-still);
+  margin-top:22px;padding:16px 18px;border:1px dashed var(--linie-hell);
+  font-size:var(--txt-m);color:var(--auf-grund-still);
 }
 
 .formular{display:flex;flex-direction:column;gap:14px}
@@ -436,12 +450,11 @@ footer nav a:hover{color:var(--signal)}
     </div>
 
     <div class="ergebnis" id="ergebnis">
-      <div class="papier">
+      <div class="resultat">
+        <p class="etikett"><i aria-hidden="true"></i>Dein Preisrahmen</p>
         <h2 id="empfehlung">Dein Preisrahmen</h2>
-        <div class="rahmen" style="margin-top:18px">
-          <span class="zahl platzhalter" id="zahl">CHF ———</span>
-        </div>
-        <p>Ein unverbindlicher Richtwert auf Basis deiner Angaben. Nach kurzer Prüfung bekommst du ein verbindliches Festpreisangebot. Das gilt dann.</p>
+        <p class="betrag"><span class="waehrung">CHF</span><span class="zahl" id="zahl">———</span></p>
+        <p class="still hinweis">Ein unverbindlicher Richtwert auf Basis deiner Angaben. Nach kurzer Prüfung bekommst du ein verbindliches Festpreisangebot. Das gilt dann.</p>
 
         <dl class="uebersicht" id="uebersicht"></dl>
 
@@ -740,7 +753,9 @@ function rechnen(){
 
   document.getElementById('empfehlung').textContent = empfehlungen[antwort.umfang] || 'Dein Preisrahmen';
   rahmenText = 'CHF ' + zahl(von) + ' – ' + zahl(bis);
-  document.getElementById('zahl').textContent = rahmenText;
+  const strich = document.createElement('span');
+  strich.className = 'strich'; strich.textContent = '–';
+  document.getElementById('zahl').replaceChildren(zahl(von), strich, zahl(bis));
 
   const titel = {
     umfang:'Umfang', bestand:'Ausgangslage', texte:'Texte',
