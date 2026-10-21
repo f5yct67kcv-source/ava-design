@@ -15,6 +15,7 @@ Schriften liegen selbst im Projekt (`schriften/`, `schriften.css`).
 | `anfrage.php` | Nimmt die Anfrage aus dem Rechner an und schickt sie als Mail |
 | `impressum.html`, `datenschutz.html` | Rechtsseiten, gemeinsame Gestaltung in `recht.css`, dauerhaft `noindex` |
 | `foto.webp`, `portrait.webp` | Fotos, siehe unten |
+| `arbeiten/` | Aufnahmen der Projekte für die Werkbank, siehe unten |
 | `schriften/`, `schriften.css` | Selbst ausgelieferte Schriften, siehe `schriften/LIZENZ.md` |
 | `quellen/` | Vorlagen fuer Teilen-Bild und Favicon, siehe unten |
 | `archiv/` | Frühere Entwurfsrichtungen, nicht mehr aktuell |
@@ -50,16 +51,35 @@ Schriften liegen selbst im Projekt (`schriften/`, `schriften.css`).
   Der Kreis wird bis 190 Pixel breit, das Hochformat bis 340, gebraucht werden
   also mindestens 380 und 680 Pixel. `-metadata none` entfernt Kameradaten und Ort.
 
-- **Referenzen** fehlen noch, bewusst. Der Hinweis auf die Hochzeitsfilme ist
-  raus, damit steht aktuell kein Beleg auf der Seite. Mehrere Kundenprojekte
-  sind kurz vor Abschluss; die Seite geht ohnehin erst danach online. Sobald
-  drei Projekte live sind, kommt ein Referenzabschnitt zwischen „Nicht jede
-  Website braucht alles" und die häufigen Fragen.
+- **Arbeiten** (`#arbeiten`, zwischen Angebot und häufigen Fragen) zeigen
+  Projekte nicht als Galerie, sondern auf einer Werkbank: Desktop-Fenster mit
+  Bauplan unter dem Schnitt, Telefon, Inspektor mit Farben, Schriften und
+  Messwerten. Beide Geräte fahren die Seite von selbst ab. Bisher ein Projekt
+  (Craniosacral Praxis Johann von Arb), noch ohne Fotos aufgenommen.
 
-  **Währenddessen einsammeln, nicht nachher:** pro Projekt eine schriftliche
-  Freigabe des Kunden, ein bis zwei Bildschirmaufnahmen, und einen Satz dazu,
-  was die Seite für den Betrieb geändert hat. Danach fragen zu müssen kostet
-  Wochen und liefert schlechtere Antworten.
+  **Neu aufnehmen**, sobald die Fotos drin sind oder sich die Seite ändert. Die
+  Höhen `--h` im HTML und `data-mass` an die neue Seitenlänge anpassen, die
+  Messwerte im Inspektor im Browser nachmessen (Netzwerk, übertragene Grösse).
+
+  ```bash
+  C="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+  U=https://ADRESSE-DER-SEITE/
+  # Hoehe H vorher im Browser messen: document.documentElement.scrollHeight
+  "$C" --headless=new --hide-scrollbars --force-device-scale-factor=1 --window-size=1440,H --screenshot=desk.png "$U"
+  "$C" --headless=new --hide-scrollbars --force-device-scale-factor=2 --window-size=390,H --screenshot=mobil.png "$U"
+  cwebp -metadata none -q 62 desk.png -o arbeiten/johann-desktop.webp
+  cwebp -metadata none -q 62 -resize 440 0 mobil.png -o arbeiten/johann-mobil.webp
+  ```
+
+  Der Bauplan ist dieselbe Seite mit eingeschobenem Stil: alle Hintergründe
+  weg, Text in Balken, Abschnitte gestrichelt. Dafür eine lokale Kopie der Seite
+  ausliefern, vor `</head>` den Block aus `quellen/bauplan.inject` einsetzen und
+  mit denselben Massen wie `desk.png` aufnehmen. Er muss deckungsgleich sein,
+  sonst springt die Seite am Schnitt.
+
+  Für weitere Projekte: pro Projekt eine Werkbank. Weiter einsammeln: pro
+  Projekt eine schriftliche Freigabe des Kunden und ein Satz dazu, was die Seite
+  für den Betrieb geändert hat.
 - **Markenname** ist provisorisch AVA.
 - **Kontaktweg** fehlt: keine E-Mail-Adresse, keine Telefonnummer hinterlegt.
 - **Datenschutzerklaerung geht davon aus**, dass `EMPFAENGER` ein Postfach bei

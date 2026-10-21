@@ -50,8 +50,9 @@
 
 <!--
 THESIS: Eine Person aus Olten baut Websites von Hand zum Festpreis. Die Seite
-zeigt das Gesicht im ersten Bild und den Preisweg statt eines Portfolios, weil
-es noch keines gibt. Sie verweigert das Referenzband und die Paketkarten-Tabelle.
+zeigt das Gesicht im ersten Bild und den Preisweg. Arbeiten erscheinen nicht als
+Referenzband, sondern aufgeschnitten auf einer Werkbank (#arbeiten). Sie verweigert
+die Paketkarten-Tabelle.
 OWN-WORLD: Schiefer als kuehler getraenkter Grund, warmes Creme als Papier,
 Signalorange als einziges Signal. Playfair Display als Stimme, Schibsted Grotesk fuer
 alles Funktionale. Karten gibt es nicht — es gibt Flaechen, Zeilen und ein rundes
@@ -648,6 +649,161 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
 .faq details p{color:var(--auf-grund-still);font-size:var(--txt-m);max-width:58ch;padding:0 0 22px}
 .faq details a{color:var(--auf-grund)}
 .faq details a:hover{color:var(--signal)}
+
+/* ---------- Arbeiten ----------
+   Keine Bildergalerie, sondern eine Werkbank: die Arbeit liegt auf einer
+   Zeichenflaeche mit Punktraster, wie im Gestaltungsprogramm. Die Desktop-
+   Flaeche ist ausgewaehlt (Rahmen, Griffe, Massangabe), daneben das Telefon und
+   ein Inspektor mit Farben, Schriften und gemessenen Werten. Unter der Seite
+   liegt ihr Bauplan, aufgedeckt mit dem Zeiger oder dem Finger. */
+.arbeitenkopf{display:grid;gap:18px 66px;align-items:end;margin-bottom:clamp(30px,5vh,52px)}
+@media(min-width:920px){.arbeitenkopf{grid-template-columns:1.02fr .98fr}}
+.arbeitenkopf p{max-width:46ch}
+
+.werkbank{margin:0}
+.flaeche{
+  position:relative;display:grid;gap:44px 0;
+  padding:clamp(44px,6vw,80px) clamp(18px,4vw,64px) clamp(40px,5vw,64px);
+  background:
+    radial-gradient(60% 55% at 42% 45%, rgba(46,69,87,.55), transparent 75%),
+    radial-gradient(circle, rgba(117,144,159,.26) 1px, transparent 1.5px) 0 0/22px 22px,
+    var(--grund-tief);
+  border:1px solid var(--linie);
+}
+@media(min-width:900px){
+  .flaeche{grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:auto auto 1fr;gap:0}
+  .brett-desktop{grid-column:1/10;grid-row:1/3;align-self:start;margin-right:-2%}
+  .inspektor{grid-column:9/13;grid-row:1;align-self:start;margin:-14px 0 0 0;z-index:2}
+  .brett-mobil{grid-column:9/12;grid-row:2/4;align-self:start;margin:34px 0 0 30%;z-index:3}
+  .projekt{grid-column:1/8;grid-row:3;align-self:end;padding-top:80px}
+}
+
+.brettname{
+  font-size:var(--txt-xs);letter-spacing:.04em;color:var(--ringschrift);
+  margin-bottom:10px;font-variant-numeric:tabular-nums;max-width:none;
+}
+.brettname b{color:var(--auf-grund-still);font-weight:600}
+/* Das Telefon ragt ueber die Desktop-Flaeche, sein Name steht deshalb darunter. */
+.brett-mobil{display:flex;flex-direction:column}
+.brett-mobil .brettname{order:2;margin:12px 0 0}
+
+/* Auswahl wie im Gestaltungsprogramm: Haarlinie, vier Griffe, Masse darunter. */
+.auswahl{position:relative}
+.auswahl::before{
+  content:"";position:absolute;inset:-7px;border:1px solid var(--signal);pointer-events:none;
+  background:
+    linear-gradient(var(--signal),var(--signal)) 0 0/7px 7px no-repeat,
+    linear-gradient(var(--signal),var(--signal)) 100% 0/7px 7px no-repeat,
+    linear-gradient(var(--signal),var(--signal)) 0 100%/7px 7px no-repeat,
+    linear-gradient(var(--signal),var(--signal)) 100% 100%/7px 7px no-repeat;
+  transition:opacity .3s ease;
+}
+.auswahl::after{
+  content:attr(data-mass);position:absolute;left:50%;bottom:-38px;translate:-50% 0;
+  background:var(--signal);color:var(--tinte);font-size:var(--txt-xs);font-weight:700;
+  padding:3px 8px;border-radius:3px;font-variant-numeric:tabular-nums;white-space:nowrap;
+  transition:opacity .3s ease;
+}
+.brett-mobil .auswahl::before,.brett-mobil .auswahl::after{opacity:0}
+@media(hover:hover){
+  .flaeche:has(.brett-mobil:hover) .brett-desktop .auswahl::before,
+  .flaeche:has(.brett-mobil:hover) .brett-desktop .auswahl::after{opacity:0}
+  .brett-mobil:hover .auswahl::before,.brett-mobil:hover .auswahl::after{opacity:1}
+}
+
+.fenster{background:var(--grund-tief);border-radius:9px;overflow:hidden;box-shadow:0 50px 90px -40px rgba(0,0,0,.85),0 0 0 1px rgba(117,144,159,.18)}
+.fensterleiste{display:flex;align-items:center;gap:7px;height:32px;padding:0 13px;background:#16232c;border-bottom:1px solid var(--linie)}
+.fensterleiste i{width:9px;height:9px;border-radius:50%;background:var(--linie-hell)}
+.fensterleiste span{
+  flex:1;margin:0 36px 0 18px;text-align:center;font-size:.7rem;color:var(--ringschrift);
+  background:var(--grund-tief);border-radius:5px;padding:2px 10px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+
+/* Die Sicht zeigt einen Bildschirm voll, die Bahn darin faehrt die ganze Seite
+   ab. Wie weit, rechnet CSS aus dem Seitenverhaeltnis: --b und --h sind Breite
+   und Hoehe der Aufnahme, --v das Verhaeltnis Hoehe zu Breite der Sicht. */
+.sicht{position:relative;overflow:hidden;aspect-ratio:1/var(--v);touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.bahn{position:relative;--ende:calc((var(--b) * var(--v) / var(--h) - 1) * 100%)}
+.bahn img{width:100%;height:auto}
+.bahn .plan{position:absolute;inset:0;clip-path:inset(0 calc(100% - var(--schnitt,38%)) 0 0)}
+@media(prefers-reduced-motion:no-preference){
+  .bahn{animation:durchlauf var(--dauer,24s) cubic-bezier(.45,0,.55,1) infinite alternate;animation-play-state:paused}
+  .werkbank.laeuft .bahn{animation-play-state:running}
+  .werkbank.laeuft .sicht:hover .bahn{animation-play-state:paused}
+}
+@keyframes durchlauf{0%,10%{transform:none}90%,100%{transform:translateY(var(--ende))}}
+@media(prefers-reduced-motion:reduce){.sicht{overflow-y:auto}}
+
+/* Schnittlinie: links Bauplan, rechts die fertige Seite. */
+.schnitt{
+  position:absolute;top:0;bottom:0;left:var(--schnitt,38%);width:0;
+  border-left:1.5px solid var(--signal);pointer-events:none;
+}
+.griff{
+  /* Der Griff wandert mit dem Schnitt ueber seine eigene Breite: bei 0 % steht
+     er ganz rechts der Linie, bei 100 % ganz links. So wird er am Rand nie
+     abgeschnitten. */
+  position:absolute;top:50%;left:0;translate:calc(var(--schnitt,38%) * -1) -50%;pointer-events:auto;cursor:ew-resize;
+  display:flex;align-items:center;gap:0;
+  font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  background:var(--signal);color:var(--tinte);border-radius:99px;padding:5px 4px;
+  box-shadow:0 8px 22px -8px rgba(0,0,0,.6);touch-action:none;
+}
+.griff span{padding:0 9px}
+.griff span+span{border-left:1px solid rgba(21,32,42,.35)}
+.griff:focus-visible{outline-offset:4px}
+
+.telefon{
+  background:#0a1117;border-radius:30px;padding:7px;
+  box-shadow:0 50px 80px -36px rgba(0,0,0,.9),0 0 0 1px rgba(117,144,159,.22);
+}
+.telefon .sicht{border-radius:23px}
+
+.inspektor{
+  background:rgba(22,35,44,.94);border:1px solid var(--linie);border-radius:8px;
+  padding:16px 18px 18px;font-size:var(--txt-s);
+  box-shadow:0 36px 70px -36px rgba(0,0,0,.8);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+}
+.inspektor h3{
+  font-family:var(--sans);font-size:var(--txt-xs);font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--auf-grund-still);display:flex;align-items:center;gap:9px;
+}
+.inspektor h3::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--signal)}
+.inspektor dl{margin-top:4px}
+.inspektor .gruppe{padding:13px 0;border-bottom:1px solid var(--linie)}
+.inspektor .gruppe:last-child{border-bottom:0;padding-bottom:0}
+.inspektor dt{font-size:var(--txt-xs);color:var(--ringschrift);margin-bottom:8px}
+.inspektor dd{margin:0}
+.muster{display:flex;gap:6px}
+.muster i{flex:1;height:30px;border-radius:4px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.muster+.hex{display:flex;justify-content:space-between;gap:6px;margin-top:6px;font-size:.66rem;color:var(--ringschrift);font-variant-numeric:tabular-nums;max-width:none}
+.schriftzeile{display:flex;justify-content:space-between;gap:12px;max-width:none}
+.schriftzeile+.schriftzeile{margin-top:3px}
+.schriftzeile span:last-child{color:var(--ringschrift)}
+.werte{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
+.werte div{display:flex;flex-direction:column}
+.werte b{font-family:var(--serif);font-weight:900;font-size:1.5rem;line-height:1.05;font-variant-numeric:lining-nums tabular-nums}
+.werte b small{font-family:var(--sans);font-size:.72rem;font-weight:600;margin-left:3px;color:var(--auf-grund-still)}
+.werte span{font-size:var(--txt-xs);color:var(--ringschrift)}
+
+.projekt .brettname{margin-bottom:6px}
+.projekt h3{font-size:clamp(1.3rem,2vw,1.7rem)}
+.projekt p:not(.brettname){color:var(--auf-grund-still);font-size:var(--txt-s);margin-top:6px}
+.projekt .zweitweg{margin-top:6px}
+
+/* Schmal: das Telefon ragt unten rechts in die Desktop-Flaeche, links daneben
+   steht das Projekt, der Inspektor folgt darunter in voller Breite. */
+@media(max-width:899px){
+  .flaeche{grid-template-columns:minmax(0,1fr) 38%;gap:0 18px}
+  .brett-desktop{grid-column:1/3}
+  .brett-mobil{grid-column:2;grid-row:2;margin-top:-64px;z-index:3;max-width:200px;justify-self:end;width:100%}
+  .projekt{grid-column:1;grid-row:2;align-self:start;padding-top:62px}
+  .projekt h3{font-size:1.2rem}
+  .inspektor{grid-column:1/3;grid-row:3;margin-top:40px}
+  .brett-desktop .auswahl::after{left:32%;bottom:-34px}
+}
 </style>
 
 <header class="kopf">
@@ -796,6 +952,90 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
       <span>Direkt mit dem, der sie baut</span>
       <span>Rahmen in zwei Minuten</span>
     </p>
+  </div>
+</section>
+
+<section id="arbeiten">
+  <div class="spalte auf">
+    <div class="arbeitenkopf">
+      <h2>Gebaut, nicht behauptet.<span class="zweite">Eine Seite, aufgeschnitten.</span></h2>
+      <p class="still">Statt einer Galerie mit Logos liegt hier eine echte Arbeit auf dem Tisch. Fahr mit dem Zeiger oder dem Finger über das Fenster, darunter liegt der Bauplan.</p>
+    </div>
+
+    <!-- Die Aufnahmen kommen aus Chrome ohne Kopf, der Bauplan aus derselben
+         Seite mit eingeschobenem Stil. Neu erzeugen: siehe README, Abschnitt
+         Arbeiten. Messwerte im Inspektor nach jedem Neubau der Seite nachmessen. -->
+    <div class="werkbank" id="werkbank">
+      <div class="flaeche">
+        <div class="brett-desktop">
+          <p class="brettname" aria-hidden="true"><b>Desktop</b> · 1440 × 900</p>
+          <div class="auswahl" data-mass="1440 × 4906">
+            <div class="fenster">
+              <div class="fensterleiste" aria-hidden="true"><i></i><i></i><i></i><span>Craniosacral Therapie Fulenbach</span></div>
+              <div class="sicht" style="--v:.625">
+                <div class="bahn" style="--b:1440;--h:4906;--dauer:26s">
+                  <img src="arbeiten/johann-desktop.webp" alt="Startseite der Craniosacral-Praxis Johann von Arb in Fulenbach, ganze Länge am Desktop" width="1440" height="4906" loading="lazy" decoding="async">
+                  <img class="plan" src="arbeiten/johann-bauplan.webp" alt="" width="1440" height="4906" loading="lazy" decoding="async">
+                </div>
+                <div class="schnitt">
+                  <span class="griff" role="slider" tabindex="0" aria-label="Bauplan aufdecken" aria-valuemin="0" aria-valuemax="100" aria-valuenow="38" aria-valuetext="38 Prozent Bauplan"><span>Bauplan</span><span>Seite</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="inspektor" aria-label="Kennwerte der Seite">
+          <h3>Inspektor</h3>
+          <dl>
+            <div class="gruppe">
+              <dt>Farben</dt>
+              <dd>
+                <div class="muster" aria-hidden="true"><i style="background:#fcf4ef"></i><i style="background:#ead0bd"></i><i style="background:#b0553a"></i><i style="background:#33211c"></i></div>
+                <p class="hex"><span>FCF4EF</span><span>EAD0BD</span><span>B0553A</span><span>33211C</span></p>
+              </dd>
+            </div>
+            <div class="gruppe">
+              <dt>Schriften</dt>
+              <dd>
+                <p class="schriftzeile"><span>Marcellus</span><span>Titel</span></p>
+                <p class="schriftzeile"><span>Schibsted Grotesk</span><span>Text</span></p>
+              </dd>
+            </div>
+            <div class="gruppe">
+              <dt>Gemessen</dt>
+              <dd class="werte">
+                <div><b>114<small>KB</small></b><span>ganze Seite</span></div>
+                <div><b>4</b><span>Dateien</span></div>
+                <div><b>0</b><span>Cookies</span></div>
+                <div><b>0</b><span>fremde Server</span></div>
+              </dd>
+            </div>
+          </dl>
+        </aside>
+
+        <div class="brett-mobil">
+          <p class="brettname" aria-hidden="true"><b>Mobil</b> · 390</p>
+          <div class="auswahl" data-mass="390 × 7316">
+            <div class="telefon">
+              <div class="sicht" style="--v:2.164">
+                <div class="bahn" style="--b:390;--h:7316;--dauer:30s">
+                  <img src="arbeiten/johann-mobil.webp" alt="Dieselbe Seite am Telefon, ganze Länge" width="440" height="8254" loading="lazy" decoding="async">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="projekt">
+          <p class="brettname"><b>Projekt</b> · 2026</p>
+          <h3>Craniosacral Praxis Johann von Arb</h3>
+          <p>Fulenbach · eine Seite · von Hand gebaut, ohne Baukasten</p>
+          <!-- LIVEGANG: auf die echte Domain der Praxis umstellen, sobald sie live ist. -->
+          <a class="zweitweg" href="https://f5yct67kcv-source.github.io/webseite-johann-vonarb/" target="_blank" rel="noopener">Seite ansehen ↗</a>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1130,5 +1370,51 @@ if (saetze && saetzeBloecke.length) {
   zeiger.addEventListener('change', () => { zielSetzen(null); ausScrollposition(); });
   addEventListener('resize', lichtStellen);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(lichtStellen);
+}
+
+// Werkbank: die Geraete fahren die Seite nur ab, solange sie im Bild sind.
+// Der Schnitt zwischen Bauplan und Seite folgt am Zeiger der Maus ohne Klick,
+// am Finger dem waagrechten Ziehen; senkrecht scrollt die Seite normal weiter.
+const werkbank = document.getElementById('werkbank');
+if (werkbank) {
+  const sicht = werkbank.querySelector('.brett-desktop .sicht');
+  const griff = werkbank.querySelector('.griff');
+  let anteil = 38;
+  const setzen = (wert) => {
+    anteil = Math.min(100, Math.max(0, wert));
+    sicht.style.setProperty('--schnitt', anteil.toFixed(1) + '%');
+    griff.setAttribute('aria-valuenow', Math.round(anteil));
+    griff.setAttribute('aria-valuetext', Math.round(anteil) + ' Prozent Bauplan');
+  };
+  const ausZeiger = (e) => {
+    const r = sicht.getBoundingClientRect();
+    setzen((e.clientX - r.left) / r.width * 100);
+  };
+  let zieht = false;
+  sicht.addEventListener('pointermove', (e) => {
+    if (e.pointerType === 'mouse' || zieht) ausZeiger(e);
+  });
+  sicht.addEventListener('pointerdown', (e) => {
+    if (e.pointerType === 'mouse') return;
+    zieht = true; ausZeiger(e);
+  });
+  addEventListener('pointerup', () => { zieht = false; });
+  addEventListener('pointercancel', () => { zieht = false; });
+  griff.addEventListener('keydown', (e) => {
+    const schritt = e.shiftKey ? 10 : 4;
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') setzen(anteil - schritt);
+    else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') setzen(anteil + schritt);
+    else if (e.key === 'Home') setzen(0);
+    else if (e.key === 'End') setzen(100);
+    else return;
+    e.preventDefault();
+  });
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(([e]) => werkbank.classList.toggle('laeuft', e.isIntersecting),
+      { threshold: .25 }).observe(werkbank);
+  } else {
+    werkbank.classList.add('laeuft');
+  }
 }
 </script>
