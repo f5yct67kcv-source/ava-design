@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark">
 <title>Kostenrechner — Webdesign Olten | formateins</title>
-<meta name="description" content="In sechs Fragen zum Preisrahmen für deine Website. Ohne Konto, ohne Telefonnummer. Danach ein verbindliches Festpreisangebot.">
+<meta name="description" content="In sieben Fragen zum Preisrahmen für deine Website. Ohne Konto, ohne Telefonnummer. Danach ein verbindliches Festpreisangebot.">
 
 <!-- ============================================================
      SEO-Grundlage. Drei Dinge muessen vor dem Livegang passieren,
@@ -33,7 +33,7 @@
 <meta property="og:locale" content="de_CH">
 <meta property="og:site_name" content="formateins">
 <meta property="og:title" content="Kostenrechner — Webdesign Olten | formateins">
-<meta property="og:description" content="In sechs Fragen zum Preisrahmen für deine Website. Ohne Konto, ohne Telefonnummer.">
+<meta property="og:description" content="In sieben Fragen zum Preisrahmen für deine Website. Ohne Konto, ohne Telefonnummer.">
 <meta property="og:image" content="teilen.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -54,7 +54,7 @@ vor dem Formular, nicht dahinter. Er verweigert die uebliche Leadstrecke, in der
 die Zahl erst nach der Mailadresse kommt.
 OWN-WORLD: Dieselbe Welt wie die Startseite — Schiefer, Creme, Signalorange,
 Playfair Display und Schibsted Grotesk. Eine Frage pro Bildschirm, keine Karten.
-STORY: Sechs Fragen, sofort ein Rahmen, dann entscheidet der Besucher selbst, ob
+STORY: Sieben Fragen, sofort ein Rahmen, dann entscheidet der Besucher selbst, ob
 er seine Daten hergibt.
 FIRST VIEWPORT: Knotenleiste oben wie der Ablauf der Startseite, Frage gross gesetzt, Antworten als breite
 Zeilen, Zurueck links und Weiter rechts unten.
@@ -406,9 +406,22 @@ footer nav a:hover{color:var(--signal)}
       </div>
     </div>
 
-    <div class="frage" data-schluessel="zeit">
+    <div class="frage" data-schluessel="funktionen">
       <span class="ziffer" aria-hidden="true">06</span>
-      <p class="etikett"><b>06</b><i aria-hidden="true"></i>Zeitrahmen</p>
+      <p class="etikett"><b>06</b><i aria-hidden="true"></i>Funktionen</p>
+      <h1>Braucht es etwas Besonderes?</h1>
+      <p class="hilfe">Die meisten Seiten kommen ohne aus. Diese zwei verändern den Aufwand spürbar.</p>
+      <div class="antworten">
+        <button class="antwort" data-wert="nein" data-text="Keine Sonderfunktionen"><span class="kreis"></span><span><b>Nein, nichts davon</b><span>Die Seite zeigt, was du machst, und man erreicht dich. Das reicht den meisten.</span></span></button>
+        <button class="antwort" data-wert="sprache" data-text="Zweite Sprache"><span class="kreis"></span><span><b>Eine zweite Sprache</b><span>Zum Beispiel Deutsch und Französisch. Die Übersetzung selbst ist nicht dabei.</span></span></button>
+        <button class="antwort" data-wert="buchung" data-text="Online-Buchung"><span class="kreis"></span><span><b>Online-Termine oder Reservationen</b><span>Über einen bewährten Buchungsdienst, eingebunden in deine Seite. Dessen Gebühren laufen direkt auf dich.</span></span></button>
+        <button class="antwort" data-wert="beides" data-text="Zweite Sprache und Online-Buchung"><span class="kreis"></span><span><b>Beides</b><span>Zwei Sprachen und Online-Buchung.</span></span></button>
+      </div>
+    </div>
+
+    <div class="frage" data-schluessel="zeit">
+      <span class="ziffer" aria-hidden="true">07</span>
+      <p class="etikett"><b>07</b><i aria-hidden="true"></i>Zeitrahmen</p>
       <h1>Wann soll sie live sein?</h1>
       <p class="hilfe">Ehrliche Antwort reicht. „Keine Ahnung“ ist auch eine.</p>
       <div class="antworten">
@@ -576,7 +589,12 @@ const preis = {
   texte:  { teil: { eine:350,  firma:600,  gross:1000 },
             ich:  { eine:700,  firma:1200, gross:2000 } },
   bilder: { teil: { eine:250,  firma:400,  gross:600  } },
-  logo:   { teil: { eine:300,  firma:300,  gross:300  } }
+  logo:   { teil: { eine:300,  firma:300,  gross:300  } },
+  // Zweite Sprache: Aufbau, Umschalter und Pflege doppelt, ohne Uebersetzung.
+  // Buchung: fremden Dienst einrichten und einbinden, kaum abhaengig von der Groesse.
+  funktionen: { sprache: { eine:450, firma:800,  gross:1300 },
+                buchung: { eine:350, firma:350,  gross:350  },
+                beides:  { eine:800, firma:1150, gross:1650 } }
 };
 const UEBERARBEITEN = 0.8;   // bestehende Seite ueberarbeiten statt neu bauen
 const EILE = 1.15;           // fester Termin in weniger als sechs Wochen
@@ -705,7 +723,7 @@ const separat = [];
 function rechnen(){
   const groesse = preis.grund[antwort.umfang] ? antwort.umfang : 'eine';
   let punkt = preis.grund[groesse];
-  for (const feld of ['texte','bilder','logo']) {
+  for (const feld of ['texte','bilder','logo','funktionen']) {
     const stufe = preis[feld][antwort[feld]];
     if (stufe) punkt += stufe[groesse];
   }
@@ -726,11 +744,11 @@ function rechnen(){
 
   const titel = {
     umfang:'Umfang', bestand:'Ausgangslage', texte:'Texte',
-    bilder:'Bilder', logo:'Logo und Auftritt', zeit:'Zeitrahmen'
+    bilder:'Bilder', logo:'Logo und Auftritt', funktionen:'Funktionen', zeit:'Zeitrahmen'
   };
   const liste = document.getElementById('uebersicht');
   liste.innerHTML = '';
-  for (const schluessel of ['umfang','bestand','texte','bilder','logo','zeit']) {
+  for (const schluessel of ['umfang','bestand','texte','bilder','logo','funktionen','zeit']) {
     if (!beschriftung[schluessel]) continue;
     // textContent statt innerHTML: Adresse und Datum stammen vom Besucher.
     const zeile = document.createElement('div');
@@ -764,7 +782,7 @@ const formstatus = document.getElementById('formstatus');
 const senden = document.getElementById('senden');
 const titelFuerVersand = {
   umfang:'Umfang', bestand:'Ausgangslage', texte:'Texte',
-  bilder:'Bilder', logo:'Logo und Auftritt', zeit:'Zeitrahmen'
+  bilder:'Bilder', logo:'Logo und Auftritt', funktionen:'Funktionen', zeit:'Zeitrahmen'
 };
 
 function pruefen(){

@@ -11,7 +11,7 @@ Schriften liegen selbst im Projekt (`schriften/`, `schriften.css`).
 | Datei | Inhalt |
 |---|---|
 | `index.html` | Startseite |
-| `kostenrechner.html` | Kostenrechner, sechs Fragen, Preisrahmen vor dem Formular |
+| `kostenrechner.html` | Kostenrechner, sieben Fragen, Preisrahmen vor dem Formular |
 | `anfrage.php` | Nimmt die Anfrage aus dem Rechner an und schickt sie als Mail |
 | `impressum.html`, `datenschutz.html` | Rechtsseiten, gemeinsame Gestaltung in `recht.css`, dauerhaft `noindex` |
 | `schriften/`, `schriften.css` | Selbst ausgelieferte Schriften, siehe `schriften/LIZENZ.md` |
@@ -21,7 +21,7 @@ Schriften liegen selbst im Projekt (`schriften/`, `schriften.css`).
 ## Noch offen
 
 - **Preise** sind gesetzt, im Objekt `preis` im Skript von `kostenrechner.html`.
-  Grundpreis und Zuschlaege je Groesse, daraus ein Punktwert, der Rahmen ist
+  Grundpreis und Zuschlaege je Groesse (Texte, Bilder, Logo, Funktionen), daraus ein Punktwert, der Rahmen ist
   -10 % bis +15 % davon. Ueberarbeiten -20 %, Eilzuschlag +15 % nur bei Termin
   unter sechs Wochen. Lage: oberes Freelancer-Feld, rund halb so teuer wie eine
   Kleinagentur. Nach den ersten echten Projekten nachkalibrieren.

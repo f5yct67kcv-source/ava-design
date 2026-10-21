@@ -69,12 +69,13 @@ $telefon   = zeile('tel', 40);
 $bemerkung = absatz('bemerkung');
 
 $fragen = [
-  'umfang'  => 'Umfang',
-  'bestand' => 'Ausgangslage',
-  'texte'   => 'Texte',
-  'bilder'  => 'Bilder',
-  'logo'    => 'Logo und Auftritt',
-  'zeit'    => 'Zeitrahmen',
+  'umfang'     => 'Umfang',
+  'bestand'    => 'Ausgangslage',
+  'texte'      => 'Texte',
+  'bilder'     => 'Bilder',
+  'logo'       => 'Logo und Auftritt',
+  'funktionen' => 'Funktionen',
+  'zeit'       => 'Zeitrahmen',
 ];
 
 $text = [];
