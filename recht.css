@@ -1,0 +1,60 @@
+/* Gemeinsame Gestaltung fuer Impressum und Datenschutz. Gleiche Welt wie die
+   uebrigen Seiten, nur ruhiger: eine Spalte Text, nichts, was ablenkt. */
+:root{
+  --grund:#1b2a33;
+  --grund-tief:#0e1820;
+  --grund-licht:#2e4557;
+  --signal:#ff8a4c;
+  --auf-grund:#e4eaee;
+  --auf-grund-still:#a8b8c4;
+  --linie:#2f4553;
+  --txt-xs:.78rem;
+  --txt-s:.875rem;
+  --txt-l:1.06rem;
+  --serif:"Playfair Display",Georgia,serif;
+  --sans:"Schibsted Grotesk",system-ui,-apple-system,sans-serif;
+  --spalte:min(860px,calc(100% - 2 * clamp(22px,5vw,56px)));
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;background:var(--grund-tief)}
+body{
+  background:radial-gradient(125% 95% at 10% 4%,var(--grund-licht) 0%,var(--grund) 50%,var(--grund-tief) 100%) fixed;
+  color:var(--auf-grund);
+  font-family:var(--sans);font-size:clamp(16px,1.04vw,17.5px);line-height:1.65;
+  -webkit-font-smoothing:antialiased;min-height:100svh;
+  display:flex;flex-direction:column;
+}
+a{color:inherit;text-decoration-color:var(--signal);text-underline-offset:3px}
+a:hover{color:var(--signal)}
+::selection{background:var(--signal);color:#15202a}
+:focus-visible{outline:2px solid var(--signal);outline-offset:3px;border-radius:2px}
+.spalte{width:var(--spalte);margin-inline:auto}
+
+.kopf{border-bottom:1px solid var(--linie);background:var(--grund-tief)}
+.kopf .spalte{display:flex;align-items:center;justify-content:space-between;gap:18px;height:60px}
+.logo{font-weight:800;font-size:var(--txt-l);letter-spacing:-.02em;text-decoration:none}
+.logo:hover{color:inherit}
+.zurueck{font-size:var(--txt-s);font-weight:600;color:var(--auf-grund-still);text-decoration:none}
+
+main{flex:1;padding-block:clamp(44px,8vh,90px)}
+main .spalte > *{max-width:62ch}
+h1,h2{font-family:var(--serif);font-weight:900;letter-spacing:-.022em;line-height:1.1}
+h1{font-size:clamp(2.15rem,4.5vw,3.2rem);margin-bottom:.35em}
+h2{font-size:clamp(1.3rem,2.2vw,1.6rem);margin-top:2.1em;margin-bottom:.55em}
+p + p,p + ul,ul + p{margin-top:.85em}
+ul{padding-left:1.15em}
+li + li{margin-top:.35em}
+li::marker{color:var(--signal)}
+.stand{font-size:var(--txt-s);color:var(--auf-grund-still);letter-spacing:.02em}
+.kurz{
+  margin-top:1.6em;padding:18px 20px;border-left:3px solid var(--signal);
+  background:rgba(255,255,255,.035);font-size:var(--txt-l);
+}
+address{font-style:normal}
+.still{color:var(--auf-grund-still)}
+
+footer{border-top:1px solid var(--linie);padding-block:30px;font-size:var(--txt-s)}
+footer .spalte{display:flex;flex-wrap:wrap;gap:16px 34px;justify-content:space-between}
+footer nav{display:flex;flex-wrap:wrap;gap:8px 22px;color:var(--auf-grund-still)}
+footer nav a{text-decoration:none}
+footer nav a[aria-current]{color:var(--auf-grund)}

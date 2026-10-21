@@ -13,6 +13,7 @@ von Google Fonts.
 | `index.html` | Startseite |
 | `kostenrechner.html` | Kostenrechner, sechs Fragen, Preisrahmen vor dem Formular |
 | `anfrage.php` | Nimmt die Anfrage aus dem Rechner an und schickt sie als Mail |
+| `impressum.html`, `datenschutz.html` | Rechtsseiten, gemeinsame Gestaltung in `recht.css`, dauerhaft `noindex` |
 | `archiv/` | Frühere Entwurfsrichtungen, nicht mehr aktuell |
 
 ## Noch offen
@@ -71,9 +72,13 @@ von Google Fonts.
   Wochen und liefert schlechtere Antworten.
 - **Markenname** ist provisorisch AVA.
 - **Kontaktweg** fehlt: keine E-Mail-Adresse, keine Telefonnummer hinterlegt.
-- **Impressum und Datenschutz** sind leere Links. Die Datenschutzerklärung ist
-  Pflicht, sobald der Rechner scharf geschaltet wird — er erhebt Name, E-Mail
-  und Telefonnummer.
+- **Schriften kommen von Google Fonts.** Dabei geht die IP-Adresse jedes
+  Besuchers an Google in den USA; die Datenschutzerklaerung sagt das offen.
+  Besser: die Schriften selbst ausliefern, dann entfaellt der Abschnitt und die
+  Seite laedt schneller. Offen, bis die Dateien heruntergeladen sind.
+- **Datenschutzerklaerung geht davon aus**, dass `EMPFAENGER` ein Postfach bei
+  Hostpoint ist. Wird an Hotmail oder einen anderen Anbieter weitergeleitet,
+  muss dieser dort genannt werden.
 
 ## Vor dem Livegang
 
@@ -95,7 +100,8 @@ im Code mit `LIVEGANG` markiert — `grep -rn LIVEGANG .` findet sie alle.
    Mails im Spam. In `kostenrechner.html` bei `VERSAND.mail` die eigene Adresse
    als Rueckfallweg eintragen. Danach eine Testanfrage abschicken und pruefen,
    ob sie ankommt, auch im Spam-Ordner nachsehen.
-4. **Adresse und Telefon** im JSON-LD ergaenzen (drei Stellen mit `AUSFUELLEN`).
+4. **Adresse und Telefon** ergaenzen: im JSON-LD, in `impressum.html` und in
+   `datenschutz.html` — `grep -rn AUSFUELLEN .` findet alle Stellen.
    Ein LocalBusiness ohne Adresse wird von Google weitgehend ignoriert.
 5. **Markenname vereinheitlichen** — Titel und Fuss stehen noch auf AVA, die
    Kopfzeile beider Seiten bereits auf formateins.
