@@ -557,11 +557,43 @@ section{padding-block:clamp(50px,7.5vh,80px)}
 }
 
 /* ---------- Fuss ---------- */
-footer{border-top:1px solid var(--linie);padding-block:clamp(40px,5.5vh,64px);font-size:var(--txt-s)}
-footer .spalte{display:flex;flex-wrap:wrap;gap:26px 44px;justify-content:space-between;align-items:flex-start}
-footer nav{display:flex;flex-wrap:wrap;gap:8px 24px;color:var(--auf-grund-still)}
-footer nav a{text-decoration:none}
-footer nav a:hover{color:var(--signal)}
+/* ---------- Fuss ----------
+   Gross statt klein: Schrift auf Fliesstextgroesse und darueber, drei Spalten
+   mit Haarlinien dazwischen, Titel in der Serifenschrift mit der orangen Linie
+   der Etiketten. Rechtliches erst ganz unten, klein und gedaempft. */
+footer{
+  border-top:1px solid var(--linie);background:var(--grund-tief);
+  padding:clamp(56px,9vh,96px) 0 clamp(26px,4vh,38px);font-size:var(--txt-l);
+}
+.fussraster{display:grid;grid-template-columns:1fr;gap:44px}
+@media(min-width:820px){
+  .fussraster{grid-template-columns:1.2fr 1fr 1.1fr;gap:0}
+  .fussraster > *{padding-inline:clamp(26px,3.2vw,48px)}
+  .fussraster > :first-child{padding-left:0}
+  .fussraster > :last-child{padding-right:0}
+  .fussraster > * + *{border-left:1px solid var(--linie)}
+}
+footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
+.fussmarke p{margin-top:18px;color:var(--auf-grund-still);max-width:30ch}
+.fusstitel{
+  display:flex;align-items:center;gap:14px;margin-bottom:24px;
+  font-family:var(--serif);font-weight:900;font-size:clamp(1.35rem,1.8vw,1.6rem);letter-spacing:-.015em;line-height:1.1;
+}
+.fusstitel i{flex:none;width:30px;height:1.5px;background:var(--signal)}
+.fussliste{list-style:none;display:flex;flex-direction:column;gap:15px}
+.fussliste a{text-decoration:none;transition:color .2s ease}
+.fussliste a:hover{color:var(--signal)}
+.fussliste li{display:flex;align-items:center;gap:16px}
+.fussliste svg{flex:none;width:24px;height:24px;fill:none;stroke:var(--signal);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.fussliste .folgt{color:var(--auf-grund-still)}
+.rechtliches{
+  display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 26px;
+  margin-top:clamp(52px,8vh,80px);padding-top:20px;border-top:1px solid var(--linie);
+  font-size:var(--txt-s);color:var(--auf-grund-still);
+}
+.rechtliches nav{display:flex;flex-wrap:wrap;gap:8px 26px}
+.rechtliches a{text-decoration:none}
+.rechtliches a:hover{color:var(--signal)}
 
 @media(prefers-reduced-motion:no-preference){
   /* Nur verstecken, wenn das Skript die Klasse gesetzt hat UND der Beobachter
@@ -725,7 +757,7 @@ footer nav a:hover{color:var(--signal)}
   </div>
 </section>
 
-<section>
+<section id="angebot">
   <div class="spalte auf">
     <h2>Nicht jede Website braucht alles.<span class="zweite">Deine braucht das Richtige.</span></h2>
     <div class="zeilen">
@@ -824,11 +856,34 @@ footer nav a:hover{color:var(--signal)}
 
 <footer>
   <div class="spalte">
-    <div class="logo"><span class="s">format</span><span class="p">eins</span></div>
-    <nav>
-      <a href="kostenrechner.html">Kostenrechner</a><a href="#kontakt">Kontakt</a><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a>
-    </nav>
-    <span class="still">© 2026 · Webdesign aus Olten und Region · von Hand gebaut, ohne Baukastensystem</span>
+    <div class="fussraster">
+      <div class="fussmarke">
+        <a class="logo" href="#" aria-label="formateins, zum Seitenanfang"><span class="s">format</span><span class="p">eins</span></a>
+        <p>Websites für Selbstständige und kleine Unternehmen in Olten und der Region. Von Hand gebaut, zum Festpreis.</p>
+      </div>
+      <div>
+        <p class="fusstitel"><i aria-hidden="true"></i>Angebot</p>
+        <ul class="fussliste">
+          <li><a href="#angebot">Eine Seite</a></li>
+          <li><a href="#angebot">Firmenwebsite</a></li>
+          <li><a href="#angebot">Bestehendes erneuern</a></li>
+          <li><a href="kostenrechner.html">Kostenrechner</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="fusstitel"><i aria-hidden="true"></i>Kontakt</p>
+        <!-- LIVEGANG / AUSFUELLEN: Adresse, E-Mail (mailto:) und Telefon (tel:) eintragen. -->
+        <ul class="fussliste">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span>Region Olten</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="m3.5 7 8.5 6.5L20.5 7"/></svg><span class="folgt">E-Mail folgt</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span class="folgt">Telefon folgt</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="rechtliches">
+      <nav><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></nav>
+      <span>© 2026 formateins · Webdesign aus Olten</span>
+    </div>
   </div>
 </footer>
 
