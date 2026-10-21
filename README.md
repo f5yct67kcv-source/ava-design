@@ -17,8 +17,11 @@ von Google Fonts.
 
 ## Noch offen
 
-- **Preise** sind gesetzt. Die Werte stehen im Skript von `kostenrechner.html`
-  in den Objekten `grund` und `zuschlag`; anpassen nach den ersten echten Projekten.
+- **Preise** sind gesetzt, im Objekt `preis` im Skript von `kostenrechner.html`.
+  Grundpreis und Zuschlaege je Groesse, daraus ein Punktwert, der Rahmen ist
+  -10 % bis +15 % davon. Ueberarbeiten -20 %, Eilzuschlag +15 % nur bei Termin
+  unter sechs Wochen. Lage: oberes Freelancer-Feld, rund halb so teuer wie eine
+  Kleinagentur. Nach den ersten echten Projekten nachkalibrieren.
 - **Versand der Anfragen** laeuft ueber `anfrage.php` beim Hoster (hosting.ch).
   Das Skript prueft die Angaben, schickt sie als Mail und legt keine Anfrage ab. Es
   bremst nach fuenf Anfragen pro Stunde und Absender, faengt Spam-Programme ueber

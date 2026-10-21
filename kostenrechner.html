@@ -282,13 +282,12 @@ footer nav a:hover{color:var(--signal)}
         <button class="antwort" data-wert="eine" data-text="Eine Seite"><span class="kreis"></span><span><b>Eine Seite</b><span>Alles Wichtige auf einer Länge. Reicht für die meisten Betriebe.</span></span></button>
         <button class="antwort" data-wert="firma" data-text="Firmenwebsite, 3 bis 5 Seiten"><span class="kreis"></span><span><b>Firmenwebsite, 3 bis 5 Seiten</b><span>Wenn Leistungen, Team oder Standorte wirklich getrennt gehören.</span></span></button>
         <button class="antwort" data-wert="gross" data-text="Grössere Website, ab 6 Seiten"><span class="kreis"></span><span><b>Grössere Website, ab 6 Seiten</b><span>Mehrere Angebote oder Standorte. Hier schaue ich vorher genau hin.</span></span></button>
-        <button class="antwort" data-wert="erneuern" data-text="Bestehende Website erneuern"><span class="kreis"></span><span><b>Bestehende Website erneuern</b><span>Sie steht schon, soll aber wieder in die Gegenwart.</span></span></button>
       </div>
     </div>
 
     <div class="frage" data-schluessel="bestand">
       <h1>Gibt es schon eine Website?</h1>
-      <p class="hilfe">Falls ja, schaue ich sie mir vor dem Angebot an.</p>
+      <p class="hilfe">Falls ja, schaue ich sie mir vor dem Angebot an. Überarbeiten ist günstiger als neu bauen, wenn das Fundament taugt.</p>
       <div class="antworten">
         <button class="antwort" data-wert="nein" data-text="Nein, es gibt noch nichts"><span class="kreis"></span><span><b>Nein, es gibt noch nichts</b><span>Wir fangen bei null an. Oft der einfachere Weg.</span></span></button>
         <button class="antwort" data-wert="ersetzen" data-text="Ja, sie soll ersetzt werden"><span class="kreis"></span><span><b>Ja, sie soll ersetzt werden</b><span>Neu gebaut, Inhalte übernehmen wir wo es sich lohnt.</span></span></button>
@@ -336,7 +335,7 @@ footer nav a:hover{color:var(--signal)}
       <div class="antworten">
         <button class="antwort" data-wert="offen" data-text="Zeitlich offen"><span class="kreis"></span><span><b>Keine Eile</b><span>Wir nehmen uns die Zeit, die es braucht.</span></span></button>
         <button class="antwort" data-wert="normal" data-text="In den nächsten zwei Monaten"><span class="kreis"></span><span><b>In den nächsten zwei Monaten</b><span>Der übliche Rahmen für ein Projekt dieser Grösse.</span></span></button>
-        <button class="antwort" data-wert="datum" data-text="Bis zu einem festen Datum"><span class="kreis"></span><span><b>Bis zu einem festen Datum</b><span>Eröffnung, Messe, Saisonstart. Sag mir welches.</span></span></button>
+        <button class="antwort" data-wert="datum" data-text="Bis zu einem festen Datum"><span class="kreis"></span><span><b>Bis zu einem festen Datum</b><span>Eröffnung, Messe, Saisonstart. Liegt er weniger als sechs Wochen entfernt, rechne ich einen Eilzuschlag ein.</span></span></button>
       </div>
       <div class="feld zusatzfeld" id="datumfeld">
         <label for="datum">Bis wann?</label>
@@ -451,24 +450,31 @@ const antwort = {};   // schluessel -> wert
 const beschriftung = {}; // schluessel -> lesbarer Text
 let dran = 0;
 
-// Preislogik. Grundwert nach Umfang, Zuschlaege nach Aufwand.
-const grund = {
-  eine:      [1400, 1900],
-  firma:     [2600, 3500],
-  gross:     [4200, 6000],
-  erneuern:  [1600, 2600]
+// Preislogik. Alles wird zu einem Punktwert zusammengezaehlt, der Rahmen ist
+// dann -10 % bis +15 % davon. So bleibt die Spanne gleich eng, egal wie viel
+// jemand anklickt — getrennt addierte Unter- und Obergrenzen wuerden sie mit
+// jedem Klick breiter machen.
+// Zuschlaege wachsen mit der Groesse: Texte fuer zehn Seiten sind nicht der
+// Aufwand von Texten fuer eine.
+// Marktlage CH 2026 zum Vergleich: Freelancer-Onepager CHF 1200–2200,
+// Kleinagentur im Schnitt rund CHF 6800.
+const preis = {
+  //                eine   firma  gross
+  grund:          { eine:1650, firma:3050, gross:5100 },
+  texte:  { teil: { eine:350,  firma:600,  gross:1000 },
+            ich:  { eine:700,  firma:1200, gross:2000 } },
+  bilder: { teil: { eine:250,  firma:400,  gross:600  } },
+  logo:   { teil: { eine:300,  firma:300,  gross:300  } }
 };
-const zuschlag = {
-  texte:  { da:[0,0], teil:[250,500], ich:[500,900] },
-  bilder: { da:[0,0], teil:[150,350], shooting:[0,0] },
-  logo:   { da:[0,0], teil:[200,450], neu:[0,0] },
-  zeit:   { offen:[0,0], normal:[0,0], datum:[150,400] }
-};
+const UEBERARBEITEN = 0.8;   // bestehende Seite ueberarbeiten statt neu bauen
+const EILE = 1.15;           // fester Termin in weniger als sechs Wochen
+const EILE_TAGE = 42;
+let eilig = false;
+
 const empfehlungen = {
   eine:     'Eine Seite passt zu dir.',
   firma:    'Eine Firmenwebsite passt zu dir.',
-  gross:    'Das wird eine grössere Website.',
-  erneuern: 'Wir erneuern, was schon steht.'
+  gross:    'Das wird eine grössere Website.'
 };
 
 function zahl(n){ return n.toLocaleString('de-CH').replace(/[  ]/g, "'"); }
@@ -512,16 +518,6 @@ fragen.forEach(frage => {
       if (schluessel === 'bestand') url.classList.toggle('zeigen', knopf.dataset.wert !== 'nein');
       if (schluessel === 'zeit') datum.classList.toggle('zeigen', knopf.dataset.wert === 'datum');
 
-      // "Bestehende Website erneuern" und "es gibt noch nichts" widersprechen sich.
-      if (schluessel === 'umfang') {
-        const nein = document.querySelector('[data-schluessel="bestand"] [data-wert="nein"]');
-        nein.hidden = knopf.dataset.wert === 'erneuern';
-        if (nein.hidden && antwort.bestand === 'nein') {
-          nein.setAttribute('aria-pressed', 'false');
-          delete antwort.bestand; delete beschriftung.bestand;
-        }
-      }
-
       weiter.disabled = false;
     });
   });
@@ -549,18 +545,28 @@ function antwortText(schluessel){
   const datum = document.getElementById('datum').value;
   if (schluessel === 'bestand' && antwort.bestand !== 'nein' && url) text += ' · ' + url;
   if (schluessel === 'zeit' && antwort.zeit === 'datum' && datum) text += ', bis ' + datumLesbar(datum);
+  if (schluessel === 'zeit' && eilig) text += ' (Eilzuschlag eingerechnet)';
   return text;
 }
 
 const separat = [];
 function rechnen(){
-  const basis = grund[antwort.umfang] || grund.eine;
-  let von = basis[0], bis = basis[1];
-  for (const feld of ['texte','bilder','logo','zeit']) {
-    const z = zuschlag[feld] && zuschlag[feld][antwort[feld]];
-    if (z) { von += z[0]; bis += z[1]; }
+  const groesse = preis.grund[antwort.umfang] ? antwort.umfang : 'eine';
+  let punkt = preis.grund[groesse];
+  for (const feld of ['texte','bilder','logo']) {
+    const stufe = preis[feld][antwort[feld]];
+    if (stufe) punkt += stufe[groesse];
   }
-  if (antwort.bestand === 'ueberarbeiten') { von -= 200; bis -= 200; }
+  if (antwort.bestand === 'ueberarbeiten') punkt *= UEBERARBEITEN;
+
+  // Ein Termin kostet nur dann extra, wenn er wirklich eng ist.
+  const termin = document.getElementById('datum').value;
+  const tage = termin ? (new Date(termin + 'T00:00') - new Date()) / 864e5 : Infinity;
+  eilig = antwort.zeit === 'datum' && tage < EILE_TAGE;
+  if (eilig) punkt *= EILE;
+
+  const von = Math.floor(punkt * 0.9 / 100) * 100;
+  const bis = Math.ceil(punkt * 1.15 / 100) * 100;
 
   document.getElementById('empfehlung').textContent = empfehlungen[antwort.umfang] || 'Dein Preisrahmen';
   rahmenText = 'CHF ' + zahl(von) + ' – ' + zahl(bis);
