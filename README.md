@@ -75,6 +75,10 @@ Schriften liegen selbst im Projekt (`schriften/`, `schriften.css`).
   cwebp -metadata none -q 62 -resize 440 0 mobil.png -o arbeiten/johann-mobil.webp
   ```
 
+  Nach jeder Neuaufnahme die Zahl hinter `?v=` an den drei Bildadressen in
+  `index.html` hochzaehlen. Sonst zeigen Browser bis zu zehn Minuten lang das
+  alte Bild aus dem Zwischenspeicher.
+
   Der Bauplan ist dieselbe Seite mit eingeschobenem Stil: alle Hintergründe
   weg, Text in Balken, Abschnitte gestrichelt. Dafür eine lokale Kopie der Seite
   ausliefern, vor `</head>` den Block aus `quellen/bauplan.inject` einsetzen und
