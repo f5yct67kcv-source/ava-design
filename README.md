@@ -54,7 +54,7 @@ Schriften liegen selbst im Projekt (`schriften/`, `schriften.css`).
   raus, damit steht aktuell kein Beleg auf der Seite. Mehrere Kundenprojekte
   sind kurz vor Abschluss; die Seite geht ohnehin erst danach online. Sobald
   drei Projekte live sind, kommt ein Referenzabschnitt zwischen „Nicht jede
-  Website braucht alles" und den Preisabschnitt.
+  Website braucht alles" und die häufigen Fragen.
 
   **Währenddessen einsammeln, nicht nachher:** pro Projekt eine schriftliche
   Freigabe des Kunden, ein bis zwei Bildschirmaufnahmen, und einen Satz dazu,

@@ -240,6 +240,20 @@ p{max-width:62ch}
 /* In der Kopfzeile groesser als im Fuss: neben der Schlagzeile ging es sonst unter. */
 .kopf .logo{font-size:clamp(1.3rem,1.9vw,1.6rem)}
 
+/* Mitlaufende Leiste: taucht erst auf, wenn der Knopf im Hero aus dem Bild ist,
+   damit oben nicht zwei gleiche Knoepfe nebeneinander stehen. */
+.mitlauf{
+  position:fixed;inset:0 0 auto;z-index:30;
+  background:rgba(14,24,32,.88);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--linie);
+  transform:translateY(-101%);transition:transform .4s cubic-bezier(.16,1,.3,1);
+}
+.mitlauf.zeigen{transform:none}
+.mitlauf .spalte{display:flex;align-items:center;justify-content:space-between;gap:16px;height:60px}
+.mitlauf .logo{font-size:1.3rem;text-decoration:none}
+.knopf.klein{padding:10px 16px;font-size:var(--txt-s);gap:8px}
+@media(prefers-reduced-motion:reduce){.mitlauf{transition:none}}
+
 /* ---------- Hero ---------- */
 /* Hoehe gedeckelt: auf einem hohen Bildschirm schwimmt der Inhalt sonst in der
    Mitte und oben steht eine leere Bahn. Der angeschnittene naechste Abschnitt
@@ -530,9 +544,8 @@ section{padding-block:clamp(50px,7.5vh,80px)}
 .zeile:hover .hin{opacity:1}
 @media(max-width:819px){.zeile .hin{opacity:1}}
 
-/* Die drei Konditionen als eine Zeile statt als eigener Block: Preis,
-   Ansprechpartner, Besitz. Im Hero machten sie einen zweiten Abschnitt auf,
-   hier sind sie die Fussnote zum Preisversprechen. */
+/* Die drei Konditionen als eine Zeile unter dem Angebot statt als eigener
+   Abschnitt: Preis, Ansprechpartner, Tempo. */
 .beweiszeile{
   grid-column:1 / -1;
   display:flex;flex-wrap:wrap;gap:8px 14px;
@@ -541,6 +554,8 @@ section{padding-block:clamp(50px,7.5vh,80px)}
   font-size:var(--txt-s);font-weight:600;color:var(--auf-grund);max-width:none;
 }
 .beweiszeile span{display:flex;align-items:center;gap:14px}
+/* Unter den Zeilen traegt deren letzte Haarlinie schon die Trennung, eine zweite waere doppelt. */
+.zeilen + .beweiszeile{border-top:0;padding-top:0}
 /* Als Zeile trennt das Quadrat zwischen den Punkten, es steht deshalb nur ab dem
    zweiten. Sobald gestapelt wird, ist es ein Aufzaehlungszeichen und muss vor
    jedem stehen — sonst haette der erste Punkt als einziger keins. */
@@ -555,7 +570,6 @@ section{padding-block:clamp(50px,7.5vh,80px)}
   }
 }
 
-/* ---------- Fuss ---------- */
 /* ---------- Fuss ----------
    Gross statt klein: Schrift auf Fliesstextgroesse und darueber, drei Spalten
    mit Haarlinien dazwischen, Titel in der Serifenschrift mit der orangen Linie
@@ -642,6 +656,13 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
   </div>
 </header>
 
+<div class="mitlauf" id="mitlauf" inert>
+  <div class="spalte">
+    <a class="logo" href="#" aria-label="formateins, zum Seitenanfang"><span class="s">format</span><span class="p">eins</span></a>
+    <a class="knopf klein" href="kostenrechner.html">Kosten berechnen<span class="pfeil">→</span></a>
+  </div>
+</div>
+
 <main>
 <section class="hero">
   <div class="spalte heroraster">
@@ -667,7 +688,7 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
         <div class="rund"><img src="foto.webp" alt="Adrian von Arb" width="480" height="480"></div>
         </div>
       </div>
-      <p class="gross">Ich baue Websites für Selbstständige und kleine Unternehmen in Olten und der Region, die ihr Handwerk können, aber online nicht stattfinden. Von Hand, ohne Baukasten, zum Festpreis.</p>
+      <p class="gross">Ich baue Websites für Selbstständige und kleine Unternehmen in Olten und der Region, die ihr Fach verstehen, online aber kaum stattfinden. Von Hand gebaut, zum Festpreis.</p>
     </div>
 
     <div class="handeln">
@@ -705,11 +726,11 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
       </div>
       <div>
         <h3>Individuell gebaut, nicht zusammengeklickt.</h3>
-        <p>Kein Baukasten-Look, keine unnötigen Erweiterungen, kein Template von der Stange. Deine Seite sieht nicht aus wie zwölf andere in deiner Branche.</p>
+        <p>Gestaltet für deinen Betrieb und von Hand umgesetzt. Deine Seite sieht nicht aus wie zwölf andere in deiner Branche, und sie lädt schnell, weil nichts Unnötiges mitkommt.</p>
       </div>
       <div>
         <h3>Sie gehört dir. Punkt.</h3>
-        <p>Domain, Dateien und Inhalte bleiben bei dir. Willst du irgendwann wechseln, nimmst du alles mit. Kein Konto, das dir jemand kündigen kann.</p>
+        <p>Domain, Dateien und Inhalte bleiben bei dir. Willst du irgendwann wechseln, nimmst du alles mit.</p>
       </div>
     </div>
   </div>
@@ -726,7 +747,7 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
       <div class="schritt">
         <span class="punkt" aria-hidden="true"></span>
         <h3>Du rechnest</h3>
-        <p>Sieben Fragen im Kostenrechner. Du siehst sofort, in welchem Rahmen dein Projekt liegt. Dafür brauchst du weder ein Konto noch deine Telefonnummer.</p>
+        <p>Sieben Fragen im Kostenrechner, und du siehst sofort, in welchem Rahmen dein Projekt liegt.</p>
       </div>
 
       <div class="schritt">
@@ -738,13 +759,13 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
       <div class="schritt">
         <span class="punkt" aria-hidden="true"></span>
         <h3>Wir bauen</h3>
-        <p>Ein Gespräch über Inhalte, dann baue ich. Du siehst die Seite zwischendurch und sagst, was nicht stimmt. Kein Sitzungsmarathon, keine Freigabeschlaufen über drei Wochen.</p>
+        <p>Ein Gespräch über die Inhalte, dann baue ich. Du siehst die Seite zwischendurch und sagst, was nicht stimmt. Kurze Wege statt langer Sitzungen.</p>
       </div>
 
       <div class="schritt">
         <span class="punkt" aria-hidden="true"></span>
         <h3>Es geht live</h3>
-        <p>Domain und Hosting sind eingerichtet, die Seite läuft. Änderungen später sind kein Abo, sondern eine Rechnung. Und nur dann, wenn du etwas willst.</p>
+        <p>Domain und Hosting sind eingerichtet, die Seite läuft. Willst du später etwas ändern, meldest du dich und bezahlst genau das.</p>
       </div>
     </div>
   </div>
@@ -770,20 +791,10 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
         <span class="hin">Einschätzen →</span>
       </a>
     </div>
-  </div>
-</section>
-
-<section id="preis">
-  <div class="spalte zweispalt auf">
-    <h2>Kein „ab“.<span class="zweite">Keine Überraschung.</span></h2>
-    <div>
-      <p class="gross">Ein Startpreis ist ein Köder. Er steht gross auf der Seite und hat mit dem, was am Ende auf der Rechnung steht, wenig zu tun.</p>
-      <p style="margin-top:1.1em">Bei mir umgekehrt: du beantwortest sieben Fragen, siehst sofort einen Rahmen, und danach bekommst du einen Festpreis, der hält. Unter tausend Franken gibt es bei mir nichts — dafür auch keine monatliche Baukastenrechnung, die nie aufhört.</p>
-    </div>
     <p class="beweiszeile">
       <span>Festpreis statt „ab“</span>
       <span>Direkt mit dem, der sie baut</span>
-      <span>Die Seite gehört dir</span>
+      <span>Rahmen in zwei Minuten</span>
     </p>
   </div>
 </section>
@@ -805,7 +816,7 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
       </details>
       <details>
         <summary>Was kostet eine Website bei dir?</summary>
-        <p>Das hängt vom Umfang ab und davon, was an Texten und Bildern schon da ist. Der <a href="kostenrechner.html">Kostenrechner</a> zeigt dir in sieben Fragen einen Rahmen, danach bekommst du einen Festpreis.</p>
+        <p>Das hängt vom Umfang ab und davon, was an Texten und Bildern schon da ist. Einen Startpreis mit „ab“ nenne ich bewusst nicht, er sagt wenig über die Rechnung am Ende. Der <a href="kostenrechner.html">Kostenrechner</a> zeigt dir in sieben Fragen einen Rahmen, danach bekommst du einen Festpreis. Unter tausend Franken gibt es bei mir keine Website.</p>
       </details>
       <details>
         <summary>Wie lange dauert es, bis sie live ist?</summary>
@@ -927,6 +938,18 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
 
 
 <script>
+// Die Leiste kommt, sobald der Knopf im Hero oben aus dem Bild ist, und geht,
+// wenn er wieder sichtbar wird.
+const mitlauf = document.getElementById('mitlauf');
+const heroKnopf = document.querySelector('.hero .handeln');
+if (mitlauf && heroKnopf && 'IntersectionObserver' in window) {
+  new IntersectionObserver(([e]) => {
+    const zeigen = !e.isIntersecting && e.boundingClientRect.top < 0;
+    mitlauf.classList.toggle('zeigen', zeigen);
+    mitlauf.inert = !zeigen;
+  }).observe(heroKnopf);
+}
+
 // Ein einziger inszenierter Moment: die Leitung des Ablaufs zeichnet sich,
 // wenn der Abschnitt ins Bild kommt. Alles andere bewegt sich nur auf Bedienung.
 const reduziert = matchMedia('(prefers-reduced-motion: reduce)').matches;
