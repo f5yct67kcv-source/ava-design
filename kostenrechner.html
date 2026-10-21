@@ -560,6 +560,7 @@ const VERSAND = {
 const antwort = {};   // schluessel -> wert
 const beschriftung = {}; // schluessel -> lesbarer Text
 let dran = 0;
+let selbstWeiter;
 
 // Preislogik. Alles wird zu einem Punktwert zusammengezaehlt, der Rahmen ist
 // dann -10 % bis +15 % davon. So bleibt die Spanne gleich eng, egal wie viel
@@ -661,6 +662,13 @@ fragen.forEach(frage => {
 
       weiter.disabled = false;
       knotenZeichnen();
+
+      // Ohne Zusatzfeld geht es von selbst weiter. Die kurze Pause zeigt noch, was gewaehlt ist.
+      // Taucht ein Feld auf, bleibt die Frage stehen, bis man selbst auf Weiter drueckt.
+      clearTimeout(selbstWeiter);
+      if (!frage.querySelector('.zusatzfeld.zeigen')) {
+        selbstWeiter = setTimeout(() => { if (fragen[dran] === frage) weiter.click(); }, 380);
+      }
     });
   });
 });
