@@ -172,6 +172,7 @@ p{max-width:62ch}
 .antwort[aria-pressed="true"]{border-color:var(--signal);background:rgba(255,138,76,.08)}
 .antwort[aria-pressed="true"] .kreis{border-color:var(--signal)}
 .antwort[aria-pressed="true"] .kreis::after{transform:scale(1)}
+.antwort[hidden]{display:none}
 .antwort b{font-weight:700;display:block}
 .antwort span{display:block;font-size:var(--txt-s);color:var(--auf-grund-still);margin-top:2px}
 
@@ -185,6 +186,9 @@ p{max-width:62ch}
 .feld input:hover,.feld textarea:hover{border-color:var(--linie-hell)}
 .feld input::placeholder,.feld textarea::placeholder{color:#71889a}
 .feld textarea{min-height:96px;resize:vertical}
+.feld [aria-invalid="true"]{border-color:var(--signal)}
+.fehlertext{font-size:var(--txt-s);font-weight:600;color:var(--signal)}
+.fehlertext:empty{display:none}
 .zusatzfeld{display:none}
 .zusatzfeld.zeigen{display:flex}
 
@@ -244,6 +248,12 @@ p{max-width:62ch}
 @media(min-width:640px){.paar{grid-template-columns:1fr 1fr}}
 .formular .knopf{align-self:flex-start;margin-top:4px}
 .klarzeile{font-size:var(--txt-s);color:var(--auf-grund-still);max-width:52ch}
+.formstatus{color:var(--signal)}
+.formstatus:empty{display:none}
+.aendern{align-self:flex-start;margin-top:-6px}
+.aendern[hidden]{display:none}
+.danke{display:flex;flex-direction:column;gap:.9em}
+.danke[hidden]{display:none}
 
 footer{border-top:1px solid var(--linie);padding-block:30px;font-size:var(--txt-s)}
 footer .spalte{display:flex;flex-wrap:wrap;gap:16px 34px;justify-content:space-between}
@@ -256,7 +266,7 @@ footer nav a:hover{color:var(--signal)}
 
 <header class="kopf">
   <div class="spalte">
-    <a class="logo" href="index.html"><span class="zeichen">A</span>AVA</a>
+    <a class="logo" href="index.html">formateins</a>
     <span class="zaehler" id="zaehler">Frage 1 von 6</span>
   </div>
   <div class="balken"><i id="balken"></i></div>
@@ -347,7 +357,9 @@ footer nav a:hover{color:var(--signal)}
         <div class="separat" id="separat" hidden></div>
       </div>
 
-      <div>
+      <button class="zurueck aendern" id="aendern" type="button">← Angaben ändern</button>
+
+      <div id="anfrage">
         <h2>Soll ich mir das anschauen?</h2>
         <p style="margin-top:.9em;margin-bottom:1.4em" class="still">Du hast den Rahmen bereits gesehen. Ob du dich meldest, entscheidest du jetzt in Ruhe.</p>
 
@@ -355,7 +367,8 @@ footer nav a:hover{color:var(--signal)}
           <div class="paar">
             <div class="feld">
               <label for="name">Name</label>
-              <input type="text" id="name" name="name" required autocomplete="name" placeholder="Vor- und Nachname">
+              <input type="text" id="name" name="name" required autocomplete="name" placeholder="Vor- und Nachname" aria-describedby="name-fehler">
+              <span class="fehlertext" id="name-fehler"></span>
             </div>
             <div class="feld">
               <label for="betrieb">Betrieb</label>
@@ -365,7 +378,8 @@ footer nav a:hover{color:var(--signal)}
           <div class="paar">
             <div class="feld">
               <label for="mail">E-Mail</label>
-              <input type="email" id="mail" name="mail" required autocomplete="email" placeholder="name@betrieb.ch">
+              <input type="email" id="mail" name="mail" required autocomplete="email" placeholder="name@betrieb.ch" aria-describedby="mail-fehler">
+              <span class="fehlertext" id="mail-fehler"></span>
             </div>
             <div class="feld">
               <label for="tel">Telefon (freiwillig)</label>
@@ -376,10 +390,20 @@ footer nav a:hover{color:var(--signal)}
             <label for="bemerkung">Was ich sonst noch wissen sollte</label>
             <textarea id="bemerkung" name="bemerkung" placeholder="Was dein Betrieb macht, was dich an der jetzigen Lösung stört, was dir wichtig ist."></textarea>
           </div>
-          <button class="knopf" type="submit">Anfrage schicken<span class="pfeil">→</span></button>
-          <span class="klarzeile">Kein Newsletter, kein Verteiler. Ich antworte persönlich, in der Regel innerhalb von zwei Arbeitstagen.</span>
-          <span class="klarzeile" style="color:var(--signal)" id="hinweisversand">Versand ist noch nicht aufgeschaltet. Die Adresse folgt mit der Marke.</span>
+          <!-- Falle fuer Spam-Programme: fuer Menschen unsichtbar, wird von Bots ausgefuellt.
+               Der Name _gotcha wird von Formspree zusaetzlich selbst erkannt. -->
+          <div class="nurleser" aria-hidden="true">
+            <label for="gotcha">Nicht ausfüllen</label>
+            <input type="text" id="gotcha" name="_gotcha" tabindex="-1" autocomplete="off">
+          </div>
+          <button class="knopf" type="submit" id="senden">Anfrage schicken<span class="pfeil">→</span></button>
+          <p class="klarzeile formstatus" id="formstatus" role="status" aria-live="polite"></p>
+          <span class="klarzeile">Kein Newsletter, kein Verteiler. Ich antworte persönlich, in der Regel innerhalb von zwei Arbeitstagen. Deine Angaben verwende ich nur dafür, mehr dazu im <a href="#">Datenschutz</a>.</span>
         </form>
+
+        <div class="danke" id="danke" hidden tabindex="-1">
+          <p class="klarzeile" style="font-size:var(--txt-l);color:var(--auf-grund);max-width:52ch">Danke, deine Anfrage ist angekommen. Ich schaue mir deine Angaben an und melde mich in der Regel innerhalb von zwei Arbeitstagen.</p>
+        </div>
       </div>
     </div>
 
@@ -412,6 +436,17 @@ const balken = document.getElementById('balken');
 const zaehler = document.getElementById('zaehler');
 const ansage = document.getElementById('ansage');
 const steuerung = document.getElementById('steuerung');
+
+// LIVEGANG: wohin die Anfragen gehen. Eine von zwei Zeilen reicht.
+// ziel: Adresse eines Formular-Empfaengers, der ein normales POST annimmt —
+//       eigenes PHP-Skript beim Hoster, Formspree, Web3Forms. Bevorzugt, weil es
+//       ohne Mailprogramm beim Besucher funktioniert.
+// mail: Rueckfallweg. Ist ziel leer oder schlaegt der Versand fehl, oeffnet sich
+//       das Mailprogramm des Besuchers mit fertig ausgefuellter Nachricht.
+const VERSAND = {
+  ziel: '',
+  mail: ''
+};
 
 const antwort = {};   // schluessel -> wert
 const beschriftung = {}; // schluessel -> lesbarer Text
@@ -478,6 +513,16 @@ fragen.forEach(frage => {
       if (schluessel === 'bestand') url.classList.toggle('zeigen', knopf.dataset.wert !== 'nein');
       if (schluessel === 'zeit') datum.classList.toggle('zeigen', knopf.dataset.wert === 'datum');
 
+      // "Bestehende Website erneuern" und "es gibt noch nichts" widersprechen sich.
+      if (schluessel === 'umfang') {
+        const nein = document.querySelector('[data-schluessel="bestand"] [data-wert="nein"]');
+        nein.hidden = knopf.dataset.wert === 'erneuern';
+        if (nein.hidden && antwort.bestand === 'nein') {
+          nein.setAttribute('aria-pressed', 'false');
+          delete antwort.bestand; delete beschriftung.bestand;
+        }
+      }
+
       weiter.disabled = false;
     });
   });
@@ -489,7 +534,26 @@ weiter.addEventListener('click', () => {
   zeichnen();
 });
 zurueck.addEventListener('click', () => { dran = Math.max(0, dran - 1); zeichnen(); });
+// Antworten bleiben stehen, man klickt sich nur durch, was sich aendern soll.
+document.getElementById('aendern').addEventListener('click', () => { dran = 0; zeichnen(); });
 
+let rahmenText = '';
+function datumLesbar(wert){
+  if (!wert) return '';
+  const [j, m, t] = wert.split('-');
+  return t + '.' + m + '.' + j;
+}
+// Zusatzangaben haengen an der Antwort, zu der sie gehoeren.
+function antwortText(schluessel){
+  let text = beschriftung[schluessel] || '';
+  const url = document.getElementById('url').value.trim();
+  const datum = document.getElementById('datum').value;
+  if (schluessel === 'bestand' && antwort.bestand !== 'nein' && url) text += ' · ' + url;
+  if (schluessel === 'zeit' && antwort.zeit === 'datum' && datum) text += ', bis ' + datumLesbar(datum);
+  return text;
+}
+
+const separat = [];
 function rechnen(){
   const basis = grund[antwort.umfang] || grund.eine;
   let von = basis[0], bis = basis[1];
@@ -500,7 +564,8 @@ function rechnen(){
   if (antwort.bestand === 'ueberarbeiten') { von -= 200; bis -= 200; }
 
   document.getElementById('empfehlung').textContent = empfehlungen[antwort.umfang] || 'Dein Preisrahmen';
-  document.getElementById('zahl').textContent = 'CHF ' + zahl(von) + ' – ' + zahl(bis);
+  rahmenText = 'CHF ' + zahl(von) + ' – ' + zahl(bis);
+  document.getElementById('zahl').textContent = rahmenText;
 
   const titel = {
     umfang:'Umfang', bestand:'Ausgangslage', texte:'Texte',
@@ -510,13 +575,16 @@ function rechnen(){
   liste.innerHTML = '';
   for (const schluessel of ['umfang','bestand','texte','bilder','logo','zeit']) {
     if (!beschriftung[schluessel]) continue;
+    // textContent statt innerHTML: Adresse und Datum stammen vom Besucher.
     const zeile = document.createElement('div');
-    zeile.innerHTML = '<dt>' + titel[schluessel] + '</dt><dd>' + beschriftung[schluessel] + '</dd>';
+    const dt = document.createElement('dt'); dt.textContent = titel[schluessel];
+    const dd = document.createElement('dd'); dd.textContent = antwortText(schluessel);
+    zeile.append(dt, dd);
     liste.appendChild(zeile);
   }
 
   // Was bewusst nicht im Rahmen steckt, steht separat — sonst wird der Rahmen zur Mogelpackung.
-  const separat = [];
+  separat.length = 0;
   if (antwort.bilder === 'shooting') separat.push('Fotos vor Ort');
   if (antwort.logo === 'neu') separat.push('Logo und visueller Auftritt');
   const kasten = document.getElementById('separat');
@@ -529,10 +597,110 @@ function rechnen(){
   }
 }
 
-document.getElementById('formular').addEventListener('submit', (e) => {
+const formular = document.getElementById('formular');
+const formstatus = document.getElementById('formstatus');
+const senden = document.getElementById('senden');
+const titelFuerVersand = {
+  umfang:'Umfang', bestand:'Ausgangslage', texte:'Texte',
+  bilder:'Bilder', logo:'Logo und Auftritt', zeit:'Zeitrahmen'
+};
+
+function pruefen(){
+  const pflicht = [
+    ['name', 'Wie darf ich dich ansprechen?'],
+    ['mail', 'Ohne gültige E-Mail-Adresse kann ich dir nicht antworten.']
+  ];
+  let erstesFalsches = null;
+  for (const [id, meldung] of pflicht) {
+    const feld = document.getElementById(id);
+    feld.value = feld.value.trim();
+    const ok = feld.checkValidity();
+    feld.setAttribute('aria-invalid', ok ? 'false' : 'true');
+    document.getElementById(id + '-fehler').textContent = ok ? '' : meldung;
+    if (!ok && !erstesFalsches) erstesFalsches = feld;
+  }
+  if (erstesFalsches) erstesFalsches.focus();
+  return !erstesFalsches;
+}
+// Fehler verschwinden, sobald sie behoben sind, nicht erst beim naechsten Absenden.
+['name','mail'].forEach(id => document.getElementById(id).addEventListener('input', e => {
+  if (e.target.getAttribute('aria-invalid') === 'true' && e.target.checkValidity()) {
+    e.target.setAttribute('aria-invalid', 'false');
+    document.getElementById(id + '-fehler').textContent = '';
+  }
+}));
+
+// Alles, was der Besucher angegeben hat, in einer Form, die auch als Mail lesbar ist.
+function nachricht(){
+  const d = new FormData(formular);
+  const zeilen = [
+    'Preisrahmen: ' + rahmenText,
+    ...(separat.length ? ['Separat offerieren: ' + separat.join(', ')] : []),
+    '',
+    ...Object.keys(titelFuerVersand).filter(k => beschriftung[k]).map(k => titelFuerVersand[k] + ': ' + antwortText(k)),
+    '',
+    'Name: ' + d.get('name'),
+    'Betrieb: ' + (d.get('betrieb') || '–'),
+    'E-Mail: ' + d.get('mail'),
+    'Telefon: ' + (d.get('tel') || '–'),
+    '', 'Bemerkung:', d.get('bemerkung') || '–'
+  ];
+  return zeilen.join('\n');
+}
+
+function dankeZeigen(){
+  formular.hidden = true;
+  document.getElementById('aendern').hidden = true;
+  formular.previousElementSibling.hidden = true;           // Absatz
+  formular.previousElementSibling.previousElementSibling.textContent = 'Danke.';
+  const danke = document.getElementById('danke');
+  danke.hidden = false;
+  danke.focus();
+}
+
+function mailLink(){
+  const betreff = 'Anfrage Website · ' + (document.getElementById('betrieb').value.trim() || document.getElementById('name').value.trim());
+  return 'mailto:' + VERSAND.mail + '?subject=' + encodeURIComponent(betreff) + '&body=' + encodeURIComponent(nachricht());
+}
+
+function ueberMailprogramm(einleitung){
+  formstatus.textContent = '';
+  if (!VERSAND.mail) {
+    formstatus.textContent = VERSAND.ziel
+      ? 'Das hat leider nicht geklappt. Versuch es bitte in ein paar Minuten nochmals.'
+      : 'Versand ist in diesem Entwurf noch nicht angebunden.';
+    return;
+  }
+  location.href = mailLink();
+  formstatus.append(einleitung + ' Falls sich nichts geöffnet hat, schreib direkt an ');
+  const a = document.createElement('a');
+  a.href = mailLink(); a.textContent = VERSAND.mail;
+  formstatus.append(a, '.');
+}
+
+formular.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const hinweis = document.getElementById('hinweisversand');
-  hinweis.textContent = 'Versand ist in diesem Entwurf noch nicht angebunden. Sobald die Adresse steht, geht die Anfrage direkt an mich.';
+  if (!pruefen()) return;
+  if (document.getElementById('gotcha').value) { dankeZeigen(); return; }
+
+  if (!VERSAND.ziel) { ueberMailprogramm('Dein Mailprogramm öffnet sich mit der fertigen Nachricht, du musst nur noch senden.'); return; }
+
+  const daten = new FormData(formular);
+  daten.append('Preisrahmen', rahmenText);
+  if (separat.length) daten.append('Separat offerieren', separat.join(', '));
+  for (const k of Object.keys(titelFuerVersand)) if (beschriftung[k]) daten.append(titelFuerVersand[k], antwortText(k));
+  daten.append('Zusammenfassung', nachricht());
+
+  senden.disabled = true;
+  formstatus.textContent = 'Wird gesendet …';
+  try {
+    const antwortServer = await fetch(VERSAND.ziel, { method:'POST', body:daten, headers:{ Accept:'application/json' } });
+    if (!antwortServer.ok) throw new Error(antwortServer.status);
+    dankeZeigen();
+  } catch (fehler) {
+    senden.disabled = false;
+    ueberMailprogramm('Das hat leider nicht geklappt.');
+  }
 });
 
 zeichnen();

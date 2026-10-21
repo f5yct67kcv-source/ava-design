@@ -16,9 +16,15 @@ von Google Fonts.
 
 ## Noch offen
 
-- **Preise** sind Platzhalter. Die Werte stehen im Skript von `kostenrechner.html`
-  in den Objekten `grund` und `zuschlag`. Solange sie nicht kalibriert sind,
-  weist ein Hinweis neben der Zahl darauf hin.
+- **Preise** sind gesetzt. Die Werte stehen im Skript von `kostenrechner.html`
+  in den Objekten `grund` und `zuschlag`; anpassen nach den ersten echten Projekten.
+- **Versand der Anfragen** ist gebaut, aber ohne Ziel. Im Skript von
+  `kostenrechner.html` steht das Objekt `VERSAND` mit zwei Feldern:
+  `ziel` fuer einen Formular-Empfaenger (eigenes PHP-Skript beim Hoster,
+  Formspree, Web3Forms) und `mail` als Rueckfallweg ueber das Mailprogramm des
+  Besuchers. Eines reicht, beide sind am robustesten. Die Anfrage enthaelt
+  Preisrahmen, alle Antworten samt Website-Adresse und Wunschdatum, die separat
+  zu offerierenden Arbeiten und die Kontaktangaben.
 - **Foto** fehlt. Quadratisch, Tageslicht, Blick in die Kamera. Kommt in den
   runden Platzhalter im ersten Bild.
 
@@ -74,11 +80,13 @@ im Code mit `LIVEGANG` markiert — `grep -rn LIVEGANG .` findet sie alle.
 2. **Domain einsetzen** — `DOMAIN.ch` ersetzen in `robots.txt`, `sitemap.xml`
    und im JSON-LD am Ende von `index.html`. Dort auch `canonical` und `og:url`
    einkommentieren.
-3. **Adresse und Telefon** im JSON-LD ergaenzen (drei Stellen mit `AUSFUELLEN`).
+3. **Versandziel eintragen** im Objekt `VERSAND` in `kostenrechner.html`,
+   danach eine Testanfrage abschicken und ankommen sehen.
+4. **Adresse und Telefon** im JSON-LD ergaenzen (drei Stellen mit `AUSFUELLEN`).
    Ein LocalBusiness ohne Adresse wird von Google weitgehend ignoriert.
-4. **Markenname vereinheitlichen** — Titel und Fuss stehen noch auf AVA, der
-   Header bereits auf formateins.
-5. **Google Business Profile anlegen.** Bei lokalen Suchen dominiert das
+5. **Markenname vereinheitlichen** — Titel und Fuss stehen noch auf AVA, die
+   Kopfzeile beider Seiten bereits auf formateins.
+6. **Google Business Profile anlegen.** Bei lokalen Suchen dominiert das
    Kartenpaket ueber den organischen Treffern. Das ist wirksamer als jede
    Meta-Optimierung und kostet nichts.
 
