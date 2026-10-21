@@ -306,7 +306,7 @@ footer nav a:hover{color:var(--signal)}
       <div class="antworten">
         <button class="antwort" data-wert="da" data-text="Texte sind vorhanden"><span class="kreis"></span><span><b>Sind vorhanden</b><span>Ich ordne und kürze sie, schreibe aber nichts Neues.</span></span></button>
         <button class="antwort" data-wert="teil" data-text="Texte teilweise vorhanden"><span class="kreis"></span><span><b>Teilweise</b><span>Ein Teil steht, den Rest schreiben wir gemeinsam.</span></span></button>
-        <button class="antwort" data-wert="ich" data-text="Ich schreibe die Texte"><span class="kreis"></span><span><b>Bitte übernimm das</b><span>Ich schreibe sie nach einem Gespräch mit dir. Kostet extra, spart Monate.</span></span></button>
+        <button class="antwort" data-wert="ich" data-text="Texte werden neu geschrieben"><span class="kreis"></span><span><b>Bitte übernimm das</b><span>Ich schreibe sie nach einem Gespräch mit dir. Kostet extra, spart Monate.</span></span></button>
       </div>
     </div>
 
@@ -437,14 +437,13 @@ const zaehler = document.getElementById('zaehler');
 const ansage = document.getElementById('ansage');
 const steuerung = document.getElementById('steuerung');
 
-// LIVEGANG: wohin die Anfragen gehen. Eine von zwei Zeilen reicht.
-// ziel: Adresse eines Formular-Empfaengers, der ein normales POST annimmt —
-//       eigenes PHP-Skript beim Hoster, Formspree, Web3Forms. Bevorzugt, weil es
-//       ohne Mailprogramm beim Besucher funktioniert.
-// mail: Rueckfallweg. Ist ziel leer oder schlaegt der Versand fehl, oeffnet sich
-//       das Mailprogramm des Besuchers mit fertig ausgefuellter Nachricht.
+// Wohin die Anfragen gehen.
+// ziel: anfrage.php beim Hoster schickt die Anfrage als Mail. Funktioniert nur
+//       dort — auf GitHub Pages laeuft kein PHP, der Versand schlaegt fehl.
+// mail: LIVEGANG: eigene Adresse eintragen. Rueckfallweg, falls ziel scheitert:
+//       dann oeffnet sich das Mailprogramm des Besuchers mit fertiger Nachricht.
 const VERSAND = {
-  ziel: '',
+  ziel: 'anfrage.php',
   mail: ''
 };
 
@@ -651,6 +650,7 @@ function nachricht(){
 function dankeZeigen(){
   formular.hidden = true;
   document.getElementById('aendern').hidden = true;
+  formstatus.textContent = '';
   formular.previousElementSibling.hidden = true;           // Absatz
   formular.previousElementSibling.previousElementSibling.textContent = 'Danke.';
   const danke = document.getElementById('danke');
@@ -686,10 +686,10 @@ formular.addEventListener('submit', async (e) => {
   if (!VERSAND.ziel) { ueberMailprogramm('Dein Mailprogramm öffnet sich mit der fertigen Nachricht, du musst nur noch senden.'); return; }
 
   const daten = new FormData(formular);
-  daten.append('Preisrahmen', rahmenText);
-  if (separat.length) daten.append('Separat offerieren', separat.join(', '));
-  for (const k of Object.keys(titelFuerVersand)) if (beschriftung[k]) daten.append(titelFuerVersand[k], antwortText(k));
-  daten.append('Zusammenfassung', nachricht());
+  // Kurze Schluessel: PHP macht aus Leerzeichen in Feldnamen Unterstriche.
+  daten.append('rahmen', rahmenText);
+  if (separat.length) daten.append('separat', separat.join(', '));
+  for (const k of Object.keys(titelFuerVersand)) if (beschriftung[k]) daten.append(k, antwortText(k));
 
   senden.disabled = true;
   formstatus.textContent = 'Wird gesendet …';

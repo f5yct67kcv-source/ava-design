@@ -12,19 +12,18 @@ von Google Fonts.
 |---|---|
 | `index.html` | Startseite |
 | `kostenrechner.html` | Kostenrechner, sechs Fragen, Preisrahmen vor dem Formular |
+| `anfrage.php` | Nimmt die Anfrage aus dem Rechner an und schickt sie als Mail |
 | `archiv/` | Frühere Entwurfsrichtungen, nicht mehr aktuell |
 
 ## Noch offen
 
 - **Preise** sind gesetzt. Die Werte stehen im Skript von `kostenrechner.html`
   in den Objekten `grund` und `zuschlag`; anpassen nach den ersten echten Projekten.
-- **Versand der Anfragen** ist gebaut, aber ohne Ziel. Im Skript von
-  `kostenrechner.html` steht das Objekt `VERSAND` mit zwei Feldern:
-  `ziel` fuer einen Formular-Empfaenger (eigenes PHP-Skript beim Hoster,
-  Formspree, Web3Forms) und `mail` als Rueckfallweg ueber das Mailprogramm des
-  Besuchers. Eines reicht, beide sind am robustesten. Die Anfrage enthaelt
-  Preisrahmen, alle Antworten samt Website-Adresse und Wunschdatum, die separat
-  zu offerierenden Arbeiten und die Kontaktangaben.
+- **Versand der Anfragen** laeuft ueber `anfrage.php` beim Hoster (hosting.ch).
+  Das Skript prueft die Angaben, schickt sie als Mail und legt keine Anfrage ab. Es
+  bremst nach fuenf Anfragen pro Stunde und Absender, faengt Spam-Programme ueber
+  ein unsichtbares Feld ab und nimmt nur Anfragen von der eigenen Seite an.
+  Auf GitHub Pages laeuft kein PHP, dort schlaegt der Versand bewusst fehl.
 - **Foto** fehlt. Quadratisch, Tageslicht, Blick in die Kamera. Kommt in den
   runden Platzhalter im ersten Bild.
 
@@ -80,8 +79,13 @@ im Code mit `LIVEGANG` markiert — `grep -rn LIVEGANG .` findet sie alle.
 2. **Domain einsetzen** — `DOMAIN.ch` ersetzen in `robots.txt`, `sitemap.xml`
    und im JSON-LD am Ende von `index.html`. Dort auch `canonical` und `og:url`
    einkommentieren.
-3. **Versandziel eintragen** im Objekt `VERSAND` in `kostenrechner.html`,
-   danach eine Testanfrage abschicken und ankommen sehen.
+3. **Versand einrichten.** Bei hosting.ch ein Postfach auf der eigenen Domain
+   anlegen, zum Beispiel `anfrage@DOMAIN.ch`. In `anfrage.php` oben
+   `EMPFAENGER` (wo die Anfragen ankommen) und `ABSENDER` (dieses Postfach)
+   eintragen. Der Absender muss auf der eigenen Domain liegen, sonst landen die
+   Mails im Spam. In `kostenrechner.html` bei `VERSAND.mail` die eigene Adresse
+   als Rueckfallweg eintragen. Danach eine Testanfrage abschicken und pruefen,
+   ob sie ankommt, auch im Spam-Ordner nachsehen.
 4. **Adresse und Telefon** im JSON-LD ergaenzen (drei Stellen mit `AUSFUELLEN`).
    Ein LocalBusiness ohne Adresse wird von Google weitgehend ignoriert.
 5. **Markenname vereinheitlichen** — Titel und Fuss stehen noch auf AVA, die
