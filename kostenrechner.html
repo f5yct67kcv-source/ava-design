@@ -56,7 +56,7 @@ OWN-WORLD: Dieselbe Welt wie die Startseite — Schiefer, Creme, Signalorange,
 Playfair Display und Schibsted Grotesk. Eine Frage pro Bildschirm, keine Karten.
 STORY: Sechs Fragen, sofort ein Rahmen, dann entscheidet der Besucher selbst, ob
 er seine Daten hergibt.
-FIRST VIEWPORT: Fortschrittsbalken oben, Frage gross gesetzt, Antworten als breite
+FIRST VIEWPORT: Knotenleiste oben wie der Ablauf der Startseite, Frage gross gesetzt, Antworten als breite
 Zeilen, Zurueck links und Weiter rechts unten.
 FORM: Vierte Richtung, Fortsetzung der Startseite.
 FINISH: unreviewed und undokumentiert ist unfertig; dieser Bau endet mit dem Finish-Review, dem Verdikt und DESIGN.md
@@ -139,10 +139,49 @@ p{max-width:62ch}
 /* In der Kopfzeile groesser als im Fuss: neben der Schlagzeile ging es sonst unter. */
 .kopf .logo{font-size:clamp(1.3rem,1.9vw,1.6rem)}
 .zaehler{font-size:var(--txt-xs);letter-spacing:.13em;text-transform:uppercase;font-weight:700;color:var(--auf-grund-still)}
-.balken{height:3px;background:var(--linie)}
-/* Der Fortschritt laeuft ueber transform, nicht ueber width — sonst rechnet der
-   Browser bei jedem Schritt das Layout neu. */
-.balken i{display:block;height:100%;background:var(--signal);width:100%;transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+/* Fortschritt als Knotenleiste, dasselbe Motiv wie der Ablauf auf der Startseite:
+   erledigte Fragen gefuellt, die aktuelle pulsiert, die Linie fuellt sich mit. */
+.kopf .leistenzeile{display:block;height:auto}  /* hebt die Flex-Zeile der Kopfspalte auf */
+.leiste{position:relative;display:flex;justify-content:space-between;align-items:center;height:30px;margin-top:-4px}
+.schiene{position:absolute;left:6.75px;right:6.75px;top:50%;height:1.5px;margin-top:-.75px;background:var(--linie)}
+/* transform statt width: sonst rechnet der Browser bei jedem Schritt das Layout neu. */
+.schiene i{display:block;height:100%;width:100%;background:var(--signal);transform:scaleX(0);transform-origin:left;transition:transform .6s cubic-bezier(.16,1,.3,1)}
+.knoten{
+  position:relative;width:13.5px;height:13.5px;padding:0;border-radius:50%;
+  border:1.5px solid var(--linie);background:var(--grund-tief);cursor:default;
+  transition:border-color .4s ease,background .4s ease,transform .2s ease;
+}
+.knoten::before{content:"";position:absolute;inset:-12px}  /* Trefferflaeche fuer den Finger */
+.knoten.erledigt{border-color:var(--signal);background:var(--signal)}
+.knoten.erledigt:not(:disabled){cursor:pointer}
+.knoten.erledigt:not(:disabled):hover{transform:scale(1.25)}
+.knoten.dran{border-color:var(--signal);background:var(--signal);animation:punktpuls 2s ease infinite}
+@keyframes punktpuls{
+  0%  {transform:scale(.95);box-shadow:0 0 0 0    rgba(255,138,76,1)}
+  70% {transform:scale(1);  box-shadow:0 0 0 14px rgba(255,138,76,0)}
+  100%{transform:scale(.95);box-shadow:0 0 0 0    rgba(255,138,76,0)}
+}
+@media(prefers-reduced-motion:reduce){.knoten.dran{animation:none}}
+
+/* Etikett ueber jeder Frage, wie die gesperrten Grossbuchstaben der Startseite. */
+.etikett{
+  display:flex;align-items:center;gap:14px;margin-bottom:-6px;
+  font-size:var(--txt-xs);letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--auf-grund-still);
+}
+.etikett b{color:var(--signal);font-weight:800;letter-spacing:.08em}
+.etikett i{width:30px;height:1.5px;background:var(--signal)}
+
+/* Grosse Fragenummer als Umriss, nur wo rechts neben der Frage Platz ist. */
+.ziffer{display:none}
+@media(min-width:900px){
+  .frage{position:relative}
+  .ziffer{
+    display:block;position:absolute;right:-.04em;top:-.12em;pointer-events:none;
+    font-family:var(--serif);font-weight:900;font-size:clamp(7rem,10vw,9.5rem);line-height:.8;letter-spacing:-.04em;
+    color:transparent;-webkit-text-stroke:1.5px var(--linie-hell);
+  }
+  .frage h1{padding-right:clamp(170px,19vw,230px)}
+}
 
 /* ---------- Bühne ---------- */
 .buehne{flex:1;display:flex;align-items:center;padding-block:clamp(38px,7vh,80px)}
@@ -272,13 +311,15 @@ footer nav a:hover{color:var(--signal)}
     <a class="logo" href="index.html"><span class="s">format</span><span class="p">eins</span></a>
     <span class="zaehler" id="zaehler">Frage 1 von 6</span>
   </div>
-  <div class="balken"><i id="balken"></i></div>
+  <div class="spalte leistenzeile"><div class="leiste" id="leiste"><span class="schiene" aria-hidden="true"><i id="balken"></i></span></div></div>
 </header>
 
 <main class="buehne">
   <div class="spalte">
 
     <div class="frage dran" data-schluessel="umfang">
+      <span class="ziffer" aria-hidden="true">01</span>
+      <p class="etikett"><b>01</b><i aria-hidden="true"></i>Umfang</p>
       <h1>Was brauchst du?</h1>
       <p class="hilfe">Wenn du unsicher bist: nimm das Kleinere. Ich sage dir nachher, wenn mehr sinnvoll wäre.</p>
       <div class="antworten">
@@ -289,6 +330,8 @@ footer nav a:hover{color:var(--signal)}
     </div>
 
     <div class="frage" data-schluessel="bestand">
+      <span class="ziffer" aria-hidden="true">02</span>
+      <p class="etikett"><b>02</b><i aria-hidden="true"></i>Ausgangslage</p>
       <h1>Gibt es schon eine Website?</h1>
       <p class="hilfe">Falls ja, schaue ich sie mir vor dem Angebot an. Überarbeiten ist günstiger als neu bauen, wenn das Fundament taugt.</p>
       <div class="antworten">
@@ -303,6 +346,8 @@ footer nav a:hover{color:var(--signal)}
     </div>
 
     <div class="frage" data-schluessel="texte">
+      <span class="ziffer" aria-hidden="true">03</span>
+      <p class="etikett"><b>03</b><i aria-hidden="true"></i>Texte</p>
       <h1>Wie steht es um die Texte?</h1>
       <p class="hilfe">Der häufigste Grund, warum Websites monatelang liegen bleiben.</p>
       <div class="antworten">
@@ -313,6 +358,8 @@ footer nav a:hover{color:var(--signal)}
     </div>
 
     <div class="frage" data-schluessel="bilder">
+      <span class="ziffer" aria-hidden="true">04</span>
+      <p class="etikett"><b>04</b><i aria-hidden="true"></i>Bilder</p>
       <h1>Und um die Bilder?</h1>
       <p class="hilfe">Handyfotos vom Betrieb sind oft brauchbarer als Bilddatenbanken.</p>
       <div class="antworten">
@@ -328,6 +375,8 @@ footer nav a:hover{color:var(--signal)}
     </div>
 
     <div class="frage" data-schluessel="logo">
+      <span class="ziffer" aria-hidden="true">05</span>
+      <p class="etikett"><b>05</b><i aria-hidden="true"></i>Logo und Auftritt</p>
       <h1>Hast du ein Logo und einen Auftritt?</h1>
       <p class="hilfe">Farben, Schrift, Logo. Muss nicht perfekt sein, nur vorhanden.</p>
       <div class="antworten">
@@ -338,6 +387,8 @@ footer nav a:hover{color:var(--signal)}
     </div>
 
     <div class="frage" data-schluessel="zeit">
+      <span class="ziffer" aria-hidden="true">06</span>
+      <p class="etikett"><b>06</b><i aria-hidden="true"></i>Zeitrahmen</p>
       <h1>Wann soll sie live sein?</h1>
       <p class="hilfe">Ehrliche Antwort reicht. „Keine Ahnung“ ist auch eine.</p>
       <div class="antworten">
@@ -490,7 +541,36 @@ const empfehlungen = {
 
 function zahl(n){ return n.toLocaleString('de-CH').replace(/[  ]/g, "'"); }
 
+// Ein Knoten pro Frage plus einer fuer das Ergebnis. Erledigte Knoten sind
+// anklickbar und springen zurueck zur Frage.
+const leiste = document.getElementById('leiste');
+function erreichbar(i){ return fragen.slice(0, i).every(f => antwort[f.dataset.schluessel]); }
+const knoten = [...fragen.keys(), fragen.length].map(i => {
+  const k = document.createElement('button');
+  k.type = 'button';
+  k.className = 'knoten';
+  k.setAttribute('aria-label', i < fragen.length ? 'Zu Frage ' + (i + 1) : 'Zum Ergebnis');
+  k.addEventListener('click', () => {
+    if (!erreichbar(i)) return;
+    if (i === fragen.length) rechnen();
+    dran = i;
+    zeichnen();
+  });
+  leiste.appendChild(k);
+  return k;
+});
+
+function knotenZeichnen(){
+  knoten.forEach((k, i) => {
+    const beantwortet = i < fragen.length ? !!antwort[fragen[i].dataset.schluessel] : dran === fragen.length;
+    k.classList.toggle('dran', i === dran);
+    k.classList.toggle('erledigt', beantwortet && i !== dran);
+    k.disabled = i === dran || !erreichbar(i);
+  });
+}
+
 function zeichnen(){
+  knotenZeichnen();
   fragen.forEach((f, i) => f.classList.toggle('dran', i === dran));
   const amEnde = dran >= fragen.length;
   ergebnis.classList.toggle('dran', amEnde);
@@ -531,6 +611,7 @@ fragen.forEach(frage => {
       if (schluessel === 'bilder') document.getElementById('ortfeld').classList.toggle('zeigen', ['shooting','video'].includes(knopf.dataset.wert));
 
       weiter.disabled = false;
+      knotenZeichnen();
     });
   });
 });
