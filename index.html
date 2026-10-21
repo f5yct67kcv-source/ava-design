@@ -239,7 +239,6 @@ p{max-width:62ch}
 .logo .p{font-family:var(--serif);font-weight:900;letter-spacing:-.01em;color:var(--signal)}
 /* In der Kopfzeile groesser als im Fuss: neben der Schlagzeile ging es sonst unter. */
 .kopf .logo{font-size:clamp(1.3rem,1.9vw,1.6rem)}
-.kopf .platz{font-size:var(--txt-xs);letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--auf-grund-still)}
 
 /* ---------- Hero ---------- */
 /* Hoehe gedeckelt: auf einem hohen Bildschirm schwimmt der Inhalt sonst in der
@@ -608,10 +607,6 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
   .ablauf.laeuft .schritt .punkt{animation:none}
 }
 
-@media(max-width:600px){
-  .kopf .platz{display:none}
-}
-
 /* Auf schmalen Schirmen steht der zweite Weg direkt unter dem Knopf, nicht
    irgendwo daneben umgebrochen. */
 @media(max-width:700px){
@@ -644,8 +639,6 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
 <header class="kopf">
   <div class="spalte">
     <div class="logo"><span class="s">format</span><span class="p">eins</span></div>
-    <!-- LIVEGANG: Hinweis entfernen, sobald Name und Domain gekauft sind. -->
-    <span class="platz">Markenname noch Platzhalter</span>
   </div>
 </header>
 

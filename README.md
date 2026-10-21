@@ -91,8 +91,8 @@ im Code mit `LIVEGANG` markiert — `grep -rn LIVEGANG .` findet sie alle.
    Ein LocalBusiness ohne Adresse wird von Google weitgehend ignoriert.
 5. **Markenname bestaetigen.** Die Seite steht durchgehend auf formateins
    (Titel, Logo, Teilen-Bild, Favicon, JSON-LD). Vor dem Livegang Name bei
-   nic.ch und swissreg.ch pruefen und kaufen, dann den Hinweis „Markenname noch
-   Platzhalter“ in der Kopfzeile der Startseite entfernen.
+   nic.ch und swissreg.ch pruefen und kaufen. Faellt der Name weg, alle Stellen
+   mit `grep -rni formateins .` finden.
 6. **Google Business Profile anlegen.** Bei lokalen Suchen dominiert das
    Kartenpaket ueber den organischen Treffern. Das ist wirksamer als jede
    Meta-Optimierung und kostet nichts.
