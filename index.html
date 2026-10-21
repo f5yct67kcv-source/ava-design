@@ -586,6 +586,27 @@ footer nav a:hover{color:var(--signal)}
   .handeln{flex-direction:column;align-items:flex-start;gap:6px}
 }
 
+/* ---------- Haeufige Fragen ----------
+   Dieselbe Linienlogik wie im Rechner: aufklappbar ohne Skript, nur Haarlinien,
+   das Plus dreht sich zum Kreuz. Links Ueberschrift, rechts die Liste. */
+.faq{border-top:1px solid var(--linie)}
+.faq details{border-bottom:1px solid var(--linie)}
+.faq summary{
+  list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:18px;
+  padding:19px 0;font-weight:700;font-size:var(--txt-l);transition:color .2s ease;
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{
+  content:"";flex:none;width:13px;height:13px;
+  background:linear-gradient(var(--signal),var(--signal)) center/100% 1.5px no-repeat,
+             linear-gradient(var(--signal),var(--signal)) center/1.5px 100% no-repeat;
+  transition:transform .3s cubic-bezier(.16,1,.3,1);
+}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq summary:hover{color:var(--signal-hell)}
+.faq details p{color:var(--auf-grund-still);font-size:var(--txt-m);max-width:58ch;padding:0 0 22px}
+.faq details a{color:var(--auf-grund)}
+.faq details a:hover{color:var(--signal)}
 </style>
 
 <header class="kopf">
@@ -739,6 +760,41 @@ footer nav a:hover{color:var(--signal)}
       <span>Direkt mit dem, der sie baut</span>
       <span>Die Seite gehört dir</span>
     </p>
+  </div>
+</section>
+
+<section id="fragen">
+  <div class="spalte zweispalt auf">
+    <div>
+      <h2>Was oft gefragt wird.<span class="zweite">Ehrlich beantwortet.</span></h2>
+      <p style="margin-top:1.2em" class="still">Deine Frage ist nicht dabei? Schreib sie in den Kostenrechner, ganz am Schluss hat sie Platz.</p>
+    </div>
+    <div class="faq">
+      <details>
+        <summary>Kann ich meine Website selbst bearbeiten?</summary>
+        <p>Nicht über ein Login, und das ist Absicht. Ohne CMS gibt es keine Updates, keine Erweiterungen und nichts, was über Nacht kaputtgeht. Änderungen schickst du mir, ich setze sie um und verrechne den Aufwand. Kein Abo.</p>
+      </details>
+      <details>
+        <summary>Warum kein WordPress oder Baukasten?</summary>
+        <p>Für eine Seite, die zeigt, was du machst, ist das zu viel Maschine: laufende Updates, Sicherheitslücken, monatliche Gebühren. Von Hand gebaut lädt sie schneller, ist sicherer und kostet im Betrieb nur Hosting und Domain.</p>
+      </details>
+      <details>
+        <summary>Was kostet eine Website bei dir?</summary>
+        <p>Das hängt vom Umfang ab und davon, was an Texten und Bildern schon da ist. Der <a href="kostenrechner.html">Kostenrechner</a> zeigt dir in sieben Fragen einen Rahmen, danach bekommst du einen Festpreis.</p>
+      </details>
+      <details>
+        <summary>Wie lange dauert es, bis sie live ist?</summary>
+        <p>Üblich sind rund zwei Monate ab Zusage. Am meisten Zeit brauchen meist Texte und Bilder, nicht der Bau. Hast du einen festen Termin, sag ihn früh.</p>
+      </details>
+      <details>
+        <summary>Findet man mich damit bei Google?</summary>
+        <p>Die Seite ist so gebaut, dass Google sie gut lesen kann: sauberer Aufbau, schnelle Ladezeit, die nötigen Angaben im Hintergrund. Einen Platz ganz oben garantiert dir niemand ehrlich. Für Suchen in der Region zählt zusätzlich dein Google-Unternehmensprofil, ich sage dir, was es dafür braucht.</p>
+      </details>
+      <details>
+        <summary>Arbeitest du nur in der Region Olten?</summary>
+        <p>Ich sitze in der Region Olten und komme für Gespräche und Fotos gern vorbei. Für Betriebe weiter weg geht vieles auch per Telefon oder Video.</p>
+      </details>
+    </div>
   </div>
 </section>
 
