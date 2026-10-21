@@ -1,12 +1,12 @@
 <?php
 // Nimmt die Anfrage aus dem Kostenrechner entgegen und schickt sie als Mail.
-// Laeuft beim Hoster (hosting.ch), braucht nur PHP und dessen mail()-Funktion,
+// Laeuft beim Hoster (Hostpoint), braucht nur PHP und dessen mail()-Funktion,
 // keine Bibliothek, keine Datenbank. Anfragen werden nicht abgelegt, nur die
 // Bremse merkt sich eine Stunde lang einen Hash der IP und die Uhrzeit.
 
 // LIVEGANG: beide Adressen eintragen.
 // EMPFAENGER: wo die Anfragen ankommen sollen.
-// ABSENDER:   muss ein Postfach auf der eigenen Domain bei hosting.ch sein,
+// ABSENDER:   muss ein Postfach auf der eigenen Domain bei Hostpoint sein,
 //             sonst landen die Mails beim Empfaenger im Spam oder gar nicht.
 const EMPFAENGER = '';
 const ABSENDER   = '';

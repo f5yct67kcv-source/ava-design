@@ -22,12 +22,13 @@ von Google Fonts.
   -10 % bis +15 % davon. Ueberarbeiten -20 %, Eilzuschlag +15 % nur bei Termin
   unter sechs Wochen. Lage: oberes Freelancer-Feld, rund halb so teuer wie eine
   Kleinagentur. Nach den ersten echten Projekten nachkalibrieren.
-- **Laufende Kosten** stehen im Ergebnis als feste Zeile: rund CHF 150–250 im
-  Jahr fuer Hosting und Domain, beim Anbieter auf den Namen des Kunden. Betrag
+- **Laufende Kosten** stehen im Ergebnis als feste Zeile: rund CHF 200–250 im
+  Jahr fuer Hosting und Domain (Hostpoint Standard ab CHF 15.90/Monat plus Domain), beim Anbieter auf den Namen des Kunden. Betrag
   steht im HTML (`class="laufend"`), pruefen wenn der Hoster die Preise aendert.
-- **Fotos vor Ort** bleiben ohne Zahl, weil die Anfahrt den Preis bestimmt. Der
+- **Fotos und Video vor Ort** bleiben ohne Zahl, weil Anfahrt und Umfang den
+  Preis bestimmen; Video ist deutlich aufwendiger als Fotos. Der
   Rechner fragt dafuer freiwillig den Ort ab, er steht in der Anfrage.
-- **Versand der Anfragen** laeuft ueber `anfrage.php` beim Hoster (hosting.ch).
+- **Versand der Anfragen** laeuft ueber `anfrage.php` beim Hoster (Hostpoint).
   Das Skript prueft die Angaben, schickt sie als Mail und legt keine Anfrage ab. Es
   bremst nach fuenf Anfragen pro Stunde und Absender, faengt Spam-Programme ueber
   ein unsichtbares Feld ab und nimmt nur Anfragen von der eigenen Seite an.
@@ -87,7 +88,7 @@ im Code mit `LIVEGANG` markiert — `grep -rn LIVEGANG .` findet sie alle.
 2. **Domain einsetzen** — `DOMAIN.ch` ersetzen in `robots.txt`, `sitemap.xml`
    und im JSON-LD am Ende von `index.html`. Dort auch `canonical` und `og:url`
    einkommentieren.
-3. **Versand einrichten.** Bei hosting.ch ein Postfach auf der eigenen Domain
+3. **Versand einrichten.** Bei Hostpoint ein Postfach auf der eigenen Domain
    anlegen, zum Beispiel `anfrage@DOMAIN.ch`. In `anfrage.php` oben
    `EMPFAENGER` (wo die Anfragen ankommen) und `ABSENDER` (dieses Postfach)
    eintragen. Der Absender muss auf der eigenen Domain liegen, sonst landen die

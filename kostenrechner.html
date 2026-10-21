@@ -317,6 +317,7 @@ footer nav a:hover{color:var(--signal)}
         <button class="antwort" data-wert="da" data-text="Bilder sind vorhanden"><span class="kreis"></span><span><b>Sind vorhanden</b><span>Ich sichte, wähle aus und bereite sie fürs Netz auf.</span></span></button>
         <button class="antwort" data-wert="teil" data-text="Bilder teilweise vorhanden"><span class="kreis"></span><span><b>Teilweise</b><span>Für die Lücken finden wir eine Lösung.</span></span></button>
         <button class="antwort" data-wert="shooting" data-text="Fotos vor Ort nötig"><span class="kreis"></span><span><b>Ich brauche neue Fotos</b><span>Ich komme in den Betrieb und fotografiere. Wird separat offeriert, nicht im Rahmen unten.</span></span></button>
+        <button class="antwort" data-wert="video" data-text="Video vor Ort nötig"><span class="kreis"></span><span><b>Ich möchte ein Video</b><span>Ein kurzer Film über deinen Betrieb, Fotos auf Wunsch am selben Tag. Deutlich aufwendiger als Fotos, wird separat offeriert.</span></span></button>
       </div>
       <div class="feld zusatzfeld" id="ortfeld">
         <label for="ort">Wo ist dein Betrieb? (freiwillig)</label>
@@ -361,7 +362,7 @@ footer nav a:hover{color:var(--signal)}
         <div class="separat" id="separat" hidden></div>
 
         <!-- Betrag pruefen, falls der Hoster die Preise aendert. -->
-        <p class="laufend">Dazu kommen jährlich rund CHF 150–250 für Hosting und Domain. Die laufen direkt beim Anbieter und auf deinen Namen, nicht über mich.</p>
+        <p class="laufend">Dazu kommen jährlich rund CHF 200–250 für Hosting und Domain. Die laufen direkt beim Anbieter und auf deinen Namen, nicht über mich.</p>
       </div>
 
       <button class="zurueck aendern" id="aendern" type="button">← Angaben ändern</button>
@@ -525,7 +526,7 @@ fragen.forEach(frage => {
       const datum = document.getElementById('datumfeld');
       if (schluessel === 'bestand') url.classList.toggle('zeigen', knopf.dataset.wert !== 'nein');
       if (schluessel === 'zeit') datum.classList.toggle('zeigen', knopf.dataset.wert === 'datum');
-      if (schluessel === 'bilder') document.getElementById('ortfeld').classList.toggle('zeigen', knopf.dataset.wert === 'shooting');
+      if (schluessel === 'bilder') document.getElementById('ortfeld').classList.toggle('zeigen', ['shooting','video'].includes(knopf.dataset.wert));
 
       weiter.disabled = false;
     });
@@ -556,7 +557,7 @@ function antwortText(schluessel){
   if (schluessel === 'zeit' && antwort.zeit === 'datum' && datum) text += ', bis ' + datumLesbar(datum);
   if (schluessel === 'zeit' && eilig) text += ' (Eilzuschlag eingerechnet)';
   const ort = document.getElementById('ort').value.trim();
-  if (schluessel === 'bilder' && antwort.bilder === 'shooting' && ort) text += ' · ' + ort;
+  if (schluessel === 'bilder' && ['shooting','video'].includes(antwort.bilder) && ort) text += ' · ' + ort;
   return text;
 }
 
@@ -602,12 +603,15 @@ function rechnen(){
   // Was bewusst nicht im Rahmen steckt, steht separat — sonst wird der Rahmen zur Mogelpackung.
   separat.length = 0;
   if (antwort.bilder === 'shooting') separat.push('Fotos vor Ort');
+  if (antwort.bilder === 'video') separat.push('Video vor Ort');
   if (antwort.logo === 'neu') separat.push('Logo und visueller Auftritt');
   const kasten = document.getElementById('separat');
   if (separat.length) {
     kasten.hidden = false;
     kasten.textContent = 'Nicht im Rahmen enthalten und separat offeriert: ' + separat.join(' · ') + '. ' +
-      (antwort.bilder === 'shooting'
+      (antwort.bilder === 'video'
+        ? 'Ein Video ist deutlich aufwendiger als Fotos: Drehtag, Schnitt, Ton. Was es kostet, hängt von Länge, Anfahrt und Umfang ab. Ich rechne es dir lieber genau aus, als hier eine Zahl zu raten.'
+        : antwort.bilder === 'shooting'
         ? 'Was ein Fototermin kostet, hängt stark von der Anfahrt ab. Ich rechne es dir lieber genau aus, als hier eine Zahl zu raten.'
         : 'Das ist eine eigene Arbeit mit eigenem Aufwand. Ich rechne sie dir lieber einzeln aus, als sie hier grob draufzuschlagen.');
   } else {
