@@ -1,4 +1,4 @@
-# AVA Design — Website
+# formateins — Website
 
 Entwurf der eigenen Website. Webdesign für Selbstständige und kleine Unternehmen
 in Olten und der Region.
@@ -14,6 +14,8 @@ Schriften liegen selbst im Projekt (`schriften/`, `schriften.css`).
 | `kostenrechner.html` | Kostenrechner, sechs Fragen, Preisrahmen vor dem Formular |
 | `anfrage.php` | Nimmt die Anfrage aus dem Rechner an und schickt sie als Mail |
 | `impressum.html`, `datenschutz.html` | Rechtsseiten, gemeinsame Gestaltung in `recht.css`, dauerhaft `noindex` |
+| `schriften/`, `schriften.css` | Selbst ausgelieferte Schriften, siehe `schriften/LIZENZ.md` |
+| `quellen/` | Vorlagen fuer Teilen-Bild und Favicon, siehe unten |
 | `archiv/` | Frühere Entwurfsrichtungen, nicht mehr aktuell |
 
 ## Noch offen
@@ -99,15 +101,39 @@ im Code mit `LIVEGANG` markiert — `grep -rn LIVEGANG .` findet sie alle.
 4. **Adresse und Telefon** ergaenzen: im JSON-LD, in `impressum.html` und in
    `datenschutz.html` — `grep -rn AUSFUELLEN .` findet alle Stellen.
    Ein LocalBusiness ohne Adresse wird von Google weitgehend ignoriert.
-5. **Markenname vereinheitlichen** — Titel und Fuss stehen noch auf AVA, die
-   Kopfzeile beider Seiten bereits auf formateins.
+5. **Markenname bestaetigen.** Die Seite steht durchgehend auf formateins
+   (Titel, Logo, Teilen-Bild, Favicon, JSON-LD). Vor dem Livegang Name bei
+   nic.ch und swissreg.ch pruefen und kaufen, dann den Hinweis „Markenname noch
+   Platzhalter“ in der Kopfzeile der Startseite entfernen.
 6. **Google Business Profile anlegen.** Bei lokalen Suchen dominiert das
    Kartenpaket ueber den organischen Treffern. Das ist wirksamer als jede
    Meta-Optimierung und kostet nichts.
 
-Was bereits liegt: `favicon.svg`, `teilen.png` (Open-Graph-Bild 1200x630),
+Was bereits liegt: `favicon.png`, `apple-touch-icon.png`, `teilen.png` (Open-Graph-Bild 1200x630),
 `robots.txt`, `sitemap.xml`, JSON-LD-Geruest, `lang="de-CH"`, Open Graph und
 Twitter Cards auf beiden Seiten.
+
+## Logo
+
+Wortmarke ohne Zeichen: „format“ in Schibsted Grotesk 700, „eins“ in Playfair
+Display 900 und Signalorange — dieselben zwei Stimmen wie in den Ueberschriften.
+Im HTML als `<span class="s">format</span><span class="p">eins</span>` in
+`.logo`. Die verworfenen Varianten liegen in `archiv/logo-varianten.html`.
+
+## Teilen-Bild und Favicon neu erzeugen
+
+Die Bilder werden aus `quellen/` mit Chrome gerendert, damit sie die echten
+Schriften tragen. Lokalen Server starten (siehe unten), dann:
+
+```bash
+C="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+"$C" --headless=new --hide-scrollbars --force-device-scale-factor=1 --virtual-time-budget=3000 --window-size=1200,630 --screenshot=teilen.png http://localhost:8000/quellen/teilen.html
+"$C" --headless=new --hide-scrollbars --force-device-scale-factor=1 --virtual-time-budget=3000 --window-size=600,600 --screenshot=apple-touch-icon.png http://localhost:8000/quellen/favicon.html
+sips -c 180 180 apple-touch-icon.png && sips -z 64 64 apple-touch-icon.png --out favicon.png
+```
+
+Chrome hat eine Mindest-Fenstergroesse, darum wird das Favicon gross gerendert
+und danach ausgeschnitten.
 
 ## Lokal ansehen
 

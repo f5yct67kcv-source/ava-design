@@ -34,6 +34,10 @@ a:hover{color:var(--signal)}
 .kopf .spalte{display:flex;align-items:center;justify-content:space-between;gap:18px;height:60px}
 .logo{font-weight:800;font-size:var(--txt-l);letter-spacing:-.02em;text-decoration:none}
 .logo:hover{color:inherit}
+/* Wortmarke: "format" in der Grotesk, "eins" in der Serif und orange — dieselben
+   zwei Stimmen wie in den Ueberschriften. */
+.logo .s{font-family:var(--sans);font-weight:700;letter-spacing:-.035em}
+.logo .p{font-family:var(--serif);font-weight:900;letter-spacing:-.01em;color:var(--signal)}
 .zurueck{font-size:var(--txt-s);font-weight:600;color:var(--auf-grund-still);text-decoration:none}
 
 main{flex:1;padding-block:clamp(44px,8vh,90px)}

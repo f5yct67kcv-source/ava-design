@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Logo-Varianten</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="stylesheet" href="../schriften.css">
+<style>
+:root{--grund:#1b2a33;--grund-tief:#0e1820;--papier:#f2ede2;--signal:#ff8a4c;--hell:#e4eaee;--still:#a8b8c4;--tinte:#15202a;--linie:#2f4553;
+  --serif:"Playfair Display",Georgia,serif;--sans:"Schibsted Grotesk",system-ui,sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--grund-tief);color:var(--hell);font-family:var(--sans);padding:40px clamp(16px,4vw,48px)}
+h1{font:800 13px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--still);margin-bottom:28px}
+.reihe{display:grid;grid-template-columns:150px 1fr 1fr 64px;gap:22px;align-items:center;padding:22px 0;border-top:1px solid var(--linie)}
+.name{font-size:13px;color:var(--still);line-height:1.4}.name b{display:block;color:var(--hell);font-size:15px}
+.kopf{background:var(--grund);height:60px;display:flex;align-items:center;padding:0 20px;font-size:18px}
+.gross{font-size:46px;line-height:1.1;padding:10px 0}
+.papier{background:var(--papier);color:var(--tinte);height:60px;display:flex;align-items:center;padding:0 20px;font-size:18px}
+.fav{width:48px;height:48px;background:var(--grund);display:grid;place-items:center;font-size:30px;line-height:1;overflow:hidden;border-radius:9px}
+@media(max-width:820px){.reihe{grid-template-columns:1fr 64px}.name{grid-column:1/-1}.gross{grid-column:1/-1}}
+
+/* A — zwei Stimmen, wie die Ueberschriften der Seite */
+.A{white-space:nowrap}
+.A .s{font-family:var(--sans);font-weight:700;letter-spacing:-.035em}
+.A .p{font-family:var(--serif);font-weight:900;letter-spacing:-.01em;color:var(--signal)}
+/* B — der i-Punkt als Signal */
+.B{font-family:var(--sans);font-weight:800;letter-spacing:-.035em;white-space:nowrap}
+/* Echter i-Punkt der Schrift, nur eingefaerbt: Verlauf mit harter Kante in der
+   Luecke zwischen Punkt und Stamm (gemessen: Punkt 6–33 %, Stamm ab 33 %). */
+.B{--farbe:var(--hell)}
+.papier .B{--farbe:var(--tinte)}
+.B .i{display:inline-block;line-height:1;color:transparent;
+  background:linear-gradient(var(--signal) 0 30%,var(--farbe) 30%);
+  -webkit-background-clip:text;background-clip:text}
+/* C — die Eins als Strich */
+.C{font-family:var(--sans);font-weight:800;letter-spacing:-.035em;white-space:nowrap}
+.C .strich{display:inline-block;width:.1em;height:.78em;background:var(--signal);margin:0 .11em 0 .09em;vertical-align:-.06em}
+/* D — Format: Schnittmarken */
+.D{font-family:var(--sans);font-weight:800;letter-spacing:-.035em;white-space:nowrap;position:relative;padding:.12em .3em}
+.D::before,.D::after{content:"";position:absolute;width:.32em;height:.32em;border:0 solid var(--signal)}
+.D::before{left:0;top:0;border-width:.07em 0 0 .07em}
+.D::after{right:0;bottom:0;border-width:0 .07em .07em 0}
+/* E — Zeichen plus Wort */
+.E{display:inline-flex;align-items:center;gap:.4em;font-family:var(--sans);font-weight:700;letter-spacing:-.03em;white-space:nowrap}
+.E .z{width:1.45em;height:1.45em;background:var(--signal);color:var(--tinte);display:inline-grid;place-items:center;font-family:var(--serif);font-weight:900;font-size:1em;letter-spacing:-.06em;padding-top:.06em}
+.E .z sub{font-family:var(--sans);font-size:.55em;font-weight:800;vertical-align:baseline;margin-left:.04em}
+</style>
+
+<h1>Logo-Varianten · Kopfzeile · gross · auf hell · Favicon</h1>
+
+<div class="reihe">
+  <div class="name"><b>A · Zwei Stimmen</b>Grotesk und Serif wie in den Überschriften</div>
+  <div class="kopf"><span class="A"><span class="s">format</span><span class="p">eins</span></span></div>
+  <div class="gross"><span class="A"><span class="s">format</span><span class="p">eins</span></span></div>
+  <div class="fav"><span class="A"><span class="s">f</span><span class="p">e</span></span></div>
+</div>
+<div class="reihe" style="grid-template-columns:150px 1fr 1fr 64px">
+  <div class="name"></div><div class="papier"><span class="A"><span class="s">format</span><span class="p">eins</span></span></div><div></div><div></div>
+</div>
+
+<div class="reihe">
+  <div class="name"><b>B · Der i-Punkt</b>Orange Punkt wie die Knoten im Ablauf</div>
+  <div class="kopf"><span class="B">formate<span class="i">i</span>ns</span></div>
+  <div class="gross"><span class="B">formate<span class="i">i</span>ns</span></div>
+  <div class="fav"><span class="B"><span class="i">i</span></span></div>
+</div>
+<div class="reihe" style="grid-template-columns:150px 1fr 1fr 64px">
+  <div class="name"></div><div class="papier"><span class="B">formate<span class="i">i</span>ns</span></div><div></div><div></div>
+</div>
+
+<div class="reihe">
+  <div class="name"><b>C · Der Strich</b>Die Eins als Trennstrich, auch ein Schreibcursor</div>
+  <div class="kopf"><span class="C">format<span class="strich"></span>eins</span></div>
+  <div class="gross"><span class="C">format<span class="strich"></span>eins</span></div>
+  <div class="fav"><span class="C">f<span class="strich"></span></span></div>
+</div>
+<div class="reihe" style="grid-template-columns:150px 1fr 1fr 64px">
+  <div class="name"></div><div class="papier"><span class="C">format<span class="strich"></span>eins</span></div><div></div><div></div>
+</div>
+
+<div class="reihe">
+  <div class="name"><b>D · Schnittmarken</b>„Format“ wörtlich genommen</div>
+  <div class="kopf"><span class="D">formateins</span></div>
+  <div class="gross"><span class="D">formateins</span></div>
+  <div class="fav"><span class="D" style="font-size:24px">f</span></div>
+</div>
+<div class="reihe" style="grid-template-columns:150px 1fr 1fr 64px">
+  <div class="name"></div><div class="papier"><span class="D">formateins</span></div><div></div><div></div>
+</div>
+
+<div class="reihe">
+  <div class="name"><b>E · Zeichen und Wort</b>Monogramm f1 als eigenes Zeichen</div>
+  <div class="kopf"><span class="E"><span class="z"><span>f<sub>1</sub></span></span>formateins</span></div>
+  <div class="gross"><span class="E"><span class="z"><span>f<sub>1</sub></span></span>formateins</span></div>
+  <div class="fav" style="background:var(--signal)"><span class="E"><span class="z" style="font-size:24px"><span>f<sub>1</sub></span></span></span></div>
+</div>
+<div class="reihe" style="grid-template-columns:150px 1fr 1fr 64px">
+  <div class="name"></div><div class="papier"><span class="E"><span class="z"><span>f<sub>1</sub></span></span>formateins</span></div><div></div><div></div>
+</div>

@@ -3,7 +3,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark">
-<title>Webdesign Olten &amp; Region | AVA Design</title>
+<title>Webdesign Olten &amp; Region | formateins</title>
 <meta name="description" content="Webdesign in Olten und der Region: Ich baue Websites für Selbstständige und kleine Unternehmen von Hand, ohne Baukasten, zum Festpreis. Kostenrahmen in sechs Fragen, ohne Konto und ohne Telefonnummer.">
 
 <!-- ============================================================
@@ -40,8 +40,8 @@
 <meta property="og:image:alt" content="formateins — Webdesign aus Olten und Region">
 <meta name="twitter:card" content="summary_large_image">
 
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="favicon.svg">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#1b2a33">
 
 <link rel="preload" href="schriften/schibsted-grotesk.woff2" as="font" type="font/woff2" crossorigin>
@@ -232,12 +232,11 @@ p{max-width:62ch}
 /* ---------- Kopf ---------- */
 .kopf{position:absolute;inset:0 0 auto;z-index:10;padding-block:clamp(20px,2.6vw,32px)}
 .kopf .spalte{display:flex;align-items:center;justify-content:space-between;gap:20px}
-.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:var(--txt-l);letter-spacing:-.02em}
-.logo .zeichen{
-  width:26px;height:26px;background:var(--signal);
-  display:grid;place-items:center;color:var(--tinte);
-  font-family:var(--serif);font-weight:800;font-size:var(--txt-m);line-height:1;padding-top:2px;
-}
+.logo{display:flex;align-items:baseline;font-weight:800;font-size:var(--txt-l);letter-spacing:-.02em}
+/* Wortmarke: "format" in der Grotesk, "eins" in der Serif und orange — dieselben
+   zwei Stimmen wie in den Ueberschriften. */
+.logo .s{font-family:var(--sans);font-weight:700;letter-spacing:-.035em}
+.logo .p{font-family:var(--serif);font-weight:900;letter-spacing:-.01em;color:var(--signal)}
 .kopf .platz{font-size:var(--txt-xs);letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--auf-grund-still)}
 
 /* ---------- Hero ---------- */
@@ -589,7 +588,8 @@ footer nav a:hover{color:var(--signal)}
 
 <header class="kopf">
   <div class="spalte">
-    <div class="logo">formateins</div>
+    <div class="logo"><span class="s">format</span><span class="p">eins</span></div>
+    <!-- LIVEGANG: Hinweis entfernen, sobald Name und Domain gekauft sind. -->
     <span class="platz">Markenname noch Platzhalter</span>
   </div>
 </header>
@@ -762,7 +762,7 @@ footer nav a:hover{color:var(--signal)}
 
 <footer>
   <div class="spalte">
-    <div class="logo"><span class="zeichen">A</span>AVA</div>
+    <div class="logo"><span class="s">format</span><span class="p">eins</span></div>
     <nav>
       <a href="kostenrechner.html">Kostenrechner</a><a href="#kontakt">Kontakt</a><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a>
     </nav>

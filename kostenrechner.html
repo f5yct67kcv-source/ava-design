@@ -3,7 +3,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark">
-<title>Kostenrechner — Webdesign Olten | AVA</title>
+<title>Kostenrechner — Webdesign Olten | formateins</title>
 <meta name="description" content="In sechs Fragen zum Preisrahmen für deine Website. Ohne Konto, ohne Telefonnummer. Danach ein verbindliches Festpreisangebot.">
 
 <!-- ============================================================
@@ -40,8 +40,8 @@
 <meta property="og:image:alt" content="formateins — Webdesign aus Olten und Region">
 <meta name="twitter:card" content="summary_large_image">
 
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="favicon.svg">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#1b2a33">
 
 <link rel="preload" href="schriften/schibsted-grotesk.woff2" as="font" type="font/woff2" crossorigin>
@@ -131,11 +131,11 @@ p{max-width:62ch}
   border-bottom:1px solid var(--linie);
 }
 .kopf .spalte{display:flex;align-items:center;justify-content:space-between;gap:18px;height:60px}
-.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:var(--txt-l);letter-spacing:-.02em;text-decoration:none}
-.logo .zeichen{
-  width:25px;height:25px;background:var(--signal);display:grid;place-items:center;
-  color:var(--tinte);font-family:var(--serif);font-weight:800;font-size:var(--txt-m);line-height:1;padding-top:2px;
-}
+.logo{display:flex;align-items:baseline;font-weight:800;font-size:var(--txt-l);letter-spacing:-.02em;text-decoration:none}
+/* Wortmarke: "format" in der Grotesk, "eins" in der Serif und orange — dieselben
+   zwei Stimmen wie in den Ueberschriften. */
+.logo .s{font-family:var(--sans);font-weight:700;letter-spacing:-.035em}
+.logo .p{font-family:var(--serif);font-weight:900;letter-spacing:-.01em;color:var(--signal)}
 .zaehler{font-size:var(--txt-xs);letter-spacing:.13em;text-transform:uppercase;font-weight:700;color:var(--auf-grund-still)}
 .balken{height:3px;background:var(--linie)}
 /* Der Fortschritt laeuft ueber transform, nicht ueber width — sonst rechnet der
@@ -267,7 +267,7 @@ footer nav a:hover{color:var(--signal)}
 
 <header class="kopf">
   <div class="spalte">
-    <a class="logo" href="index.html">formateins</a>
+    <a class="logo" href="index.html"><span class="s">format</span><span class="p">eins</span></a>
     <span class="zaehler" id="zaehler">Frage 1 von 6</span>
   </div>
   <div class="balken"><i id="balken"></i></div>
