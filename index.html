@@ -651,8 +651,9 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
 .faq details a:hover{color:var(--signal)}
 
 /* ---------- Arbeiten ----------
-   Keine Bildergalerie, sondern eine Werkbank: die Arbeit liegt auf einer
-   Zeichenflaeche mit Punktraster, wie im Gestaltungsprogramm. Die Desktop-
+   Keine Bildergalerie, sondern eine Werkbank. Zuerst ein Leuchttisch mit allen
+   Projekten verkleinert, ein Klick zoomt in eines hinein. Dort liegt die Arbeit
+   auf einer Zeichenflaeche mit Punktraster, wie im Gestaltungsprogramm. Die Desktop-
    Flaeche ist ausgewaehlt (Rahmen, Griffe, Massangabe), daneben das Telefon und
    ein Inspektor mit Farben, Schriften und gemessenen Werten. Unter der Seite
    liegt ihr Bauplan, aufgedeckt mit dem Zeiger oder dem Finger. */
@@ -661,21 +662,129 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
 .arbeitenkopf p{max-width:46ch}
 
 .werkbank{margin:0}
-.flaeche{
-  position:relative;display:grid;gap:44px 0;
-  padding:clamp(44px,6vw,80px) clamp(18px,4vw,64px) clamp(40px,5vw,64px);
+
+/* Werkzeugleiste wie im Gestaltungsprogramm: links der Pfad, rechts die
+   Zoomstufe. In der Uebersicht steht "Arbeiten / Uebersicht", im Projekt der
+   Weg zurueck und das Blaettern. Was zu welcher Ansicht gehoert, regelt
+   data-ansicht an der Werkbank. */
+.werkzeugleiste{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  min-height:50px;padding:0 clamp(14px,2vw,20px);
+  background:#16232c;border:1px solid var(--linie);border-bottom:0;
+  font-size:var(--txt-s);color:var(--auf-grund-still);
+}
+.werkzeugleiste .teil{display:flex;align-items:center;gap:10px;min-width:0;white-space:nowrap}
+.werkzeugleiste b{color:var(--auf-grund);font-weight:600;overflow:hidden;text-overflow:ellipsis}
+.werkzeugleiste .trenner,.werkzeugleiste .leise{color:var(--ringschrift)}
+.werkzeugleiste button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.werkzeugleiste .zurueck{display:inline-flex;align-items:center;gap:8px;padding:10px 0;color:var(--auf-grund);font-weight:600}
+.zurueck::before{content:"←";color:var(--signal);transition:transform .2s ease}
+.zurueck:hover::before{transform:translateX(-3px)}
+.werkzeugleiste .blaettern{
+  width:30px;height:30px;display:grid;place-items:center;
+  border:1px solid var(--linie);border-radius:5px;color:var(--auf-grund-still);
+  transition:border-color .2s ease,color .2s ease;
+}
+.werkzeugleiste .blaettern:hover{border-color:var(--signal);color:var(--auf-grund)}
+.prozent{border:1px solid var(--linie);border-radius:5px;padding:4px 9px;font-variant-numeric:tabular-nums}
+.werkbank[data-ansicht="uebersicht"] .nur-projekt,
+.werkbank[data-ansicht="projekt"] .nur-uebersicht{display:none}
+@media(max-width:699px){.werkzeugleiste .breit{display:none}}
+
+/* Die Buehne traegt Punktraster und Licht, darauf liegt entweder der
+   Leuchttisch (Uebersicht) oder die Flaeche (ein Projekt). Waehrend des Zooms
+   liegen beide kurz uebereinander; die obere wird dafuer absolut gesetzt. */
+.buehne{
+  position:relative;overflow:hidden;border:1px solid var(--linie);
   background:
     radial-gradient(60% 55% at 42% 45%, rgba(46,69,87,.55), transparent 75%),
     radial-gradient(circle, rgba(117,144,159,.26) 1px, transparent 1.5px) 0 0/22px 22px,
     var(--grund-tief);
-  border:1px solid var(--linie);
+}
+.ueberlagert{position:absolute;top:0;left:0;right:0;z-index:5}
+.tisch[hidden],.flaeche[hidden]{display:none}
+
+/* Leuchttisch: alle Projekte verkleinert, versetzt in zwei Spalten. Am Handy
+   eine Reihe zum Wischen. */
+.tisch{
+  display:grid;grid-template-columns:1fr 1fr;align-items:start;
+  gap:clamp(56px,6vw,90px) clamp(48px,7vw,110px);
+  padding:clamp(56px,6vw,88px) clamp(28px,6vw,90px) clamp(84px,8vw,120px);
+}
+.karte{display:block;width:100%;padding:0;border:0;background:none;color:inherit;font:inherit;text-align:left;cursor:zoom-in}
+.karte:nth-child(even){margin-top:clamp(40px,7vw,96px)}
+.karte .brettname{display:block;transition:color .2s ease}
+.karte:hover .brettname b,.karte:focus-visible .brettname b{color:var(--auf-grund)}
+.karte:focus-visible{outline:0}
+/* Im Knopf duerfen nur Spans stehen, sie werden hier zu Bloecken. */
+.mini,.mini .fenster,.mini .sicht,.mini .tel{display:block}
+.mini .fensterleiste{display:flex}
+.mini{position:relative;margin-right:clamp(26px,3.4vw,46px)}
+.mini::before{
+  content:"";position:absolute;inset:-9px;border:1px solid var(--signal);pointer-events:none;opacity:0;
+  background:
+    linear-gradient(var(--signal),var(--signal)) 0 0/7px 7px no-repeat,
+    linear-gradient(var(--signal),var(--signal)) 100% 0/7px 7px no-repeat,
+    linear-gradient(var(--signal),var(--signal)) 0 100%/7px 7px no-repeat,
+    linear-gradient(var(--signal),var(--signal)) 100% 100%/7px 7px no-repeat;
+  transition:opacity .25s ease;
+}
+.mini .fenster .sicht{aspect-ratio:16/10}
+.mini .fenster img{width:100%;height:100%;object-fit:cover;object-position:top}
+.mini .fensterleiste{height:20px;padding:0 9px;gap:5px}
+.mini .fensterleiste i{width:6px;height:6px}
+.mini .fensterleiste span{display:none}
+.mini .tel{
+  position:absolute;right:calc(-1 * clamp(26px,3.4vw,46px));bottom:-11%;width:22%;
+  background:#0a1117;border-radius:14px;padding:4px;
+  box-shadow:0 30px 50px -20px rgba(0,0,0,.9),0 0 0 1px rgba(117,144,159,.22);
+}
+.mini .tel img{width:100%;height:auto;border-radius:10px}
+.chip{
+  position:absolute;left:50%;bottom:-58px;translate:-50% 6px;opacity:0;
+  background:var(--signal);color:var(--tinte);font-weight:700;font-size:var(--txt-xs);
+  padding:6px 13px;border-radius:99px;white-space:nowrap;pointer-events:none;
+  box-shadow:0 10px 24px -10px rgba(0,0,0,.6);
+  transition:opacity .25s ease,translate .25s ease;
+}
+.karte:hover .mini::before,.karte:focus-visible .mini::before{opacity:1}
+.karte:hover .chip,.karte:focus-visible .chip{opacity:1;translate:-50% 0}
+@media(hover:none){.chip{opacity:1;translate:-50% 0}}
+.leer{opacity:.7;width:72%;justify-self:center}
+.leer:nth-child(even){opacity:.5}
+.leer div{
+  aspect-ratio:16/10.6;border:1px dashed var(--linie-hell);border-radius:9px;
+  display:grid;place-items:center;color:var(--ringschrift);font-size:var(--txt-xs);letter-spacing:.04em;
+}
+@media(max-width:699px){
+  .tisch{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:26px;padding:40px 22px 84px;scrollbar-width:none}
+  .tisch::-webkit-scrollbar{display:none}
+  .karte{flex:0 0 80%;scroll-snap-align:center;margin-top:0!important}
+  .leer{display:none}
+}
+
+/* Waehrend des Zooms bleibt die Auswahl der grossen Flaeche aus, sonst stuende
+   sie schon in voller Groesse da, bevor das Fenster angekommen ist. */
+.werkbank.zoomt .brett-desktop .auswahl::before,
+.werkbank.zoomt .brett-desktop .auswahl::after{opacity:0}
+
+/* Ein Stand pro Projekt. display:contents laesst Fenster, Inspektor, Telefon
+   und Projekt direkt im Raster der Flaeche stehen. Verborgene Staende laden
+   ihre Bilder nicht; das Skript holt sie vor, sobald der Zeiger auf einer
+   Karte steht. Bis sie da sind, zeigt die Sicht das Vorschaubild. */
+.stand{display:contents}
+.stand[hidden]{display:none}
+.stand .brett-desktop .sicht{background:var(--vorschau) top/100% auto no-repeat}
+.flaeche{
+  position:relative;display:grid;gap:44px 0;
+  padding:clamp(44px,6vw,80px) clamp(18px,4vw,64px) clamp(40px,5vw,64px);
 }
 @media(min-width:900px){
   .flaeche{grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:auto auto 1fr;gap:0}
   .brett-desktop{grid-column:1/9;grid-row:1/3;align-self:start}
   .inspektor{grid-column:9/13;grid-row:1;align-self:start;margin:31px 0 0 clamp(24px,3vw,40px)}
-  .brett-mobil{grid-column:9/12;grid-row:2/4;align-self:start;margin:-6px 0 0 -14%;z-index:3}
-  .projekt{grid-column:1/8;grid-row:3;align-self:end;padding-top:80px}
+  .brett-mobil{grid-column:9/12;grid-row:2/4;align-self:start;margin:26px 0 0 -14%;z-index:3;max-width:250px}
+  .projekt{grid-column:1/8;grid-row:3;align-self:start;padding-top:72px}
 }
 
 .brettname{
@@ -960,24 +1069,60 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
 <section id="arbeiten">
   <div class="spalte auf">
     <div class="arbeitenkopf">
-      <h2>Gebaut, nicht behauptet.<span class="zweite">Eine Seite, aufgeschnitten.</span></h2>
-      <p class="still">Statt einer Galerie mit Logos liegt hier eine echte Arbeit auf dem Tisch. Fahr mit dem Zeiger oder dem Finger über das Fenster, darunter liegt der Bauplan.</p>
+      <h2>Gebaut, nicht behauptet.<span class="zweite">Echte Seiten, aufgeschnitten.</span></h2>
+      <p class="still">Statt einer Galerie mit Logos liegen hier echte Arbeiten auf dem Tisch. Zoom in ein Projekt und fahr mit dem Zeiger oder dem Finger über das Fenster, darunter liegt der Bauplan.</p>
     </div>
 
-    <!-- Die Aufnahmen kommen aus Chrome ohne Kopf, der Bauplan aus derselben
-         Seite mit eingeschobenem Stil. Neu erzeugen: siehe README, Abschnitt
-         Arbeiten. Messwerte im Inspektor nach jedem Neubau der Seite nachmessen. -->
-    <div class="werkbank" id="werkbank">
-      <div class="flaeche">
+    <!-- Aufnahmen, Vorschauen und Bauplan kommen aus Chrome ohne Kopf, gesteuert
+         ueber das DevTools-Protokoll (quellen/aufnahme.mjs, quellen/bauplan.js).
+         Neues Projekt: Karte auf dem Tisch und Stand auf der Flaeche nach
+         demselben Muster ergaenzen, siehe README, Abschnitt Arbeiten.
+         Messwerte im Inspektor nach jedem Neubau nachmessen. -->
+    <div class="werkbank" id="werkbank" data-ansicht="uebersicht">
+      <div class="werkzeugleiste">
+        <div class="teil nur-uebersicht"><b>Arbeiten</b><span class="trenner">/</span><span>Übersicht · 2 Projekte</span></div>
+        <div class="teil nur-projekt"><button class="zurueck" type="button">Übersicht</button><span class="trenner">/</span><b class="projekttitel"></b></div>
+        <div class="teil nur-uebersicht"><span class="leise breit">Projekt anklicken zum Hineinzoomen</span><span class="prozent">25 %</span></div>
+        <div class="teil nur-projekt"><span class="leise breit">Projekt <span class="nummer">1</span> von 2</span><button class="blaettern" type="button" data-richtung="-1" aria-label="Vorheriges Projekt">‹</button><button class="blaettern" type="button" data-richtung="1" aria-label="Nächstes Projekt">›</button><span class="prozent breit">100 %</span></div>
+      </div>
+      <div class="buehne">
+        <div class="tisch">
+        <button class="karte" type="button" data-projekt="0" aria-label="GuardOpS ansehen">
+          <span class="brettname"><b>01 GuardOpS</b> · Software · online</span>
+          <span class="mini">
+            <span class="fenster"><span class="fensterleiste"><i></i><i></i><i></i><span></span></span><span class="sicht"><img src="arbeiten/guardops-vorschau.webp?v=4" alt="" width="960" height="600" loading="lazy" decoding="async"></span></span>
+            <span class="tel"><img src="arbeiten/guardops-vorschau-mobil.webp?v=4" alt="" width="220" height="476" loading="lazy" decoding="async"></span>
+            <span class="chip" aria-hidden="true">Hineinzoomen ⤢</span>
+          </span>
+        </button>
+        <button class="karte" type="button" data-projekt="1" aria-label="Craniosacral Praxis Johann von Arb ansehen">
+          <span class="brettname"><b>02 Craniosacral Praxis</b> · Fulenbach</span>
+          <span class="mini">
+            <span class="fenster"><span class="fensterleiste"><i></i><i></i><i></i><span></span></span><span class="sicht"><img src="arbeiten/johann-vorschau.webp?v=4" alt="" width="960" height="600" loading="lazy" decoding="async"></span></span>
+            <span class="tel"><img src="arbeiten/johann-vorschau-mobil.webp?v=4" alt="" width="220" height="476" loading="lazy" decoding="async"></span>
+            <span class="chip" aria-hidden="true">Hineinzoomen ⤢</span>
+          </span>
+        </button>
+        <div class="leer" aria-hidden="true">
+          <p class="brettname"><b>03</b> · in Arbeit</p>
+          <div>Nächstes Projekt</div>
+        </div>
+        <div class="leer" aria-hidden="true">
+          <p class="brettname"><b>04</b> · in Arbeit</p>
+          <div>Nächstes Projekt</div>
+        </div>
+        </div>
+        <div class="flaeche" hidden>
+      <div class="stand" id="stand-guardops" data-titel="GuardOpS" role="group" aria-label="GuardOpS" hidden>
         <div class="brett-desktop">
           <p class="brettname" aria-hidden="true"><b>Desktop</b> · 1440 × 900</p>
-          <div class="auswahl" data-mass="1440 × 4906">
+          <div class="auswahl" data-mass="1440 × 8411">
             <div class="fenster">
-              <div class="fensterleiste" aria-hidden="true"><i></i><i></i><i></i><span>Craniosacral Therapie Fulenbach</span></div>
-              <div class="sicht" style="--v:.625">
-                <div class="bahn" style="--b:1440;--h:4906;--dauer:26s">
-                  <img src="arbeiten/johann-desktop.webp?v=2" alt="Startseite der Craniosacral-Praxis Johann von Arb in Fulenbach, ganze Länge am Desktop" width="1440" height="4906" loading="lazy" decoding="async">
-                  <img class="plan" src="arbeiten/johann-bauplan.webp?v=2" alt="" width="1440" height="4906" loading="lazy" decoding="async">
+              <div class="fensterleiste" aria-hidden="true"><i></i><i></i><i></i><span>GuardOpS – Betriebssoftware für Sicherheitsdienste</span></div>
+              <div class="sicht" style="--v:.625;--vorschau:url(arbeiten/guardops-vorschau.webp?v=4)">
+                <div class="bahn" style="--b:1440;--h:8411;--dauer:34s">
+                  <img src="arbeiten/guardops-desktop.webp?v=4" alt="Startseite von GuardOpS, Betriebssoftware für Sicherheitsdienste, ganze Länge am Desktop" width="1440" height="8411" loading="lazy" decoding="async">
+                  <img class="plan" src="arbeiten/guardops-bauplan.webp?v=4" alt="" width="1440" height="8411" loading="lazy" decoding="async">
                 </div>
                 <div class="schnitt">
                   <span class="griff" role="slider" tabindex="0" aria-label="Bauplan aufdecken" aria-valuemin="0" aria-valuemax="100" aria-valuenow="38" aria-valuetext="38 Prozent Bauplan"><span>Bauplan</span><span>Seite</span></span>
@@ -993,7 +1138,73 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
             <div class="gruppe">
               <dt>Farben</dt>
               <dd>
-                <div class="muster" aria-hidden="true"><i style="background:#fcf4ef"></i><i style="background:#ead0bd"></i><i style="background:#b0553a"></i><i style="background:#33211c"></i></div>
+                <div class="muster" aria-hidden="true"><i style="background:#0F1117"></i><i style="background:#F2F4F8"></i><i style="background:#3B67E8"></i><i style="background:#E2B156"></i></div>
+                <p class="hex"><span>0F1117</span><span>F2F4F8</span><span>3B67E8</span><span>E2B156</span></p>
+              </dd>
+            </div>
+            <div class="gruppe">
+              <dt>Schriften</dt>
+              <dd>
+                <p class="schriftzeile"><span>Archivo</span><span>Titel</span></p>
+                <p class="schriftzeile"><span>IBM Plex Sans</span><span>Text</span></p>
+                <p class="schriftzeile"><span>IBM Plex Mono</span><span>Details</span></p>
+              </dd>
+            </div>
+            <div class="gruppe">
+              <dt>Gemessen</dt>
+              <dd class="werte">
+                <div><b>355<small>KB</small></b><span>ganze Seite</span></div><div><b>7</b><span>Dateien</span></div><div><b>0</b><span>Cookies</span></div><div><b>0</b><span>fremde Server</span></div>
+              </dd>
+            </div>
+          </dl>
+        </aside>
+
+        <div class="brett-mobil">
+          <p class="brettname" aria-hidden="true"><b>Mobil</b> · 390</p>
+          <div class="auswahl" data-mass="390 × 11686">
+            <div class="telefon">
+              <div class="sicht" style="--v:2.164">
+                <div class="bahn" style="--b:390;--h:11686;--dauer:40s">
+                  <img src="arbeiten/guardops-mobil.webp?v=4" alt="Dieselbe Seite am Telefon, ganze Länge" width="420" height="12585" loading="lazy" decoding="async">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="projekt">
+          <p class="brettname"><b>Projekt 01</b> · 2026</p>
+          <h3>GuardOpS</h3>
+          <p>Produktwebsite · Software für Schweizer Sicherheitsdienste · online</p>
+          <a class="zweitweg" href="https://guardops.ch/" target="_blank" rel="noopener">guardops.ch ansehen ↗</a>
+        </div>
+      </div>
+      <div class="stand" id="stand-johann" data-titel="Craniosacral Praxis" role="group" aria-label="Craniosacral Praxis Johann von Arb" hidden>
+        <div class="brett-desktop">
+          <p class="brettname" aria-hidden="true"><b>Desktop</b> · 1440 × 900</p>
+          <div class="auswahl" data-mass="1440 × 4906">
+            <div class="fenster">
+              <div class="fensterleiste" aria-hidden="true"><i></i><i></i><i></i><span>Craniosacral Therapie Fulenbach</span></div>
+              <div class="sicht" style="--v:.625;--vorschau:url(arbeiten/johann-vorschau.webp?v=4)">
+                <div class="bahn" style="--b:1440;--h:4906;--dauer:26s">
+                  <img src="arbeiten/johann-desktop.webp?v=4" alt="Startseite der Craniosacral-Praxis Johann von Arb in Fulenbach, ganze Länge am Desktop" width="1440" height="4906" loading="lazy" decoding="async">
+                  <img class="plan" src="arbeiten/johann-bauplan.webp?v=4" alt="" width="1440" height="4906" loading="lazy" decoding="async">
+                </div>
+                <div class="schnitt">
+                  <span class="griff" role="slider" tabindex="0" aria-label="Bauplan aufdecken" aria-valuemin="0" aria-valuemax="100" aria-valuenow="38" aria-valuetext="38 Prozent Bauplan"><span>Bauplan</span><span>Seite</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="inspektor" aria-label="Kennwerte der Seite">
+          <h3>Inspektor</h3>
+          <dl>
+            <div class="gruppe">
+              <dt>Farben</dt>
+              <dd>
+                <div class="muster" aria-hidden="true"><i style="background:#FCF4EF"></i><i style="background:#EAD0BD"></i><i style="background:#B0553A"></i><i style="background:#33211C"></i></div>
                 <p class="hex"><span>FCF4EF</span><span>EAD0BD</span><span>B0553A</span><span>33211C</span></p>
               </dd>
             </div>
@@ -1007,10 +1218,7 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
             <div class="gruppe">
               <dt>Gemessen</dt>
               <dd class="werte">
-                <div><b>114<small>KB</small></b><span>ganze Seite</span></div>
-                <div><b>4</b><span>Dateien</span></div>
-                <div><b>0</b><span>Cookies</span></div>
-                <div><b>0</b><span>fremde Server</span></div>
+                <div><b>114<small>KB</small></b><span>ganze Seite</span></div><div><b>4</b><span>Dateien</span></div><div><b>0</b><span>Cookies</span></div><div><b>0</b><span>fremde Server</span></div>
               </dd>
             </div>
           </dl>
@@ -1022,7 +1230,7 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
             <div class="telefon">
               <div class="sicht" style="--v:2.164">
                 <div class="bahn" style="--b:390;--h:7316;--dauer:30s">
-                  <img src="arbeiten/johann-mobil.webp?v=2" alt="Dieselbe Seite am Telefon, ganze Länge" width="440" height="8254" loading="lazy" decoding="async">
+                  <img src="arbeiten/johann-mobil.webp?v=4" alt="Dieselbe Seite am Telefon, ganze Länge" width="440" height="8254" loading="lazy" decoding="async">
                 </div>
               </div>
             </div>
@@ -1030,11 +1238,13 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
         </div>
 
         <div class="projekt">
-          <p class="brettname"><b>Projekt</b> · 2026</p>
+          <p class="brettname"><b>Projekt 02</b> · 2026</p>
           <h3>Craniosacral Praxis Johann von Arb</h3>
           <p>Fulenbach · eine Seite · von Hand gebaut, ohne Baukasten</p>
           <!-- LIVEGANG: auf die echte Domain der Praxis umstellen, sobald sie live ist. -->
           <a class="zweitweg" href="https://f5yct67kcv-source.github.io/webseite-johann-vonarb/" target="_blank" rel="noopener">Seite ansehen ↗</a>
+        </div>
+      </div>
         </div>
       </div>
     </div>
@@ -1374,42 +1584,183 @@ if (saetze && saetzeBloecke.length) {
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(lichtStellen);
 }
 
-// Werkbank: die Geraete fahren die Seite nur ab, solange sie im Bild sind.
+// Werkbank: die Geraete fahren die Seiten nur ab, solange sie im Bild sind.
 // Der Schnitt zwischen Bauplan und Seite folgt am Zeiger der Maus ohne Klick,
 // am Finger dem waagrechten Ziehen; senkrecht scrollt die Seite normal weiter.
 const werkbank = document.getElementById('werkbank');
 if (werkbank) {
-  const sicht = werkbank.querySelector('.brett-desktop .sicht');
-  const griff = werkbank.querySelector('.griff');
-  let anteil = 38;
-  const setzen = (wert) => {
-    anteil = Math.min(100, Math.max(0, wert));
-    sicht.style.setProperty('--schnitt', anteil.toFixed(1) + '%');
-    griff.setAttribute('aria-valuenow', Math.round(anteil));
-    griff.setAttribute('aria-valuetext', Math.round(anteil) + ' Prozent Bauplan');
-  };
-  const ausZeiger = (e) => {
-    const r = sicht.getBoundingClientRect();
-    setzen((e.clientX - r.left) / r.width * 100);
-  };
-  let zieht = false;
-  sicht.addEventListener('pointermove', (e) => {
-    if (e.pointerType === 'mouse' || zieht) ausZeiger(e);
+  werkbank.querySelectorAll('.brett-desktop .sicht').forEach((sicht) => {
+    const griff = sicht.querySelector('.griff');
+    let anteil = 38, zieht = false;
+    const setzen = (wert) => {
+      anteil = Math.min(100, Math.max(0, wert));
+      sicht.style.setProperty('--schnitt', anteil.toFixed(1) + '%');
+      griff.setAttribute('aria-valuenow', Math.round(anteil));
+      griff.setAttribute('aria-valuetext', Math.round(anteil) + ' Prozent Bauplan');
+    };
+    const ausZeiger = (e) => {
+      const r = sicht.getBoundingClientRect();
+      setzen((e.clientX - r.left) / r.width * 100);
+    };
+    sicht.addEventListener('pointermove', (e) => {
+      if (e.pointerType === 'mouse' || zieht) ausZeiger(e);
+    });
+    sicht.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse') return;
+      zieht = true; ausZeiger(e);
+    });
+    addEventListener('pointerup', () => { zieht = false; });
+    addEventListener('pointercancel', () => { zieht = false; });
+    griff.addEventListener('keydown', (e) => {
+      const schritt = e.shiftKey ? 10 : 4;
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') setzen(anteil - schritt);
+      else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') setzen(anteil + schritt);
+      else if (e.key === 'Home') setzen(0);
+      else if (e.key === 'End') setzen(100);
+      else return;
+      e.preventDefault();
+    });
   });
-  sicht.addEventListener('pointerdown', (e) => {
-    if (e.pointerType === 'mouse') return;
-    zieht = true; ausZeiger(e);
+
+  // Leuchttisch und Zoom. Hinein und hinaus laufen als FLIP: Lage vorher und
+  // nachher messen, dann vom einen zum anderen animieren. Der Tisch wird dabei
+  // so mitgezoomt, dass seine kleine Karte genau auf dem grossen Fenster landet,
+  // und blendet aus; darunter steht schon die echte Flaeche.
+  const buehne = werkbank.querySelector('.buehne');
+  const tisch = werkbank.querySelector('.tisch');
+  const flaeche = werkbank.querySelector('.flaeche');
+  const karten = [...werkbank.querySelectorAll('.karte')];
+  const staende = [...werkbank.querySelectorAll('.stand')];
+  const zurueck = werkbank.querySelector('.zurueck');
+  const titel = werkbank.querySelector('.projekttitel');
+  const nummer = werkbank.querySelector('.nummer');
+  const zeit = 750, kurve = 'cubic-bezier(.65,0,.25,1)';
+  let aktiv = -1, beschaeftigt = false;
+
+  const standZeigen = (i) => {
+    staende.forEach((s, k) => { s.hidden = k !== i; });
+    aktiv = i;
+    titel.textContent = staende[i].dataset.titel;
+    nummer.textContent = i + 1;
+  };
+  const hoehe = (von, nach) => {
+    if (!reduziert && von !== nach) buehne.animate([{ height: von + 'px' }, { height: nach + 'px' }], { duration: zeit, easing: kurve });
+  };
+  // Zoom auf eine Karte: Verschiebung und Massstab, die das kleine Fenster m
+  // auf das grosse g legen, gerechnet im Koordinatensystem des Tisches t.
+  const tischZoom = (m, g, t) => {
+    const k = g.width / m.width;
+    return `translate(${(g.left - t.left) - (m.left - t.left) * k}px,${(g.top - t.top) - (m.top - t.top) * k}px) scale(${k})`;
+  };
+  const insBild = () => {
+    const oben = werkbank.getBoundingClientRect().top;
+    // 84 = Hoehe der mitlaufenden Leiste plus Luft; darunter laege die
+    // Werkzeugleiste und mit ihr der Weg zurueck verdeckt.
+    if (oben < 76 || oben > innerHeight * .45) scrollTo({ top: scrollY + oben - 84, behavior: reduziert ? 'auto' : 'smooth' });
+  };
+  const beiwerk = (st) => st.querySelectorAll('.brett-desktop > .brettname, .inspektor, .brett-mobil, .projekt');
+
+  function hinein(i) {
+    if (beschaeftigt) return;
+    const m = karten[i].querySelector('.fenster').getBoundingClientRect();
+    const alt = buehne.offsetHeight;
+    tisch.classList.add('ueberlagert');
+    flaeche.hidden = false;
+    standZeigen(i);
+    werkbank.dataset.ansicht = 'projekt';
+    const neu = buehne.offsetHeight;
+    const gross = staende[i].querySelector('.brett-desktop .fenster');
+    const g = gross.getBoundingClientRect();
+    const t = tisch.getBoundingClientRect();
+    const fertig = () => {
+      tisch.hidden = true; tisch.classList.remove('ueberlagert');
+      werkbank.classList.remove('zoomt'); beschaeftigt = false;
+    };
+    zurueck.focus({ preventScroll: true });
+    if (reduziert) { fertig(); return; }
+    beschaeftigt = true;
+    werkbank.classList.add('zoomt');
+    gross.animate([
+      { transformOrigin: '0 0', transform: `translate(${m.left - g.left}px,${m.top - g.top}px) scale(${m.width / g.width})` },
+      { transformOrigin: '0 0', transform: 'none' }
+    ], { duration: zeit, easing: kurve });
+    tisch.animate([
+      { transformOrigin: '0 0', transform: 'none', opacity: 1 },
+      { opacity: 1, offset: .3 },
+      { transformOrigin: '0 0', transform: tischZoom(m, g, t), opacity: 0 }
+    ], { duration: zeit, easing: kurve }).onfinish = fertig;
+    beiwerk(staende[i]).forEach((el, n) => el.animate(
+      [{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'none' }],
+      { duration: 550, delay: zeit * .6 + n * 60, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'backwards' }));
+    hoehe(alt, neu);
+    insBild();
+  }
+
+  function hinaus() {
+    if (beschaeftigt || aktiv < 0) return;
+    const st = staende[aktiv];
+    const gross = st.querySelector('.brett-desktop .fenster');
+    const alt = buehne.offsetHeight;
+    flaeche.classList.add('ueberlagert');
+    tisch.hidden = false;
+    werkbank.dataset.ansicht = 'uebersicht';
+    const neu = buehne.offsetHeight;
+    const karte = karten[aktiv];
+    const m = karte.querySelector('.fenster').getBoundingClientRect();
+    const g = gross.getBoundingClientRect();
+    const t = tisch.getBoundingClientRect();
+    const fertig = () => {
+      flaeche.hidden = true; flaeche.classList.remove('ueberlagert');
+      st.getAnimations({ subtree: true }).forEach(a => a.cancel());
+      werkbank.classList.remove('zoomt'); beschaeftigt = false;
+    };
+    karte.focus({ preventScroll: true });
+    if (reduziert) { fertig(); return; }
+    beschaeftigt = true;
+    werkbank.classList.add('zoomt');
+    beiwerk(st).forEach(el => el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220, fill: 'forwards' }));
+    gross.animate([
+      { transformOrigin: '0 0', transform: 'none', opacity: 1 },
+      { opacity: 1, offset: .7 },
+      { transformOrigin: '0 0', transform: `translate(${m.left - g.left}px,${m.top - g.top}px) scale(${m.width / g.width})`, opacity: 0 }
+    ], { duration: zeit, easing: kurve, fill: 'forwards' }).onfinish = fertig;
+    tisch.animate([
+      { transformOrigin: '0 0', transform: tischZoom(m, g, t), opacity: 0 },
+      { opacity: 1, offset: .5 },
+      { transformOrigin: '0 0', transform: 'none', opacity: 1 }
+    ], { duration: zeit, easing: kurve });
+    hoehe(alt, neu);
+    insBild();
+  }
+
+  function blaettern(richtung) {
+    if (beschaeftigt || aktiv < 0) return;
+    const alt = buehne.offsetHeight;
+    standZeigen((aktiv + richtung + staende.length) % staende.length);
+    hoehe(alt, buehne.offsetHeight);
+    if (!reduziert) staende[aktiv].querySelectorAll('.brett-desktop, .inspektor, .brett-mobil, .projekt').forEach((el, n) => el.animate(
+      [{ opacity: 0, transform: `translateX(${richtung * 28}px)` }, { opacity: 1, transform: 'none' }],
+      { duration: 600, delay: n * 50, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'backwards' }));
+  }
+
+  // Die grossen Aufnahmen vorholen, sobald jemand auf eine Karte zeigt. Bis
+  // zum Klick sind sie meist da, und der Zoom landet nicht auf leerem Grund.
+  const vorgeholt = new Set();
+  const vorholen = (i) => {
+    if (vorgeholt.has(i)) return;
+    vorgeholt.add(i);
+    staende[i].querySelectorAll('img').forEach((b) => { const x = new Image(); x.src = b.currentSrc || b.src; });
+  };
+  karten.forEach((k, i) => {
+    k.addEventListener('click', () => hinein(i));
+    k.addEventListener('pointerenter', () => vorholen(i));
+    k.addEventListener('focus', () => vorholen(i));
   });
-  addEventListener('pointerup', () => { zieht = false; });
-  addEventListener('pointercancel', () => { zieht = false; });
-  griff.addEventListener('keydown', (e) => {
-    const schritt = e.shiftKey ? 10 : 4;
-    if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') setzen(anteil - schritt);
-    else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') setzen(anteil + schritt);
-    else if (e.key === 'Home') setzen(0);
-    else if (e.key === 'End') setzen(100);
-    else return;
-    e.preventDefault();
+  zurueck.addEventListener('click', hinaus);
+  werkbank.querySelectorAll('.blaettern').forEach(b => b.addEventListener('click', () => blaettern(+b.dataset.richtung)));
+  werkbank.addEventListener('keydown', (e) => {
+    if (werkbank.dataset.ansicht !== 'projekt') return;
+    if (e.key === 'Escape') hinaus();
   });
 
   if ('IntersectionObserver' in window) {

@@ -52,42 +52,49 @@ Schriften liegen selbst im Projekt (`schriften/`, `schriften.css`).
   also mindestens 380 und 680 Pixel. `-metadata none` entfernt Kameradaten und Ort.
 
 - **Arbeiten** (`#arbeiten`, zwischen Angebot und häufigen Fragen) zeigen
-  Projekte nicht als Galerie, sondern auf einer Werkbank: Desktop-Fenster mit
-  Bauplan unter dem Schnitt, Telefon, Inspektor mit Farben, Schriften und
-  Messwerten. Beide Geräte fahren die Seite von selbst ab. Bisher ein Projekt
-  (Craniosacral Praxis Johann von Arb), noch ohne Fotos aufgenommen.
+  Projekte nicht als Galerie, sondern auf einer Werkbank. Zuerst ein Leuchttisch
+  mit allen Projekten verkleinert (Fenster und Telefon), ein Klick zoomt in eines
+  hinein. Dort: Desktop-Fenster mit Bauplan unter dem Schnitt, Telefon,
+  Inspektor mit Farben, Schriften und Messwerten. Beide Geräte fahren die Seite
+  von selbst ab. Zwei gestrichelte Plätze „in Arbeit“ halten Raum für weitere
+  Projekte. Projekte: GuardOpS (online), Craniosacral Praxis Johann von Arb
+  (noch ohne Fotos aufgenommen).
 
-  **Neu aufnehmen**, sobald die Fotos drin sind oder sich die Seite ändert. Die
-  Höhen `--h` im HTML und `data-mass` an die neue Seitenlänge anpassen, die
-  Messwerte im Inspektor im Browser nachmessen (Netzwerk, übertragene Grösse).
+  **Aufnehmen.** `quellen/aufnahme.mjs` steuert Chrome über das
+  DevTools-Protokoll und nimmt die ganze Seite in fester Breite auf. Chrome ohne
+  Kopf rendert sonst nicht schmaler als rund 500 px, Handy-Aufnahmen wären
+  breiter als 390 und rechts abgeschnitten. Die Ausgabe nennt die Seitenhöhe.
 
   ```bash
-  C="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-  U=https://ADRESSE-DER-SEITE/
-  # Hoehe H vorher im Browser messen: document.documentElement.scrollHeight
-  "$C" --headless=new --hide-scrollbars --force-device-scale-factor=1 --window-size=1440,H --screenshot=desk.png "$U"
-  # Chrome ohne Kopf rendert nicht schmaler als rund 500 px. Die Handy-Aufnahme
-  # deshalb ueber eine Rahmenseite mit einem iframe von genau 390 px Breite
-  # machen und danach links 780 px (doppelte Dichte) ausschneiden.
-  "$C" --headless=new --hide-scrollbars --force-device-scale-factor=2 --window-size=600,H --screenshot=mobil.png "http://localhost:PORT/rahmen.html"   # quellen/rahmen.html
-  cwebp -metadata none -q 62 desk.png -o arbeiten/johann-desktop.webp
-  sips -c H*2 780 --cropOffset 0 0 mobil.png
-  cwebp -metadata none -q 62 -resize 440 0 mobil.png -o arbeiten/johann-mobil.webp
+  node quellen/aufnahme.mjs https://ADRESSE/ 1440 1 desk.png
+  node quellen/aufnahme.mjs https://ADRESSE/ 1440 1 plan.png quellen/bauplan.js
+  node quellen/aufnahme.mjs https://ADRESSE/ 390 2 mobil.png
+  cwebp -metadata none -q 62 desk.png -o arbeiten/NAME-desktop.webp
+  cwebp -metadata none -q 62 plan.png -o arbeiten/NAME-bauplan.webp
+  cwebp -metadata none -q 62 -resize 440 0 mobil.png -o arbeiten/NAME-mobil.webp
   ```
 
-  Nach jeder Neuaufnahme die Zahl hinter `?v=` an den drei Bildadressen in
-  `index.html` hochzaehlen. Sonst zeigen Browser bis zu zehn Minuten lang das
-  alte Bild aus dem Zwischenspeicher.
+  Der Bauplan ist dieselbe Seite mit eingeschobenem Stil: Hintergründe weg,
+  Text in Balken, Abschnitte gestrichelt. Er muss mit denselben Massen wie
+  `desk.png` aufgenommen werden, sonst springt die Seite am Schnitt.
 
-  Der Bauplan ist dieselbe Seite mit eingeschobenem Stil: alle Hintergründe
-  weg, Text in Balken, Abschnitte gestrichelt. Dafür eine lokale Kopie der Seite
-  ausliefern, vor `</head>` den Block aus `quellen/bauplan.inject` einsetzen und
-  mit denselben Massen wie `desk.png` aufnehmen. Er muss deckungsgleich sein,
-  sonst springt die Seite am Schnitt.
+  Für den Leuchttisch je zwei kleine Vorschauen, das obere Bildschirmende:
+  `NAME-vorschau.webp` (1440 × 900 aus `desk.png`, verkleinert auf 960 × 600)
+  und `NAME-vorschau-mobil.webp` (780 × 1688 aus `mobil.png`, verkleinert auf
+  220 × 476). Die Desktop-Vorschau dient im Projekt auch als Platzhalter, bis
+  die grosse Aufnahme geladen ist.
 
-  Für weitere Projekte: pro Projekt eine Werkbank. Weiter einsammeln: pro
-  Projekt eine schriftliche Freigabe des Kunden und ein Satz dazu, was die Seite
-  für den Betrieb geändert hat.
+  Danach in `index.html` die Höhen `--h` und `data-mass` auf die neue
+  Seitenlänge setzen, die Messwerte im Inspektor im Browser nachmessen
+  (Netzwerk, übertragene Grösse, Hosts, Cookies) und die Zahl hinter `?v=` an
+  allen Bildadressen der Werkbank hochzählen. Sonst zeigen Browser bis zu zehn
+  Minuten lang das alte Bild aus dem Zwischenspeicher.
+
+  **Neues Projekt:** eine Karte auf dem Tisch und einen Stand auf der Fläche
+  nach dem Muster der bestehenden ergänzen, einen gestrichelten Platz
+  entfernen, die Zahl „2 Projekte“ und „von 2“ in der Werkzeugleiste
+  anpassen. Pro Kundenprojekt vorher eine schriftliche Freigabe einholen.
+
 - **Markenname** ist provisorisch AVA.
 - **Kontaktweg** fehlt: keine E-Mail-Adresse, keine Telefonnummer hinterlegt.
 - **Datenschutzerklaerung geht davon aus**, dass `EMPFAENGER` ein Postfach bei
