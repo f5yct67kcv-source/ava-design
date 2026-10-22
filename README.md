@@ -55,8 +55,10 @@ Schriften liegen selbst im Projekt (`schriften/`, `schriften.css`).
   Projekte nicht als Galerie, sondern auf einer Werkbank. Zuerst ein Leuchttisch
   mit allen Projekten verkleinert (Fenster und Telefon), ein Klick zoomt in eines
   hinein. Dort: Desktop-Fenster mit Bauplan unter dem Schnitt, Telefon,
-  Inspektor mit Farben, Schriften und Messwerten. Beide Geräte fahren die Seite
-  von selbst ab. Zwei gestrichelte Plätze „in Arbeit“ halten Raum für weitere
+  Inspektor mit drei Kennzahlen in Kundensprache: wievielmal leichter als
+  der Durchschnitt, Cookies, Hosting in der Schweiz. Beide Geräte fahren die
+  Seite von selbst ab, in gleichem Tempo für jede Seitenlänge (`--tempo`, Zeit
+  pro Bildschirm voll, heute 4 s). Zwei gestrichelte Plätze „in Arbeit“ halten Raum für weitere
   Projekte. Projekte: GuardOpS (online), Craniosacral Praxis Johann von Arb
   (noch ohne Fotos aufgenommen).
 
@@ -85,10 +87,19 @@ Schriften liegen selbst im Projekt (`schriften/`, `schriften.css`).
   die grosse Aufnahme geladen ist.
 
   Danach in `index.html` die Höhen `--h` und `data-mass` auf die neue
-  Seitenlänge setzen, die Messwerte im Inspektor im Browser nachmessen
+  Seitenlänge setzen, die Kennzahlen im Inspektor im Browser nachmessen
   (Netzwerk, übertragene Grösse, Hosts, Cookies) und die Zahl hinter `?v=` an
   allen Bildadressen der Werkbank hochzählen. Sonst zeigen Browser bis zu zehn
   Minuten lang das alte Bild aus dem Zwischenspeicher.
+
+  **Kennzahlen im Inspektor.** Der Faktor ist 2652 KB geteilt durch das
+  gemessene Gewicht der ganzen Seite, abgerundet. 2652 KB ist der Median aller
+  Seiten am Desktop laut HTTP Archive, Web Almanac 2024; die Quelle steht als
+  Fussnote unter der Werkbank. Gibt es einen neueren Almanac, Wert und
+  Fussnote zusammen nachführen. „0 Cookies“ und „CH“ nur hinschreiben, wenn es
+  für das Projekt stimmt: keine Cookies, keine fremden Server, Hosting bei
+  einem Schweizer Anbieter. Johanns Seite trägt CH schon, gilt aber erst nach
+  dem Umzug zu Hostpoint (`LIVEGANG`).
 
   **Neues Projekt:** eine Karte auf dem Tisch und einen Stand auf der Fläche
   nach dem Muster der bestehenden ergänzen, einen gestrichelten Platz

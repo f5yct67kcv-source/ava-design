@@ -851,11 +851,20 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
 .bahn img{width:100%;height:auto}
 .bahn .plan{position:absolute;inset:0;clip-path:inset(0 calc(100% - var(--schnitt,38%)) 0 0)}
 @media(prefers-reduced-motion:no-preference){
-  .bahn{animation:durchlauf var(--dauer,24s) cubic-bezier(.45,0,.55,1) infinite alternate;animation-play-state:paused}
+  /* Gleiches Tempo fuer jede Seitenlaenge: --tempo ist die Zeit fuer einen
+     Bildschirm voll. Der Faktor 1.35 rechnet Halt und An- und Auslaufen ein. */
+  .bahn{--tempo:4s;animation:durchlauf calc((var(--h) / (var(--b) * var(--v)) - 1) * var(--tempo) * 1.35) linear infinite alternate;animation-play-state:paused}
   .werkbank.laeuft .bahn{animation-play-state:running}
   .werkbank.laeuft .sicht:hover .bahn{animation-play-state:paused}
 }
-@keyframes durchlauf{0%,10%{transform:none}90%,100%{transform:translateY(var(--ende))}}
+/* Kurz anlaufen, gleichmaessig fahren, kurz auslaufen. Ein durchgehendes
+   Ein- und Ausblenden waere in der Mitte fast doppelt so schnell. */
+@keyframes durchlauf{
+  0%,10%{transform:none;animation-timing-function:cubic-bezier(.33,0,.67,.33)}
+  16%{transform:translateY(calc(var(--ende) * .04));animation-timing-function:linear}
+  84%{transform:translateY(calc(var(--ende) * .96));animation-timing-function:cubic-bezier(.33,.67,.67,1)}
+  90%,100%{transform:translateY(var(--ende))}
+}
 @media(prefers-reduced-motion:reduce){.sicht{overflow-y:auto}}
 
 /* Schnittlinie: links Bauplan, rechts die fertige Seite. */
@@ -894,22 +903,21 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
   color:var(--auf-grund-still);display:flex;align-items:center;gap:9px;
 }
 .inspektor h3::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--signal)}
-.inspektor dl{margin-top:4px}
-.inspektor .gruppe{padding:13px 0;border-bottom:1px solid var(--linie)}
-.inspektor .gruppe:last-child{border-bottom:0;padding-bottom:0}
-.inspektor dt{font-size:var(--txt-xs);color:var(--ringschrift);margin-bottom:8px}
-.inspektor dd{margin:0}
-.muster{display:flex;gap:6px}
-.muster i{flex:1;height:30px;border-radius:4px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
-.muster+.hex{display:flex;justify-content:space-between;gap:6px;margin-top:6px;font-size:.66rem;color:var(--ringschrift);font-variant-numeric:tabular-nums;max-width:none}
-.schriftzeile{display:flex;justify-content:space-between;gap:12px;max-width:none}
-.schriftzeile+.schriftzeile{margin-top:3px}
-.schriftzeile span:last-child{color:var(--ringschrift)}
-.werte{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
-.werte div{display:flex;flex-direction:column}
-.werte b{font-family:var(--serif);font-weight:900;font-size:1.5rem;line-height:1.05;font-variant-numeric:lining-nums tabular-nums}
-.werte b small{font-family:var(--sans);font-size:.72rem;font-weight:600;margin-left:3px;color:var(--auf-grund-still)}
-.werte span{font-size:var(--txt-xs);color:var(--ringschrift)}
+/* Drei Kennzahlen in Kundensprache statt Farbwerten und Schriftnamen. Der
+   Faktor ist 2652 KB (Median aller Seiten am Desktop, HTTP Archive 2024) geteilt
+   durch das gemessene Gewicht, abgerundet. CH nur bei Schweizer Hosting. */
+.zusagen{margin-top:6px}
+.zusagen>div{display:grid;grid-template-columns:70px 1fr;align-items:center;gap:0 14px;padding:16px 0;border-bottom:1px solid var(--linie)}
+.zusagen>div:last-child{border-bottom:0;padding-bottom:2px}
+.zusagen dt b{font-family:var(--serif);font-weight:900;font-size:2.6rem;line-height:1;font-variant-numeric:lining-nums;color:var(--signal)}
+.zusagen dt small{font-size:1.5rem;margin-left:1px}
+.zusagen dt .ch{font-size:2.1rem;letter-spacing:.02em}
+.zusagen dd{margin:0}
+.zusagen strong{display:block;font-size:var(--txt-s)}
+.zusagen span{display:block;font-size:var(--txt-xs);color:var(--ringschrift);margin-top:2px;max-width:none}
+.fussnote{margin-top:14px;font-size:.7rem;color:var(--ringschrift);max-width:none}
+.fussnote a{color:inherit}
+.werkbank[data-ansicht="uebersicht"]+.fussnote{display:none}
 
 .projekt .brettname{margin-bottom:6px}
 .projekt h3{font-size:clamp(1.3rem,2vw,1.7rem)}
@@ -1132,7 +1140,7 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
             <div class="fenster">
               <div class="fensterleiste" aria-hidden="true"><i></i><i></i><i></i><span>GuardOpS – Betriebssoftware für Sicherheitsdienste</span></div>
               <div class="sicht" style="--v:.625;--vorschau:url(arbeiten/guardops-vorschau.webp?v=4)">
-                <div class="bahn" style="--b:1440;--h:8411;--dauer:34s">
+                <div class="bahn" style="--b:1440;--h:8411">
                   <img src="arbeiten/guardops-desktop.webp?v=4" alt="Startseite von GuardOpS, Betriebssoftware für Sicherheitsdienste, ganze Länge am Desktop" width="1440" height="8411" loading="lazy" decoding="async">
                   <img class="plan" src="arbeiten/guardops-bauplan.webp?v=4" alt="" width="1440" height="8411" loading="lazy" decoding="async">
                 </div>
@@ -1146,28 +1154,10 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
 
         <aside class="inspektor" aria-label="Kennwerte der Seite">
           <h3>Inspektor</h3>
-          <dl>
-            <div class="gruppe">
-              <dt>Farben</dt>
-              <dd>
-                <div class="muster" aria-hidden="true"><i style="background:#0F1117"></i><i style="background:#F2F4F8"></i><i style="background:#3B67E8"></i><i style="background:#E2B156"></i></div>
-                <p class="hex"><span>0F1117</span><span>F2F4F8</span><span>3B67E8</span><span>E2B156</span></p>
-              </dd>
-            </div>
-            <div class="gruppe">
-              <dt>Schriften</dt>
-              <dd>
-                <p class="schriftzeile"><span>Archivo</span><span>Titel</span></p>
-                <p class="schriftzeile"><span>IBM Plex Sans</span><span>Text</span></p>
-                <p class="schriftzeile"><span>IBM Plex Mono</span><span>Details</span></p>
-              </dd>
-            </div>
-            <div class="gruppe">
-              <dt>Gemessen</dt>
-              <dd class="werte">
-                <div><b>355<small>KB</small></b><span>ganze Seite</span></div><div><b>7</b><span>Dateien</span></div><div><b>0</b><span>Cookies</span></div><div><b>0</b><span>fremde Server</span></div>
-              </dd>
-            </div>
+          <dl class="zusagen">
+            <div><dt><b>7<small>×</small></b></dt><dd><strong>leichter als der Durchschnitt</strong><span>355 KB statt 2’652 KB. Die Seite steht, bevor man ungeduldig wird.</span></dd></div>
+            <div><dt><b>0</b></dt><dd><strong>Cookies</strong><span>Darum kein Banner, den Besucher wegklicken müssen.</span></dd></div>
+            <div><dt><b class="ch">CH</b></dt><dd><strong>Gehostet in der Schweiz</strong><span>Keine Besucherdaten an Google und Co.</span></dd></div>
           </dl>
         </aside>
 
@@ -1176,7 +1166,7 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
           <div class="auswahl" data-mass="390 × 11686">
             <div class="telefon">
               <div class="sicht" style="--v:2.164">
-                <div class="bahn" style="--b:390;--h:11686;--dauer:40s">
+                <div class="bahn" style="--b:390;--h:11686">
                   <img src="arbeiten/guardops-mobil.webp?v=4" alt="Dieselbe Seite am Telefon, ganze Länge" width="420" height="12585" loading="lazy" decoding="async">
                 </div>
               </div>
@@ -1198,7 +1188,7 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
             <div class="fenster">
               <div class="fensterleiste" aria-hidden="true"><i></i><i></i><i></i><span>Craniosacral Therapie Fulenbach</span></div>
               <div class="sicht" style="--v:.625;--vorschau:url(arbeiten/johann-vorschau.webp?v=4)">
-                <div class="bahn" style="--b:1440;--h:4906;--dauer:26s">
+                <div class="bahn" style="--b:1440;--h:4906">
                   <img src="arbeiten/johann-desktop.webp?v=4" alt="Startseite der Craniosacral-Praxis Johann von Arb in Fulenbach, ganze Länge am Desktop" width="1440" height="4906" loading="lazy" decoding="async">
                   <img class="plan" src="arbeiten/johann-bauplan.webp?v=4" alt="" width="1440" height="4906" loading="lazy" decoding="async">
                 </div>
@@ -1212,27 +1202,11 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
 
         <aside class="inspektor" aria-label="Kennwerte der Seite">
           <h3>Inspektor</h3>
-          <dl>
-            <div class="gruppe">
-              <dt>Farben</dt>
-              <dd>
-                <div class="muster" aria-hidden="true"><i style="background:#FCF4EF"></i><i style="background:#EAD0BD"></i><i style="background:#B0553A"></i><i style="background:#33211C"></i></div>
-                <p class="hex"><span>FCF4EF</span><span>EAD0BD</span><span>B0553A</span><span>33211C</span></p>
-              </dd>
-            </div>
-            <div class="gruppe">
-              <dt>Schriften</dt>
-              <dd>
-                <p class="schriftzeile"><span>Marcellus</span><span>Titel</span></p>
-                <p class="schriftzeile"><span>Schibsted Grotesk</span><span>Text</span></p>
-              </dd>
-            </div>
-            <div class="gruppe">
-              <dt>Gemessen</dt>
-              <dd class="werte">
-                <div><b>114<small>KB</small></b><span>ganze Seite</span></div><div><b>4</b><span>Dateien</span></div><div><b>0</b><span>Cookies</span></div><div><b>0</b><span>fremde Server</span></div>
-              </dd>
-            </div>
+          <dl class="zusagen">
+            <div><dt><b>23<small>×</small></b></dt><dd><strong>leichter als der Durchschnitt</strong><span>114 KB statt 2’652 KB. Die Seite steht, bevor man ungeduldig wird.</span></dd></div>
+            <div><dt><b>0</b></dt><dd><strong>Cookies</strong><span>Darum kein Banner, den Besucher wegklicken müssen.</span></dd></div>
+            <!-- LIVEGANG: stimmt erst, wenn die Praxis-Seite bei Hostpoint liegt. -->
+            <div><dt><b class="ch">CH</b></dt><dd><strong>Gehostet in der Schweiz</strong><span>Keine Besucherdaten an Google und Co.</span></dd></div>
           </dl>
         </aside>
 
@@ -1241,7 +1215,7 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
           <div class="auswahl" data-mass="390 × 7316">
             <div class="telefon">
               <div class="sicht" style="--v:2.164">
-                <div class="bahn" style="--b:390;--h:7316;--dauer:30s">
+                <div class="bahn" style="--b:390;--h:7316">
                   <img src="arbeiten/johann-mobil.webp?v=4" alt="Dieselbe Seite am Telefon, ganze Länge" width="440" height="8254" loading="lazy" decoding="async">
                 </div>
               </div>
@@ -1260,6 +1234,7 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
         </div>
       </div>
     </div>
+    <p class="fussnote">Durchschnitt: mittlere Website am Desktop laut <a href="https://almanac.httparchive.org/de/2024/page-weight" target="_blank" rel="noopener">HTTP Archive, Web Almanac 2024</a>.</p>
   </div>
 </section>
 
