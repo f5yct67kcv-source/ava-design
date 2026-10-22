@@ -369,7 +369,13 @@ HEX/RGB/CMYK und Kontrast, Schriften, Regeln).
 - Drei Instagram-Beitraege (1080x1440) mit Bildunterschriften. Fuer den
   Beitrag zu Johann liegt `johann-handy.webp` daneben: seine Seite am Telefon,
   abgeschnitten ueber der Karte „Platz fuer ein Foto“. Sobald seine Fotos drin
-  sind, neu aufnehmen.
+  sind, neu aufnehmen. Profilbild auf Instagram ist das Signet. Anheften lassen
+  sich hoechstens drei Beitraege: geplant sind der persoenliche Beitrag mit
+  Gesicht, Johann und Kostenrechner; „Haltung“ laeuft normal. Der zuletzt
+  gepostete steht vorne.
+- Signalorange traegt auf Weiss oder Papier keinen Text (Kontrast nur 2.0 bis
+  2.3 zu 1), nur Flaechen, Linien und die Wortmarke. Fuer Druck auf hellem
+  Grund ist ein tieferes Orange noch offen.
 - CMYK sind Richtwerte ueber das macOS-Profil „Generic CMYK“.
 - Die Schriftdateien liegen bewusst nicht im Paket: Playfair Display hat einen
   reservierten Namen, eine beschnittene Fassung duerfte so nicht weitergegeben
