@@ -10,7 +10,7 @@
      SEO-Grundlage. Drei Dinge muessen vor dem Livegang passieren,
      alle sind unten mit LIVEGANG markiert:
      1. die noindex-Zeile entfernen
-     2. canonical und og:url einkommentieren, echte Domain einsetzen
+     2. canonical und og:url einkommentieren, og:image als volle Adresse
      3. Adresse und Telefon im JSON-LD am Seitenende ergaenzen
      ============================================================ -->
 
@@ -21,9 +21,9 @@
      echte Domain antritt. -->
 <meta name="robots" content="noindex,nofollow">
 
-<!-- LIVEGANG: einkommentieren, sobald die Domain steht.
-<link rel="canonical" href="https://DOMAIN.ch/">
-<meta property="og:url" content="https://DOMAIN.ch/">
+<!-- LIVEGANG: einkommentieren, sobald die Seite unter der Domain laeuft.
+<link rel="canonical" href="https://www.formateins.ch/">
+<meta property="og:url" content="https://www.formateins.ch/">
 -->
 
 <!-- Fuer geteilte Links in WhatsApp, Signal und sozialen Netzen. Ohne das
@@ -34,6 +34,8 @@
 <meta property="og:site_name" content="formateins">
 <meta property="og:title" content="Webdesign Olten &amp; Region | formateins">
 <meta property="og:description" content="Websites für Selbstständige und kleine Unternehmen in Olten und der Region. Von Hand gebaut, ohne Baukasten, zum Festpreis.">
+<!-- LIVEGANG: auf https://www.formateins.ch/teilen.png setzen. WhatsApp und
+     Facebook brauchen eine volle Adresse, relativ zeigen manche kein Bild. -->
 <meta property="og:image" content="teilen.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -1341,14 +1343,16 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
      LocalBusiness ohne Adresse und Telefon wird von Google weitgehend
      ignoriert — unvollstaendig bringt es fast nichts.
      ============================================================ -->
+<!-- LIVEGANG: "sameAs" ergaenzen, sobald es die Eintraege gibt: Google-Unternehmensprofil,
+     local.ch, search.ch. Ueberall derselbe Name, dieselbe Adresse, dieselbe Telefonnummer. -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
   "name": "formateins",
   "description": "Websites für Selbstständige und kleine Unternehmen in Olten und der Region. Von Hand gebaut, ohne Baukasten, zum Festpreis.",
-  "url": "https://DOMAIN.ch",
-  "image": "https://DOMAIN.ch/teilen.png",
+  "url": "https://www.formateins.ch",
+  "image": "https://www.formateins.ch/teilen.png",
   "founder": { "@type": "Person", "name": "Adrian von Arb" },
   "address": {
     "@type": "PostalAddress",
@@ -1376,6 +1380,74 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
   }
 }
 </script>
+
+<!-- FAQ-DATEN -->
+<!-- Erzeugt aus den Fragen oben mit quellen/faq-daten.py, nicht von Hand aendern. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Kann ich meine Website selbst bearbeiten?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Nicht über ein Login, und das ist Absicht. Ohne CMS gibt es keine Updates, keine Erweiterungen und nichts, was über Nacht kaputtgeht. Änderungen schickst du mir, ich setze sie um und verrechne den Aufwand. Kein Abo."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Warum kein WordPress oder Baukasten?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Für eine Seite, die zeigt, was du machst, ist das zu viel Maschine: laufende Updates, Sicherheitslücken, monatliche Gebühren. Von Hand gebaut lädt sie schneller, ist sicherer und kostet im Betrieb nur Hosting und Domain."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Was kostet eine Website bei dir?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Das hängt vom Umfang ab und davon, was an Texten und Bildern schon da ist. Einen Startpreis mit „ab“ nenne ich bewusst nicht, er sagt wenig über die Rechnung am Ende. Der Kostenrechner zeigt dir in sieben Fragen einen Rahmen, danach bekommst du einen Festpreis. Unter tausend Franken gibt es bei mir keine Website."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Wie lange dauert es, bis sie live ist?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Üblich sind rund zwei Monate ab Zusage. Am meisten Zeit brauchen meist Texte und Bilder, nicht der Bau. Hast du einen festen Termin, sag ihn früh."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Machst du auch Fotos oder Videos?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ja, ich fotografiere und filme selbst. Fehlen gute Bilder, komme ich in deinen Betrieb, und Bilder und Seite passen danach zusammen. Das offeriere ich separat, weil Anfahrt und Umfang den Preis bestimmen."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Findet man mich damit bei Google?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Die Seite ist so gebaut, dass Google sie gut lesen kann: sauberer Aufbau, schnelle Ladezeit, die nötigen Angaben im Hintergrund. Einen Platz ganz oben garantiert dir niemand ehrlich. Für Suchen in der Region zählt zusätzlich dein Google-Unternehmensprofil, ich sage dir, was es dafür braucht."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Arbeitest du nur in der Region Olten?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ich sitze in der Region Olten und komme für Gespräche und Fotos gern vorbei. Für Betriebe weiter weg geht vieles auch per Telefon oder Video."
+      }
+    }
+  ]
+}
+</script>
+<!-- /FAQ-DATEN -->
 
 
 <script>

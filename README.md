@@ -108,8 +108,8 @@ Schriften liegen selbst im Projekt (`schriften/`, `schriften.css`).
   anpassen. Pro Kundenprojekt vorher eine schriftliche Freigabe einholen.
 
 - **Markenname** formateins. Auf swissreg.ch am 22.10.2026 geprüft, kein
-  Konflikt. Domains noch kaufen: `formateins.ch` als Hauptadresse,
-  `format1.ch` als Umleitung darauf (fängt „eins“ als Ziffer ab).
+  Konflikt. `formateins.ch` ist registriert. `format1.ch` als Umleitung
+  darauf ist noch offen (fängt „eins“ als Ziffer ab).
 - **Kontaktweg** fehlt: keine E-Mail-Adresse, keine Telefonnummer hinterlegt.
 - **Datenschutzerklaerung geht davon aus**, dass `EMPFAENGER` ein Postfach bei
   Hostpoint ist. Wird an Hotmail oder einen anderen Anbieter weitergeleitet,
@@ -180,11 +180,16 @@ im Code mit `LIVEGANG` markiert — `grep -rn LIVEGANG .` findet sie alle.
    Platzhalterpreisen und toten Links waere eine Indexierung schaedlich, weil
    Google die Entwurfsfassung behaelt und sie spaeter gegen die echte Domain
    antreten laesst.
-2. **Domain einsetzen** — `DOMAIN.ch` ersetzen in `robots.txt`, `sitemap.xml`
-   und im JSON-LD am Ende von `index.html`. Dort auch `canonical` und `og:url`
-   einkommentieren.
+2. **Domain einschalten.** `formateins.ch` ist registriert (22.10.2026, bei
+   Hostpoint). Adresse der Seite ist `https://www.formateins.ch`; sie steht
+   schon in `sitemap.xml`, im auskommentierten Block in `robots.txt`, im
+   JSON-LD und in `canonical`/`og:url`. Beim Livegang: bei Hostpoint ein
+   Webhosting mit der Domain verknüpfen, die Adresse ohne `www` auf die mit
+   `www` umleiten, `canonical` und `og:url` einkommentieren und `og:image`
+   auf die volle Adresse setzen (`https://www.formateins.ch/teilen.png`).
+   Offen: `format1.ch` als Umleitung.
 3. **Versand einrichten.** Bei Hostpoint ein Postfach auf der eigenen Domain
-   anlegen, zum Beispiel `anfrage@DOMAIN.ch`. In `anfrage.php` oben
+   anlegen, zum Beispiel `anfrage@formateins.ch`. In `anfrage.php` oben
    `EMPFAENGER` (wo die Anfragen ankommen) und `ABSENDER` (dieses Postfach)
    eintragen. Der Absender muss auf der eigenen Domain liegen, sonst landen die
    Mails im Spam. In `kostenrechner.html` bei `VERSAND.mail` die eigene Adresse
@@ -193,17 +198,35 @@ im Code mit `LIVEGANG` markiert — `grep -rn LIVEGANG .` findet sie alle.
 4. **Adresse und Telefon** ergaenzen: im JSON-LD, in `impressum.html` und in
    `datenschutz.html` — `grep -rn AUSFUELLEN .` findet alle Stellen.
    Ein LocalBusiness ohne Adresse wird von Google weitgehend ignoriert.
-5. **Domains kaufen.** Die Seite steht durchgehend auf formateins
-   (Titel, Logo, Teilen-Bild, Favicon, JSON-LD). swissreg ist geprueft (kein
-   Konflikt), `formateins.ch` und `format1.ch` waren am 22.10.2026 frei. Faellt der Name weg, alle Stellen
-   mit `grep -rni formateins .` finden.
-6. **Google Business Profile anlegen.** Bei lokalen Suchen dominiert das
-   Kartenpaket ueber den organischen Treffern. Das ist wirksamer als jede
-   Meta-Optimierung und kostet nichts.
+5. **Google-Unternehmensprofil anlegen.** Bei lokalen Suchen dominiert das
+   Kartenpaket ueber den organischen Treffern, und auch KI-Assistenten stützen
+   Empfehlungen wie „Webdesigner in Olten“ stark auf Profile und Bewertungen.
+   Die ersten Kunden um eine Bewertung bitten. Kostet nichts.
+6. **Bei Google und Bing anmelden.** Google Search Console und Bing Webmaster
+   Tools, jeweils die Sitemap einreichen. Bing geht oft vergessen, dabei stützt
+   sich die Websuche von ChatGPT unter anderem darauf.
+7. **Branchenverzeichnisse:** local.ch und search.ch. Überall genau derselbe
+   Name, dieselbe Adresse, dieselbe Telefonnummer wie auf der Seite. Danach
+   die Einträge und das Google-Profil im JSON-LD unter `sameAs` eintragen
+   (Hinweis steht über dem JSON-LD in `index.html`).
+8. **Vermerk auf Kundenseiten**, zum Beispiel „Website: formateins“ mit Link im
+   Fuss, nur mit Einverständnis des Kunden. Jede Kundenseite wird so zu einer
+   Erwähnung, für Suchmaschinen wie für KI. Bei Johann und GuardOpS zuerst.
+
+Bewusst weggelassen: `llms.txt`. Kein grosser KI-Anbieter nutzt die Datei
+nachweislich (Stand Oktober 2026).
 
 Was bereits liegt: `favicon.png`, `apple-touch-icon.png`, `teilen.png` (Open-Graph-Bild 1200x630),
 `robots.txt`, `sitemap.xml`, JSON-LD-Geruest, `lang="de-CH"`, Open Graph und
 Twitter Cards auf beiden Seiten.
+
+**FAQ als strukturierte Daten.** Die Fragen auf beiden Seiten stehen
+zusätzlich als `FAQPage` im Code, damit Suchmaschinen und KI-Assistenten sie
+als Frage und Antwort lesen. Nach jeder Änderung an den Fragen ausführen:
+
+```bash
+python3 quellen/faq-daten.py
+```
 
 ## Logo
 

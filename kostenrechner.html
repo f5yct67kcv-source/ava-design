@@ -10,7 +10,7 @@
      SEO-Grundlage. Drei Dinge muessen vor dem Livegang passieren,
      alle sind unten mit LIVEGANG markiert:
      1. die noindex-Zeile entfernen
-     2. canonical und og:url einkommentieren, echte Domain einsetzen
+     2. canonical und og:url einkommentieren, og:image als volle Adresse
      3. Adresse und Telefon im JSON-LD am Seitenende ergaenzen
      ============================================================ -->
 
@@ -21,9 +21,9 @@
      echte Domain antritt. -->
 <meta name="robots" content="noindex,nofollow">
 
-<!-- LIVEGANG: einkommentieren, sobald die Domain steht.
-<link rel="canonical" href="https://DOMAIN.ch/kostenrechner.html">
-<meta property="og:url" content="https://DOMAIN.ch/kostenrechner.html">
+<!-- LIVEGANG: einkommentieren, sobald die Seite unter der Domain laeuft.
+<link rel="canonical" href="https://www.formateins.ch/kostenrechner.html">
+<meta property="og:url" content="https://www.formateins.ch/kostenrechner.html">
 -->
 
 <!-- Fuer geteilte Links in WhatsApp, Signal und sozialen Netzen. Ohne das
@@ -34,6 +34,8 @@
 <meta property="og:site_name" content="formateins">
 <meta property="og:title" content="Kostenrechner — Webdesign Olten | formateins">
 <meta property="og:description" content="In sieben Fragen zum Preisrahmen für deine Website. Ohne Konto, ohne Telefonnummer.">
+<!-- LIVEGANG: auf https://www.formateins.ch/teilen.png setzen. WhatsApp und
+     Facebook brauchen eine volle Adresse, relativ zeigen manche kein Bild. -->
 <meta property="og:image" content="teilen.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -567,6 +569,66 @@ footer nav a:hover{color:var(--signal)}
     <span class="still">© 2026 formateins · Webdesign aus Olten</span>
   </div>
 </footer>
+
+<!-- FAQ-DATEN -->
+<!-- Erzeugt aus den Fragen oben mit quellen/faq-daten.py, nicht von Hand aendern. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Wie genau ist der Rahmen?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Der Rechner arbeitet mit denselben Ansätzen wie mein Angebot, der Festpreis liegt in aller Regel darin. Brauchst du weniger als angekreuzt, sage ich es dir, und der Preis sinkt. Kommt etwas dazu, das der Rechner nicht abfragt, erfährst du vorher, was und warum."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Was ist im Preis enthalten?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Gestaltung, Bau, Anpassung für Handy und Tablet, die Grundlage, damit Google die Seite findet, und die Einrichtung von Domain und Hosting bis zum Livegang. Nicht enthalten sind die jährlichen Kosten beim Hoster und was oben als separat ausgewiesen ist."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Kostet mich die Anfrage etwas?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Nein. Anfrage und Festpreisangebot sind kostenlos und unverbindlich. Du entscheidest erst, wenn du den Festpreis kennst."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Wie lange dauert es?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Üblich sind rund zwei Monate ab Zusage. Am meisten Zeit brauchen meist Texte und Bilder, nicht der Bau. Ein fester Termin in weniger als sechs Wochen geht auch, dann mit Eilzuschlag."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Was kostet es nach dem Livegang?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Nur Hosting und Domain, direkt beim Anbieter. Updates braucht deine Seite keine, weil kein Baukasten und kein CMS dahinterstecken, die gepflegt werden müssen. Änderungen wie neue Öffnungszeiten oder Preise mache ich, wenn du sie willst, und rechne sie nach Aufwand ab. Kein Abo."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Gehört die Website dann mir?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ja. Domain und Hosting laufen auf deinen Namen, die Dateien gehören dir. Du kannst jederzeit wechseln, auch zu jemand anderem."
+      }
+    }
+  ]
+}
+</script>
+<!-- /FAQ-DATEN -->
 
 <script>
 // Der Rechner. Eine Frage pro Bildschirm, Preis vor Formular.
