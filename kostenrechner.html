@@ -314,8 +314,41 @@ p{max-width:62ch}
 .formstatus:empty{display:none}
 .aendern{align-self:flex-start;margin-top:-6px}
 .aendern[hidden]{display:none}
-.danke{display:flex;flex-direction:column;gap:.9em}
+/* hidden allein reicht nicht, .formular setzt display:flex. */
+.formular[hidden]{display:none}
+
+/* Bestaetigung: ersetzt Formular und Zwischentitel, bleibt stehen. */
+.danke{
+  display:grid;grid-template-columns:auto 1fr;gap:6px clamp(14px,2vw,22px);
+  padding:clamp(22px,4vw,40px);border:1px solid var(--linie-hell);border-radius:6px;
+  background:rgba(255,122,61,.06);box-shadow:inset 3px 0 0 var(--signal);
+}
 .danke[hidden]{display:none}
+.danke:focus{outline:none}
+.danke .haken{
+  grid-row:1/3;width:clamp(44px,6vw,54px);height:clamp(44px,6vw,54px);border-radius:50%;
+  background:var(--signal);color:var(--grund-tief);display:grid;place-items:center;
+}
+.danke .haken svg{width:46%;height:46%}
+.danke h2{font-size:clamp(1.7rem,3.6vw,2.6rem);line-height:1.08;text-wrap:balance}
+.danke .unter{color:var(--auf-grund-still);font-size:var(--txt-m);max-width:52ch}
+.danke ol{grid-column:1/-1;list-style:none;margin:22px 0 0;padding:0;border-top:1px solid var(--linie);counter-reset:schritt}
+.danke li{display:grid;grid-template-columns:44px 1fr;padding:14px 0;border-bottom:1px solid var(--linie);font-size:var(--txt-m)}
+.danke li>*{grid-column:2}
+.danke li::before{
+  grid-row:1/3;counter-increment:schritt;content:counter(schritt,decimal-leading-zero);
+  color:var(--signal);font-weight:700;letter-spacing:.08em;font-size:var(--txt-xs);padding-top:3px;
+}
+.danke li span{color:var(--auf-grund-still);font-size:var(--txt-s)}
+@media(min-width:760px){
+  .danke ol{display:grid;grid-template-columns:repeat(3,1fr);gap:0 28px}
+  .danke li{grid-template-columns:36px 1fr;border-bottom:0;align-content:start}
+}
+.danke .fuss{grid-column:1/-1;margin-top:16px;font-size:var(--txt-s);color:var(--auf-grund-still)}
+.danke .fuss a{color:var(--auf-grund)}
+@media(prefers-reduced-motion:no-preference){
+  .danke:not([hidden]){animation:auftauchen .6s cubic-bezier(.16,1,.3,1)}
+}
 
 /* Kurzes FAQ unter dem Formular, ohne Skript: details/summary. */
 .faq{display:flex;flex-direction:column;margin-top:clamp(14px,3vh,30px)}
@@ -516,8 +549,16 @@ footer nav a:hover{color:var(--signal)}
           <span class="klarzeile">Kein Newsletter, kein Verteiler. Ich antworte persönlich, in der Regel innerhalb von zwei Arbeitstagen. Deine Angaben verwende ich nur dafür, mehr dazu im <a href="datenschutz.html">Datenschutz</a>.</span>
         </form>
 
-        <div class="danke" id="danke" hidden tabindex="-1">
-          <p class="klarzeile" style="font-size:var(--txt-l);color:var(--auf-grund);max-width:52ch">Danke, deine Anfrage ist angekommen. Ich schaue mir deine Angaben an und melde mich in der Regel innerhalb von zwei Arbeitstagen.</p>
+        <div class="danke" id="danke" hidden tabindex="-1" role="status">
+          <div class="haken" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+          <h2><span id="danke-name">Danke.</span><br>Deine Anfrage ist da.</h2>
+          <p class="unter">Sie liegt bei mir im Postfach, mit deinem Preisrahmen und allen Angaben.</p>
+          <ol>
+            <li><b>Ich schaue mir alles an</b><span>Bei Unklarem rufe ich kurz an oder schreibe dir.</span></li>
+            <li><b>Du bekommst ein Festpreisangebot</b><span>In der Regel innerhalb von zwei Arbeitstagen<span id="danke-mail"></span>.</span></li>
+            <li><b>Du entscheidest in Ruhe</b><span>Kein Nachhaken, keine Frist.</span></li>
+          </ol>
+          <p class="fuss">Etwas vergessen? Schreib an <a href="mailto:adrian@formateins.ch">adrian@formateins.ch</a> oder ruf an: <a href="tel:+41796868486">079 686 84 86</a>.</p>
         </div>
       </div>
 
@@ -924,11 +965,21 @@ function dankeZeigen(){
   formular.hidden = true;
   document.getElementById('aendern').hidden = true;
   formstatus.textContent = '';
-  formular.previousElementSibling.hidden = true;           // Absatz
-  formular.previousElementSibling.previousElementSibling.textContent = 'Danke.';
+  formular.previousElementSibling.hidden = true;                    // Absatz
+  formular.previousElementSibling.previousElementSibling.hidden = true; // „Soll ich mir das anschauen?“
+  const vorname = document.getElementById('name').value.trim().split(/\s+/)[0];
+  const mail = document.getElementById('mail').value.trim();
+  document.getElementById('danke-name').textContent = vorname ? 'Danke, ' + vorname + '.' : 'Danke.';
+  document.getElementById('danke-mail').textContent = mail ? ', an ' + mail : '';
   const danke = document.getElementById('danke');
   danke.hidden = false;
-  danke.focus();
+  danke.focus({ preventScroll: true });
+  // Unter die feste Kopfzeile scrollen, damit der Haken sichtbar ist.
+  const kopf = document.querySelector('.kopf').offsetHeight;
+  scrollTo({
+    top: danke.getBoundingClientRect().top + scrollY - kopf - 24,
+    behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+  });
 }
 
 function mailLink(){
