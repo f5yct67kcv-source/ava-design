@@ -711,12 +711,12 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
   gap:clamp(56px,6vw,90px) clamp(48px,7vw,110px);
   padding:clamp(56px,6vw,88px) clamp(28px,6vw,90px) clamp(84px,8vw,120px);
 }
-.karte{display:block;width:100%;padding:0;border:0;background:none;color:inherit;font:inherit;text-align:left;cursor:zoom-in}
+/* Die Karte selbst ist kein Knopf, nur die Pille darin. Mit Maus macht das
+   Skript trotzdem die ganze Karte anklickbar; am Finger bleibt die Karte freie
+   Flaeche zum Wischen, sonst wuerde jede Wischbewegung als Antippen gelesen. */
+.karte{display:block;width:100%;text-align:left;-webkit-tap-highlight-color:transparent}
 .karte:nth-child(even){margin-top:clamp(40px,7vw,96px)}
 .karte .brettname{display:block;transition:color .2s ease}
-.karte:hover .brettname b,.karte:focus-visible .brettname b{color:var(--auf-grund)}
-.karte:focus-visible{outline:0}
-/* Im Knopf duerfen nur Spans stehen, sie werden hier zu Bloecken. */
 .mini,.mini .fenster,.mini .sicht,.mini .tel{display:block}
 .mini .fensterleiste{display:flex}
 .mini{position:relative;margin-right:clamp(26px,3.4vw,46px)}
@@ -743,13 +743,25 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
 .chip{
   position:absolute;left:50%;bottom:-58px;translate:-50% 6px;opacity:0;
   background:var(--signal);color:var(--tinte);font-weight:700;font-size:var(--txt-xs);
-  padding:6px 13px;border-radius:99px;white-space:nowrap;pointer-events:none;
+  padding:6px 13px;border:0;border-radius:99px;white-space:nowrap;cursor:pointer;
+  font-family:var(--sans);
   box-shadow:0 10px 24px -10px rgba(0,0,0,.6);
-  transition:opacity .25s ease,translate .25s ease;
+  transition:opacity .25s ease,translate .25s ease,background .2s ease;
 }
-.karte:hover .mini::before,.karte:focus-visible .mini::before{opacity:1}
-.karte:hover .chip,.karte:focus-visible .chip{opacity:1;translate:-50% 0}
-@media(hover:none){.chip{opacity:1;translate:-50% 0}}
+.chip:hover{background:var(--signal-hell)}
+.chip:focus-visible{opacity:1;translate:-50% 0;outline-offset:4px}
+.karte:has(.chip:focus-visible) .mini::before{opacity:1}
+@media(hover:hover) and (pointer:fine){
+  .karte{cursor:zoom-in}
+  .karte .brettname b{transition:color .2s ease}
+  .karte:hover .brettname b{color:var(--auf-grund)}
+  .karte:hover .mini::before{opacity:1}
+  .karte:hover .chip{opacity:1;translate:-50% 0}
+}
+/* Ohne Maus steht die Pille immer da und ist gross genug fuer den Daumen. */
+@media (hover:none),(pointer:coarse){
+  .chip{opacity:1;translate:-50% 0;padding:11px 18px;font-size:var(--txt-s);bottom:-66px}
+}
 .leer{opacity:.7;width:72%;justify-self:center}
 .leer:nth-child(even){opacity:.5}
 .leer div{
@@ -1087,22 +1099,22 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
       </div>
       <div class="buehne">
         <div class="tisch">
-        <button class="karte" type="button" data-projekt="0" aria-label="GuardOpS ansehen">
+        <div class="karte" data-projekt="0">
           <span class="brettname"><b>01 GuardOpS</b> · Software · online</span>
           <span class="mini">
             <span class="fenster"><span class="fensterleiste"><i></i><i></i><i></i><span></span></span><span class="sicht"><img src="arbeiten/guardops-vorschau.webp?v=4" alt="" width="960" height="600" loading="lazy" decoding="async"></span></span>
             <span class="tel"><img src="arbeiten/guardops-vorschau-mobil.webp?v=4" alt="" width="220" height="476" loading="lazy" decoding="async"></span>
-            <span class="chip" aria-hidden="true">Hineinzoomen ⤢</span>
+            <button class="chip" type="button" aria-label="GuardOpS ansehen">Hineinzoomen ⤢</button>
           </span>
-        </button>
-        <button class="karte" type="button" data-projekt="1" aria-label="Craniosacral Praxis Johann von Arb ansehen">
+        </div>
+        <div class="karte" data-projekt="1">
           <span class="brettname"><b>02 Craniosacral Praxis</b> · Fulenbach</span>
           <span class="mini">
             <span class="fenster"><span class="fensterleiste"><i></i><i></i><i></i><span></span></span><span class="sicht"><img src="arbeiten/johann-vorschau.webp?v=4" alt="" width="960" height="600" loading="lazy" decoding="async"></span></span>
             <span class="tel"><img src="arbeiten/johann-vorschau-mobil.webp?v=4" alt="" width="220" height="476" loading="lazy" decoding="async"></span>
-            <span class="chip" aria-hidden="true">Hineinzoomen ⤢</span>
+            <button class="chip" type="button" aria-label="Craniosacral Praxis Johann von Arb ansehen">Hineinzoomen ⤢</button>
           </span>
-        </button>
+        </div>
         <div class="leer" aria-hidden="true">
           <p class="brettname"><b>03</b> · in Arbeit</p>
           <div>Nächstes Projekt</div>
@@ -1658,6 +1670,10 @@ if (werkbank) {
     // Werkzeugleiste und mit ihr der Weg zurueck verdeckt.
     if (oben < 76 || oben > innerHeight * .45) scrollTo({ top: scrollY + oben - 84, behavior: reduziert ? 'auto' : 'smooth' });
   };
+  // Abschluss eines Zooms. Laeuft am Ende der Animation, und zur Sicherheit
+  // kurz danach noch einmal per Zeitgeber: haelt der Browser die Animation an,
+  // etwa in einem Tab im Hintergrund, bliebe die Werkbank sonst blockiert.
+  const einmal = (f) => { let erledigt = false; return () => { if (!erledigt) { erledigt = true; f(); } }; };
   const beiwerk = (st) => st.querySelectorAll('.brett-desktop > .brettname, .inspektor, .brett-mobil, .projekt');
 
   function hinein(i) {
@@ -1672,14 +1688,15 @@ if (werkbank) {
     const gross = staende[i].querySelector('.brett-desktop .fenster');
     const g = gross.getBoundingClientRect();
     const t = tisch.getBoundingClientRect();
-    const fertig = () => {
+    const fertig = einmal(() => {
       tisch.hidden = true; tisch.classList.remove('ueberlagert');
       werkbank.classList.remove('zoomt'); beschaeftigt = false;
-    };
+    });
     zurueck.focus({ preventScroll: true });
     if (reduziert) { fertig(); return; }
     beschaeftigt = true;
     werkbank.classList.add('zoomt');
+    setTimeout(fertig, zeit + 300);
     gross.animate([
       { transformOrigin: '0 0', transform: `translate(${m.left - g.left}px,${m.top - g.top}px) scale(${m.width / g.width})` },
       { transformOrigin: '0 0', transform: 'none' }
@@ -1709,15 +1726,16 @@ if (werkbank) {
     const m = karte.querySelector('.fenster').getBoundingClientRect();
     const g = gross.getBoundingClientRect();
     const t = tisch.getBoundingClientRect();
-    const fertig = () => {
+    const fertig = einmal(() => {
       flaeche.hidden = true; flaeche.classList.remove('ueberlagert');
       st.getAnimations({ subtree: true }).forEach(a => a.cancel());
       werkbank.classList.remove('zoomt'); beschaeftigt = false;
-    };
-    karte.focus({ preventScroll: true });
+    });
+    karte.querySelector('.chip').focus({ preventScroll: true });
     if (reduziert) { fertig(); return; }
     beschaeftigt = true;
     werkbank.classList.add('zoomt');
+    setTimeout(fertig, zeit + 300);
     beiwerk(st).forEach(el => el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220, fill: 'forwards' }));
     gross.animate([
       { transformOrigin: '0 0', transform: 'none', opacity: 1 },
@@ -1751,10 +1769,14 @@ if (werkbank) {
     vorgeholt.add(i);
     staende[i].querySelectorAll('img').forEach((b) => { const x = new Image(); x.src = b.currentSrc || b.src; });
   };
+  const maus = matchMedia('(hover: hover) and (pointer: fine)');
   karten.forEach((k, i) => {
-    k.addEventListener('click', () => hinein(i));
+    const knopf = k.querySelector('.chip');
+    knopf.addEventListener('click', (e) => { e.stopPropagation(); hinein(i); });
+    knopf.addEventListener('focus', () => vorholen(i));
+    k.addEventListener('click', () => { if (maus.matches) hinein(i); });
     k.addEventListener('pointerenter', () => vorholen(i));
-    k.addEventListener('focus', () => vorholen(i));
+    k.addEventListener('touchstart', () => vorholen(i), { passive: true });
   });
   zurueck.addEventListener('click', hinaus);
   werkbank.querySelectorAll('.blaettern').forEach(b => b.addEventListener('click', () => blaettern(+b.dataset.richtung)));
