@@ -107,6 +107,13 @@ Schriften liegen selbst im Projekt (`schriften/`, `schriften.css`).
   entfernen, die Zahl „2 Projekte“ und „von 2“ in der Werkzeugleiste
   anpassen. Pro Kundenprojekt vorher eine schriftliche Freigabe einholen.
 
+- **Anbieterin** ist die pzu consulting gmbh (UID CHE-411.716.010), formateins
+  ihre Marke. Die eingetragene Firma muss auf Seite, Offerten und Rechnungen
+  sichtbar sein (Art. 954a OR), darum steht sie im Fuss und im Impressum.
+  Nicht MWST-pflichtig (Umsatz unter CHF 100'000), darum steht im Rechner
+  „Mehrwertsteuer kommt keine dazu“. Wird die GmbH pflichtig: Rechner, FAQ
+  und Impressum anpassen. Der Zweck im Handelsregister wird noch um Webdesign
+  erweitert.
 - **Markenname** formateins. Auf swissreg.ch am 22.10.2026 geprüft, kein
   Konflikt. `formateins.ch` ist registriert. `format1.ch` als Umleitung
   darauf ist noch offen (fängt „eins“ als Ziffer ab).
@@ -228,9 +235,11 @@ im Code mit `LIVEGANG` markiert — `grep -rn LIVEGANG .` findet sie alle.
    ob sie ankommt, auch im Spam-Ordner. Falls ein eigener Absender gewünscht
    ist (`anfrage@formateins.ch`, zum Filtern), muss er bei Hostpoint als
    Postfach existieren.
-4. **Adresse und Telefon** ergaenzen: im JSON-LD, in `impressum.html` und in
-   `datenschutz.html` — `grep -rn AUSFUELLEN .` findet alle Stellen.
-   Ein LocalBusiness ohne Adresse wird von Google weitgehend ignoriert.
+4. **Telefon** ergänzen oder die Zeile „Telefon folgt“ im Fuss entfernen.
+   Pflicht ist es nicht. Anbieterin ist die pzu consulting gmbh, Hochgasse 7,
+   4632 Trimbach (Sitz laut Handelsregister); so steht es in Impressum,
+   Datenschutz und JSON-LD. Dieselbe Adresse im Google-Unternehmensprofil
+   verwenden, dort als Einzugsgebiet ohne sichtbare Adresse.
 5. **Google-Unternehmensprofil anlegen.** Bei lokalen Suchen dominiert das
    Kartenpaket ueber den organischen Treffern, und auch KI-Assistenten stützen
    Empfehlungen wie „Webdesigner in Olten“ stark auf Profile und Bewertungen.
