@@ -119,6 +119,36 @@ Schriften liegen selbst im Projekt (`schriften/`, `schriften.css`).
   Hostpoint ist. Wird an Hotmail oder einen anderen Anbieter weitergeleitet,
   muss dieser dort genannt werden.
 
+## Auslieferung auf Hostpoint
+
+Jeder Push auf `main` lädt die Seite per GitHub Action auf Hostpoint
+(`.github/workflows/deploy-hostpoint.yml`), über FTPS mit
+`SamKirkland/FTP-Deploy-Action`. Vorher prüft die Action die Syntax von
+`anfrage.php` und `messung.js`, bei einem Fehler wird nichts hochgeladen.
+
+Hochgeladen wird alles ausser `archiv/`, `quellen/`, `README.md`, `.github/`,
+`.claude/` und `.gitignore`. Neue Dateien kommen also von selbst mit, nur neue
+Ausnahmen gehören in den Workflow. `htaccess-hostpoint` wird als `.htaccess`
+ausgeliefert: immer https und `www.formateins.ch`, Zwischenspeicher-Regeln,
+Sicherheitskopfzeilen.
+
+Secrets im Repository (Settings → Secrets and variables → Actions):
+
+| Secret | Inhalt |
+|---|---|
+| `HOSTPOINT_FTP_HOST` | FTP-Server von Hostpoint, gleich wie in den anderen Projekten |
+| `FORMATEINS_FTP_USER` | eigener FTP-Benutzer, bei Hostpoint auf den Ordner von formateins.ch eingeschränkt |
+| `FORMATEINS_FTP_PASSWORD` | dessen Passwort |
+
+Der FTP-Benutzer ist bewusst auf den einen Ordner beschränkt: Gelangt das
+Passwort je nach aussen, kommt man damit nur an diese Seite.
+
+Den Workflow kann der normale GitHub-Zugang nicht ändern (fehlender Scope
+`workflow`). Für Änderungen daran vorher `gh auth refresh -h github.com -s workflow`.
+
+GitHub Pages läuft parallel weiter, als Vorschau. Nach dem Livegang
+abschalten (Settings → Pages), sonst steht die Seite doppelt im Netz.
+
 ## Messung und Banner (Google)
 
 Gebaut, aber ausgeschaltet. `messung.js` liegt auf allen vier Seiten und tut
