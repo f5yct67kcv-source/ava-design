@@ -43,6 +43,9 @@ RewriteRule ^(.*[^/])$ $1.html [L]
 # Seiten, Stil und Skript immer frisch nachfragen, damit Aenderungen sofort
 # sichtbar sind. Schriften aendern sich nie, Bilder selten (die Werkbank
 # zaehlt bei neuen Aufnahmen ?v= hoch).
+# Nicht jeder Apache kennt die Endung des Web-Manifests.
+AddType application/manifest+json .webmanifest
+
 <IfModule mod_expires.c>
   ExpiresActive On
   ExpiresByType text/html "access plus 0 seconds"
@@ -52,6 +55,9 @@ RewriteRule ^(.*[^/])$ $1.html [L]
   ExpiresByType font/woff2 "access plus 1 year"
   ExpiresByType image/webp "access plus 1 week"
   ExpiresByType image/png "access plus 1 week"
+  ExpiresByType image/svg+xml "access plus 1 week"
+  ExpiresByType image/x-icon "access plus 1 week"
+  ExpiresByType image/vnd.microsoft.icon "access plus 1 week"
 </IfModule>
 
 <IfModule mod_headers.c>

@@ -580,14 +580,14 @@ def main():
 
     (paket / "favicon/site.webmanifest").write_text(json.dumps({
         "name": "formateins", "short_name": "formateins",
-        "icons": [{"src": "/icon-192.png", "sizes": "192x192", "type": "image/png"},
-                  {"src": "/icon-512.png", "sizes": "512x512", "type": "image/png"},
-                  {"src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}],
+        "icons": [{"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
+                  {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"},
+                  {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}],
         "theme_color": F["grund"], "background_color": F["grund"],
     }, indent=2, ensure_ascii=False) + "\n")
     (paket / "favicon/EINBAUEN.txt").write_text(
         "Alle Dateien dieses Ordners ins Hauptverzeichnis der Website legen und im <head> einfügen:\n\n"
-        '<link rel="icon" href="/favicon.ico" sizes="48x48">\n'
+        '<link rel="icon" href="/favicon.ico" sizes="32x32">\n'
         '<link rel="icon" href="/favicon.svg" type="image/svg+xml">\n'
         '<link rel="apple-touch-icon" href="/apple-touch-icon.png">\n'
         '<link rel="manifest" href="/site.webmanifest">\n'

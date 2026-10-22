@@ -333,7 +333,7 @@ im Code mit `LIVEGANG` markiert — `grep -rn LIVEGANG .` findet sie alle.
 Bewusst weggelassen: `llms.txt`. Kein grosser KI-Anbieter nutzt die Datei
 nachweislich (Stand Oktober 2026).
 
-Was bereits liegt: `favicon.png`, `apple-touch-icon.png`, `teilen.png` (Open-Graph-Bild 1200x630),
+Was bereits liegt: Favicons samt `site.webmanifest`, `teilen.png` (Open-Graph-Bild 1200x630),
 `robots.txt`, `sitemap.xml`, JSON-LD-Geruest, `lang="de-CH"`, Open Graph und
 Twitter Cards auf beiden Seiten.
 
@@ -379,18 +379,21 @@ python3 -m venv /tmp/marke-venv
 
 ## Teilen-Bild und Favicon neu erzeugen
 
-Die Bilder werden aus `quellen/` mit Chrome gerendert, damit sie die echten
-Schriften tragen. Lokalen Server starten (siehe unten), dann:
+Das Teilen-Bild wird aus `quellen/teilen.html` mit Chrome gerendert, damit es die
+echten Schriften traegt. Lokalen Server starten (siehe unten), dann:
 
 ```bash
 C="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 "$C" --headless=new --hide-scrollbars --force-device-scale-factor=1 --virtual-time-budget=3000 --window-size=1200,630 --screenshot=teilen.png http://localhost:8000/quellen/teilen.html
-"$C" --headless=new --hide-scrollbars --force-device-scale-factor=1 --virtual-time-budget=3000 --window-size=600,600 --screenshot=apple-touch-icon.png http://localhost:8000/quellen/favicon.html
-sips -c 180 180 apple-touch-icon.png && sips -z 64 64 apple-touch-icon.png --out favicon.png
 ```
 
-Chrome hat eine Mindest-Fenstergroesse, darum wird das Favicon gross gerendert
-und danach ausgeschnitten.
+Die Favicons (`favicon.ico`, `favicon.svg`, `apple-touch-icon.png`,
+`icon-192.png`, `icon-512.png`, `site.webmanifest`) kommen aus dem Markenpaket.
+Paket bauen (siehe „Markenpaket“), dann im Repo:
+
+```bash
+unzip -o -j ~/Downloads/formateins-marke.zip 'formateins-marke/favicon/*' -x '*EINBAUEN.txt' -d .
+```
 
 ## Lokal ansehen
 

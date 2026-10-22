@@ -7,8 +7,12 @@
 <!-- Rechtsseiten bleiben dauerhaft aus dem Suchindex, auch nach dem Livegang.
      Den Links darf die Suchmaschine folgen. -->
 <meta name="robots" content="noindex,follow">
-<link rel="icon" href="favicon.png" type="image/png">
+<!-- Aus dem Markenpaket (quellen/marke). sizes beim ico, sonst nimmt Chrome
+     das ico statt des scharfen svg. -->
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
 <meta name="theme-color" content="#1b2a33">
 <link rel="preload" href="schriften/schibsted-grotesk.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="schriften/playfair-display.woff2" as="font" type="font/woff2" crossorigin>
