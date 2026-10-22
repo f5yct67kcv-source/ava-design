@@ -366,6 +366,10 @@ HEX/RGB/CMYK und Kontrast, Schriften, Regeln).
 - `bauen.py` erzeugt SVGs und Vorlagen, `raster.mjs` rendert sie mit Chrome zu
   PNG und PDF. Farben stehen in `bauen.py` oben und muessen zu `:root` in
   `index.html` passen. `web/formateins.css` wird direkt aus `index.html` gezogen.
+- Drei Instagram-Beitraege (1080x1440) mit Bildunterschriften. Fuer den
+  Beitrag zu Johann liegt `johann-handy.webp` daneben: seine Seite am Telefon,
+  abgeschnitten ueber der Karte „Platz fuer ein Foto“. Sobald seine Fotos drin
+  sind, neu aufnehmen.
 - CMYK sind Richtwerte ueber das macOS-Profil „Generic CMYK“.
 - Die Schriftdateien liegen bewusst nicht im Paket: Playfair Display hat einen
   reservierten Namen, eine beschnittene Fassung duerfte so nicht weitergegeben

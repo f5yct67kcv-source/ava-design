@@ -184,6 +184,99 @@ def linkedin():
                 f'<div class="fuss"><div class="logo">{WORT_DUNKEL}</div><i></i>Webdesign aus Olten und Region</div></div>', stil)
 
 
+# ---------------------------------------------------------------- Instagram
+# Hochformat 3:4, so zeigt Instagram die Beitraege im Profilraster.
+IG_B, IG_H = 1080, 1440
+IG_TEXTE = """Bildunterschriften, zum Kopieren. Reihenfolge im Profil: zuerst 1, dann 2,
+dann 3 posten, dann erscheint 3 links. Anheften lassen sich höchstens drei.
+
+1 · Haltung
+Du machst gute Arbeit. Man müsste sie online auch sehen.
+
+Ich baue Websites für Selbstständige und kleine Unternehmen in Olten und der Region, die ihr Fach verstehen, online aber kaum stattfinden. Von Hand gebaut, zum Festpreis.
+
+Was deine kosten würde, zeigt dir der Rechner in zwei Minuten. Link im Profil.
+
+#webdesign #olten #solothurn #selbstständig #kmu
+
+
+2 · Craniosacral Praxis Johann von Arb
+Eine Seite für die Craniosacral Praxis von Johann von Arb in Fulenbach. Von Hand gebaut, ohne Baukasten, und am Telefon genauso ruhig wie die Therapie selbst.
+
+Mehr Arbeiten auf formateins.ch.
+
+#webdesign #olten #fulenbach #craniosacral
+
+
+3 · Kostenrechner
+Was kostet meine Website? Sieben Fragen, danach siehst du einen Preisrahmen. Ohne Konto und ohne Telefonnummer. Wenn er passt, bekommst du ein Festpreisangebot.
+
+formateins.ch/kostenrechner, Link im Profil.
+
+#webdesign #olten #website #kmu
+"""
+
+
+def ig_haltung():
+    stil = f"""
+    html,body{{width:{IG_B}px;height:{IG_H}px;overflow:hidden}}
+    body{{background:{VERLAUF};color:{F['auf-grund']};padding:100px 92px 96px;display:flex;flex-direction:column}}
+    .logo{{width:250px}}
+    h1{{margin-top:auto;font-family:"Playfair Display";font-weight:900;font-size:120px;line-height:1.04;letter-spacing:-.022em;text-wrap:balance}}
+    h1 span{{display:block;margin-top:.06em;font-family:"Schibsted Grotesk";font-weight:600;font-size:.98em;letter-spacing:-.04em;color:{F['signal']};text-wrap:balance}}
+    .fuss{{margin-top:130px;display:flex;align-items:center;gap:26px;font-family:"Schibsted Grotesk";font-weight:600;font-size:32px;color:{F['auf-grund-still']}}}
+    .fuss i{{width:56px;height:3px;background:{F['signal']}}}
+    """
+    return html(f'<div class="logo">{WORT_DUNKEL}</div>'
+                f'<h1>Du machst gute Arbeit.<span>Man müsste sie online auch sehen.</span></h1>'
+                f'<div class="fuss"><i></i>Webdesign aus Olten und Region</div>', stil)
+
+
+def ig_arbeit():
+    # Ausschnitt endet ueber der Platzhalter-Karte auf Johanns Seite, das
+    # Telefon laeuft unten aus dem Bild.
+    bild_url = (HIER / "johann-handy.webp").as_uri()
+    stil = f"""
+    html,body{{width:{IG_B}px;height:{IG_H}px;overflow:hidden}}
+    body{{background:{F['papier']};color:{F['tinte']};padding:100px 92px 0;position:relative;font-family:"Schibsted Grotesk"}}
+    .kopf{{display:flex;justify-content:space-between;align-items:center}}
+    .logo{{width:220px}}
+    .et{{font-size:24px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:{F['tinte-still']}}}
+    h2{{margin-top:70px;font-family:"Playfair Display";font-weight:900;font-size:88px;line-height:1.04;letter-spacing:-.022em;color:{F['tinte-still']}}}
+    h2 span{{display:block;font-family:"Schibsted Grotesk";font-weight:600;font-size:.98em;letter-spacing:-.04em;color:{F['tinte']}}}
+    p{{margin-top:22px;font-size:30px;color:{F['tinte-still']}}}
+    .tel{{position:absolute;left:50%;translate:-50% 0;top:590px;width:552px;padding:16px;border-radius:72px;background:{F['tinte']};
+      box-shadow:0 50px 90px -30px rgba(21,32,42,.55)}}
+    .schirm{{border-radius:56px;overflow:hidden;background:#f9f1ea}}
+    .status{{height:58px;position:relative}}
+    .status i{{position:absolute;left:50%;top:14px;translate:-50% 0;width:150px;height:40px;border-radius:20px;background:#0b0f13}}
+    .schirm img{{display:block;width:520px}}
+    """
+    return html(f'<div class="kopf"><div class="logo">{svg(WORT, VARIANTEN["auf-hell"], attrs=VOLL)}</div>'
+                f'<span class="et">Projekt · 2026</span></div>'
+                f'<h2>Craniosacral Praxis<span>Johann von Arb, Fulenbach.</span></h2>'
+                f'<p>Eine Seite, von Hand gebaut, ohne Baukasten.</p>'
+                f'<div class="tel"><div class="schirm"><div class="status"><i></i></div><img src="{bild_url}"></div></div>', stil)
+
+
+def ig_preis():
+    stil = f"""
+    html,body{{width:{IG_B}px;height:{IG_H}px;overflow:hidden}}
+    body{{background:{F['signal']};color:{F['tinte']};padding:100px 92px 96px;display:flex;flex-direction:column;font-family:"Schibsted Grotesk"}}
+    .et{{font-size:26px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}}
+    h1{{margin-top:auto;font-family:"Playfair Display";font-weight:900;font-size:128px;line-height:1.02;letter-spacing:-.022em;text-wrap:balance}}
+    h1 span{{display:block;margin-top:.08em;font-family:"Schibsted Grotesk";font-weight:600;font-size:.98em;letter-spacing:-.04em;text-wrap:balance}}
+    p{{margin-top:40px;font-size:36px;line-height:1.4;max-width:24ch}}
+    .fuss{{margin-top:120px;display:flex;justify-content:space-between;align-items:center;font-size:30px;font-weight:700}}
+    .logo{{width:220px}}
+    """
+    mono = svg(WORT, (F["tinte"], F["tinte"]), attrs=VOLL)
+    return html(f'<div class="et">Kostenrechner</div>'
+                f'<h1>Was kostet meine Website?<span>Preisrahmen in zwei Minuten.</span></h1>'
+                f'<p>Sieben Fragen, ohne Konto und ohne Telefonnummer.</p>'
+                f'<div class="fuss"><div class="logo">{mono}</div><span>formateins.ch/kostenrechner →</span></div>', stil)
+
+
 # ---------------------------------------------------------------- Stylesheet
 def stylesheet(stand):
     def wort(var, breite, rand=0.0):
@@ -478,7 +571,7 @@ td i+i{{margin-right:2.5mm}}
         <div><code>logo/png</code><span>Für Word, PowerPoint, Canva. Durchsichtig oder mit Grund.</span></div>
         <div><code>signet</code><span>fe als Kachel oder frei gestellt.</span></div>
         <div><code>favicon</code><span>Browser-Symbol, Apple- und Android-Symbol, mit Einbau-Anleitung.</span></div>
-        <div><code>social</code><span>Profilbild, LinkedIn-Banner, Titelbild für das Google-Profil, Link-Vorschau.</span></div>
+        <div><code>social</code><span>Profilbild, LinkedIn-Banner, Titelbild für das Google-Profil, Link-Vorschau, drei Instagram-Beiträge.</span></div>
         <div><code>web/formateins.css</code><span>Farben und Schriften als CSS-Variablen.</span></div>
       </div>
     </div>
@@ -564,6 +657,10 @@ def main():
     raster(linkedin(), 1584, 396, paket / "social/linkedin-banner-1584x396.png", False)
     raster(buehne(1920, 1080, 1.6, None), 1920, 1080, paket / "social/google-titelbild-1920x1080.png", False)
     shutil.copy(REPO / "teilen.png", paket / "social/link-vorschau-1200x630.png")
+    (paket / "social/instagram").mkdir()
+    for nr, (name, vorlage) in enumerate((("haltung", ig_haltung), ("johann", ig_arbeit), ("kostenrechner", ig_preis)), 1):
+        raster(vorlage(), IG_B, IG_H, paket / f"social/instagram/beitrag-{nr}-{name}-1080x1440.png", False)
+    (paket / "social/instagram/bildunterschriften.txt").write_text(IG_TEXTE)
 
     # Stylesheet
     sg = stylesheet(stand)
@@ -613,6 +710,7 @@ logo/png     Dieselben als Bild in 1000, 2000 und 4000 px Breite, durchsichtig.
 signet       fe, das Zeichen für kleine Flächen.
 favicon      Browser- und App-Symbole, Anleitung in EINBAUEN.txt.
 social       Profilbild, LinkedIn-Banner, Titelbild Google-Profil, Link-Vorschau.
+             instagram: drei Beiträge 3:4 mit Bildunterschriften.
 web          Farben und Schriften als CSS-Variablen.
 
 Schriften: Playfair Display und Schibsted Grotesk, beide kostenlos bei
