@@ -425,7 +425,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   if (is_array($alt) && ($alt['zeit'] ?? 0) > time() - ZWISCHENSPEICHER_S) ende(200, ['dauer' => DAUER_MIN, 'tage' => $alt['tage']]);
   $diagnose = [];
   $tage = freieZeiten();
-  if (isset($_GET['diagnose'])) ende(200, ['diagnose' => $diagnose, 'tage' => $tage]);  // VORUEBERGEHEND
+  if (isset($_GET['diagnose'])) {  // VORUEBERGEHEND
+    $liste = [];
+    [$c, $x] = dav('PROPFIND', 'https://caldav.hostpoint.ch/caldav/', '<?xml version="1.0"?><D:propfind xmlns:D="DAV:"><D:prop><D:displayname/><D:resourcetype/></D:prop></D:propfind>', ['Depth: 1', 'Content-Type: application/xml']);
+    $d = new DOMDocument(); @$d->loadXML($x, LIBXML_NONET);
+    foreach ($d->getElementsByTagNameNS('DAV:', 'response') as $r) {
+      $liste[] = [$r->getElementsByTagNameNS('DAV:', 'href')->item(0)?->textContent, $r->getElementsByTagNameNS('DAV:', 'displayname')->item(0)?->textContent];
+    }
+    [$c2, $x2] = dav('PROPFIND', KALENDER, '<?xml version="1.0"?><D:propfind xmlns:D="DAV:"><D:prop><D:getetag/></D:prop></D:propfind>', ['Depth: 1', 'Content-Type: application/xml']);
+    $d2 = new DOMDocument(); @$d2->loadXML($x2, LIBXML_NONET);
+    ende(200, ['diagnose' => $diagnose, 'kalender' => $liste, 'code' => $c, 'inhaltCode' => $c2, 'eintraege' => $d2->getElementsByTagNameNS('DAV:', 'response')->length]);
+  }
   if ($tage === null) ende(503, ['grund' => 'Kalender nicht erreichbar']);
   @file_put_contents($ablage, json_encode(['zeit' => time(), 'tage' => $tage]), LOCK_EX);
   ende(200, ['dauer' => DAUER_MIN, 'tage' => $tage]);
