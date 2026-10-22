@@ -342,6 +342,31 @@ Display 900 und Signalorange — dieselben zwei Stimmen wie in den Ueberschrifte
 Im HTML als `<span class="s">format</span><span class="p">eins</span>` in
 `.logo`. Die verworfenen Varianten liegen in `archiv/logo-varianten.html`.
 
+## Markenpaket
+
+`quellen/marke/` baut ein ZIP mit allem, was jemand ausserhalb der Website
+braucht: Wortmarke als SVG (Buchstaben als Pfade, keine Schrift noetig) und PNG,
+Signet „fe“, Favicons mit Manifest, Profilbild, LinkedIn-Banner, Titelbild fuer
+das Google-Profil, die CSS-Variablen und das Stylesheet als PDF (Logo, Farben mit
+HEX/RGB/CMYK und Kontrast, Schriften, Regeln).
+
+- `umriss.py` setzt Wortmarke und Signet mit HarfBuzz aus den Schriften in
+  `schriften/`, mit derselben Laufweite wie `.logo` im CSS. Nachgeprueft:
+  deckungsgleich mit der Darstellung im Browser.
+- `bauen.py` erzeugt SVGs und Vorlagen, `raster.mjs` rendert sie mit Chrome zu
+  PNG und PDF. Farben stehen in `bauen.py` oben und muessen zu `:root` in
+  `index.html` passen. `web/formateins.css` wird direkt aus `index.html` gezogen.
+- CMYK sind Richtwerte ueber das macOS-Profil „Generic CMYK“.
+- Die Schriftdateien liegen bewusst nicht im Paket: Playfair Display hat einen
+  reservierten Namen, eine beschnittene Fassung duerfte so nicht weitergegeben
+  werden. Das Stylesheet verweist auf Google Fonts.
+
+```bash
+python3 -m venv /tmp/marke-venv
+/tmp/marke-venv/bin/pip install "fonttools[woff]" uharfbuzz skia-pathops pillow
+/tmp/marke-venv/bin/python quellen/marke/bauen.py ~/Downloads/formateins-marke.zip
+```
+
 ## Teilen-Bild und Favicon neu erzeugen
 
 Die Bilder werden aus `quellen/` mit Chrome gerendert, damit sie die echten
