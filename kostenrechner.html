@@ -230,7 +230,6 @@ p{max-width:62ch}
 .feld textarea{min-height:96px;resize:vertical}
 .feld [aria-invalid="true"]{border-color:var(--signal)}
 .fehlertext{font-size:var(--txt-s);font-weight:600;color:var(--signal)}
-.feldhinweis{font-size:var(--txt-s);color:var(--auf-grund-still)}
 .fehlertext:empty{display:none}
 .zusatzfeld{display:none}
 .zusatzfeld.zeigen{display:flex}
@@ -532,8 +531,7 @@ footer nav a:hover{color:var(--signal)}
             </div>
             <div class="feld">
               <label for="tel">Telefon</label>
-              <input type="tel" id="tel" name="tel" required autocomplete="tel" placeholder="079 000 00 00" aria-describedby="tel-hinweis tel-fehler">
-              <span class="feldhinweis" id="tel-hinweis">Ich rufe dich kurz an, um zu verstehen, was du dir vorstellst. Kein Verkaufsgespräch.</span>
+              <input type="tel" id="tel" name="tel" required autocomplete="tel" placeholder="079 000 00 00" aria-describedby="tel-fehler">
               <span class="fehlertext" id="tel-fehler"></span>
             </div>
           </div>
