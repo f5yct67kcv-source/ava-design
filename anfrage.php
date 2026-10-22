@@ -51,6 +51,17 @@ function zeile(string $schluessel, int $max = 200): string {
   $wert = preg_replace('/[\x00-\x1F\x7F]+/u', ' ', $wert) ?? '';
   return mb_substr(trim(preg_replace('/\s+/u', ' ', $wert) ?? ''), 0, $max);
 }
+// Schweizer Nummer (0 oder +41/0041 plus neun Ziffern) oder auslaendische mit
+// Vorwahl. Gleiche Regel wie im Browser (telGueltig in kostenrechner.html und
+// gespraech.html).
+function telefonGueltig(string $t): bool {
+  if (!preg_match('~^[+0-9 ()/.\-]+$~', $t)) return false;
+  $n = preg_replace('/^00/', '+', preg_replace('/[^\d+]/', '', $t) ?? '') ?? '';
+  return preg_match('/^0[1-9]\d{8}$/', $n) === 1
+    || preg_match('/^\+410?[1-9]\d{8}$/', $n) === 1
+    || preg_match('/^\+(?!41)[1-9]\d{6,13}$/', $n) === 1;
+}
+
 function absatz(string $schluessel, int $max = 4000): string {
   $wert = str_replace("\r\n", "\n", (string) ($_POST[$schluessel] ?? ''));
   $wert = preg_replace('/[\x00-\x08\x0B-\x1F\x7F]+/u', '', $wert) ?? '';
@@ -87,8 +98,7 @@ if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) ende(400, 'E-Mail ungueltig');
 
 $betrieb   = zeile('betrieb');
 $telefon   = zeile('tel', 40);
-// Gleiche Regel wie im Rechner: uebliche Zeichen, mindestens acht Ziffern.
-if (!preg_match('~^[+0-9 ()/.\-]+$~', $telefon) || strlen(preg_replace('/\D/', '', $telefon)) < 8) ende(400, 'Telefon fehlt');
+if (!telefonGueltig($telefon)) ende(400, 'Telefon fehlt');
 $bemerkung = absatz('bemerkung');
 
 $fragen = [

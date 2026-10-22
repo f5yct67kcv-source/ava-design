@@ -923,7 +923,7 @@ function pruefen(){
   const pflicht = [
     ['name', 'Wie darf ich dich ansprechen?'],
     ['mail', 'Ohne gültige E-Mail-Adresse kann ich dir nicht antworten.'],
-    ['tel', 'Damit ich dich anrufen kann, brauche ich eine Nummer mit mindestens acht Ziffern.']
+    ['tel', 'Damit ich dich anrufen kann, brauche ich eine gültige Nummer, zum Beispiel 079 123 45 67.']
   ];
   telPruefen();
   let erstesFalsches = null;
@@ -938,13 +938,18 @@ function pruefen(){
   if (erstesFalsches) erstesFalsches.focus();
   return !erstesFalsches;
 }
-// Telefon: nur Ziffern und die ueblichen Trennzeichen, mindestens acht Ziffern.
-// Muss zur Pruefung in anfrage.php passen.
+// Telefon: Schweizer Nummer oder auslaendische mit Vorwahl. Muss zur Pruefung
+// in anfrage.php und termine.php passen.
+function telGueltig(wert){
+  if (!/^[+0-9 ()\/.\-]+$/.test(wert)) return false;
+  const n = wert.replace(/[^\d+]/g, '').replace(/^00/, '+');
+  if (/^0[1-9]\d{8}$/.test(n)) return true;          // Schweiz: 079 123 45 67
+  if (/^\+410?[1-9]\d{8}$/.test(n)) return true;     // +41 79 …, auch +41 (0)79 …
+  return /^\+(?!41)[1-9]\d{6,13}$/.test(n);         // Ausland mit Vorwahl, hoechstens 15 Ziffern
+}
 function telPruefen(){
   const tel = document.getElementById('tel');
-  const wert = tel.value.trim();
-  const ok = /^[+0-9 ()\/.\-]+$/.test(wert) && wert.replace(/\D/g, '').length >= 8;
-  tel.setCustomValidity(ok ? '' : 'Telefon');
+  tel.setCustomValidity(telGueltig(tel.value.trim()) ? '' : 'Telefon');
 }
 document.getElementById('tel').addEventListener('input', telPruefen);
 

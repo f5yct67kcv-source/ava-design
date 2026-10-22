@@ -41,8 +41,9 @@ Schriften liegen selbst im Projekt (`schriften/`, `schriften.css`).
   bremst nach fuenf Anfragen pro Stunde und Absender, faengt Spam-Programme ueber
   ein unsichtbares Feld und eine Zeitfalle ab (unter acht Sekunden Seitenzeit gibt
   es ein falsches „ok“) und nimmt nur Anfragen von der eigenen Seite an.
-- **Telefon ist Pflicht** im Anfrageformular (mindestens acht Ziffern, gleiche
-  Regel in `kostenrechner.html` und `anfrage.php`). Grund: Angebote koennen im
+- **Telefon ist Pflicht** im Anfrageformular (Schweizer Nummer mit zehn Ziffern
+  oder +41, sonst Ausland mit Vorwahl; gleiche Regel in `kostenrechner.html`,
+  `gespraech.html`, `anfrage.php` und `termine.php`). Grund: Angebote koennen im
   Spam landen, und vor dem Festpreis kommt ohnehin ein kurzes Gespraech, um die
   Vorstellung des Kunden zu verstehen. Der Preisrahmen bleibt ohne Nummer
   sichtbar, so steht es auch auf der Startseite.

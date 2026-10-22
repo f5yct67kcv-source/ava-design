@@ -433,10 +433,16 @@ el('zeiten').addEventListener('click', (e) => {
 });
 
 // Gleiche Regeln wie im Kostenrechner und in termine.php.
+function telGueltig(wert){
+  if (!/^[+0-9 ()\/.\-]+$/.test(wert)) return false;
+  const n = wert.replace(/[^\d+]/g, '').replace(/^00/, '+');
+  if (/^0[1-9]\d{8}$/.test(n)) return true;          // Schweiz: 079 123 45 67
+  if (/^\+410?[1-9]\d{8}$/.test(n)) return true;     // +41 79 …, auch +41 (0)79 …
+  return /^\+(?!41)[1-9]\d{6,13}$/.test(n);         // Ausland mit Vorwahl, hoechstens 15 Ziffern
+}
 function telPruefen(){
-  const tel = el('tel');
-  const wert = tel.value.trim();
-  tel.setCustomValidity(/^[+0-9 ()\/.\-]+$/.test(wert) && wert.replace(/\D/g, '').length >= 8 ? '' : 'Telefon');
+  const tel = document.getElementById('tel');
+  tel.setCustomValidity(telGueltig(tel.value.trim()) ? '' : 'Telefon');
 }
 el('tel').addEventListener('input', telPruefen);
 
@@ -444,7 +450,7 @@ function pruefen(){
   telPruefen();
   const pflicht = [
     ['name', 'Wie darf ich dich ansprechen?'],
-    ['tel', 'Damit ich dich erreiche, brauche ich eine Nummer mit mindestens acht Ziffern.'],
+    ['tel', 'Damit ich dich erreiche, brauche ich eine gültige Nummer, zum Beispiel 079 123 45 67.'],
     ['mail', 'An diese Adresse geht die Bestätigung. Bitte prüfen.']
   ];
   let erstes = null;

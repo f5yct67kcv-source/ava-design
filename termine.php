@@ -56,6 +56,17 @@ function zeile(string $schluessel, int $max = 200): string {
   return mb_substr(trim(preg_replace('/\s+/u', ' ', $wert) ?? ''), 0, $max);
 }
 
+// Schweizer Nummer (0 oder +41/0041 plus neun Ziffern) oder auslaendische mit
+// Vorwahl. Gleiche Regel wie im Browser (telGueltig in kostenrechner.html und
+// gespraech.html).
+function telefonGueltig(string $t): bool {
+  if (!preg_match('~^[+0-9 ()/.\-]+$~', $t)) return false;
+  $n = preg_replace('/^00/', '+', preg_replace('/[^\d+]/', '', $t) ?? '') ?? '';
+  return preg_match('/^0[1-9]\d{8}$/', $n) === 1
+    || preg_match('/^\+410?[1-9]\d{8}$/', $n) === 1
+    || preg_match('/^\+(?!41)[1-9]\d{6,13}$/', $n) === 1;
+}
+
 // Zugangsdaten kommen beim Upload aus den GitHub-Secrets (siehe Workflow).
 // Im Repository stehen nur Platzhalter, dann ist die Buchung aus.
 $zugang = @include __DIR__ . '/kalender-zugang.php';
@@ -460,7 +471,7 @@ $telefon = zeile('tel', 40);
 $art     = zeile('art', 20);
 if ($name === '') ende(400, ['grund' => 'Name fehlt']);
 if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) ende(400, ['grund' => 'E-Mail ungueltig']);
-if (!preg_match('~^[+0-9 ()/.\-]+$~', $telefon) || strlen(preg_replace('/\D/', '', $telefon)) < 8) ende(400, ['grund' => 'Telefon fehlt']);
+if (!telefonGueltig($telefon)) ende(400, ['grund' => 'Telefon fehlt']);
 if (!isset(ARTEN[$art])) ende(400, ['grund' => 'Art fehlt']);
 $beginn = DateTimeImmutable::createFromFormat('!Y-m-d H:i', zeile('datum', 10) . ' ' . zeile('zeit', 5), new DateTimeZone(ZEITZONE));
 if (!$beginn) ende(400, ['grund' => 'Zeit fehlt']);
