@@ -643,9 +643,17 @@ footer .logo{font-size:clamp(1.9rem,2.7vw,2.5rem);text-decoration:none}
 }
 
 /* Auf schmalen Schirmen steht der zweite Weg direkt unter dem Knopf, nicht
-   irgendwo daneben umgebrochen. */
+   irgendwo daneben umgebrochen. Gestapelt sind zwei verschieden lange
+   Beschriftungen aber auch zwei verschieden breite Knoepfe — zwei ungleiche
+   Kanten uebereinander, das liest sich als Versehen. Eine Rasterspalte nach dem
+   laengsten Inhalt gibt beiden dieselbe Breite, ohne sie ueber die ganze Spalte
+   zu ziehen; den Vorrang macht weiter die Farbe, nicht die Groesse.
+   minmax(0,...) statt max-content allein: auf 320 Pixel breiten Schirmen ist der
+   laengste Knopf breiter als die Spalte, und der Body schneidet den Ueberhang
+   ab (overflow-x:clip). So bleibt er innerhalb der Spalte. */
 @media(max-width:700px){
-  .handeln{flex-direction:column;align-items:flex-start;gap:6px}
+  .handeln{display:grid;grid-template-columns:minmax(0,max-content);gap:10px}
+  .handeln .knopf{justify-content:center}
 }
 
 /* ---------- Haeufige Fragen ----------
