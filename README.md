@@ -106,7 +106,9 @@ Schriften liegen selbst im Projekt (`schriften/`, `schriften.css`).
   entfernen, die Zahl „2 Projekte“ und „von 2“ in der Werkzeugleiste
   anpassen. Pro Kundenprojekt vorher eine schriftliche Freigabe einholen.
 
-- **Markenname** ist provisorisch AVA.
+- **Markenname** formateins. Auf swissreg.ch am 22.10.2026 geprüft, kein
+  Konflikt. Domains noch kaufen: `formateins.ch` als Hauptadresse,
+  `format1.ch` als Umleitung darauf (fängt „eins“ als Ziffer ab).
 - **Kontaktweg** fehlt: keine E-Mail-Adresse, keine Telefonnummer hinterlegt.
 - **Datenschutzerklaerung geht davon aus**, dass `EMPFAENGER` ein Postfach bei
   Hostpoint ist. Wird an Hotmail oder einen anderen Anbieter weitergeleitet,
@@ -135,9 +137,9 @@ im Code mit `LIVEGANG` markiert — `grep -rn LIVEGANG .` findet sie alle.
 4. **Adresse und Telefon** ergaenzen: im JSON-LD, in `impressum.html` und in
    `datenschutz.html` — `grep -rn AUSFUELLEN .` findet alle Stellen.
    Ein LocalBusiness ohne Adresse wird von Google weitgehend ignoriert.
-5. **Markenname bestaetigen.** Die Seite steht durchgehend auf formateins
-   (Titel, Logo, Teilen-Bild, Favicon, JSON-LD). Vor dem Livegang Name bei
-   nic.ch und swissreg.ch pruefen und kaufen. Faellt der Name weg, alle Stellen
+5. **Domains kaufen.** Die Seite steht durchgehend auf formateins
+   (Titel, Logo, Teilen-Bild, Favicon, JSON-LD). swissreg ist geprueft (kein
+   Konflikt), `formateins.ch` und `format1.ch` waren am 22.10.2026 frei. Faellt der Name weg, alle Stellen
    mit `grep -rni formateins .` finden.
 6. **Google Business Profile anlegen.** Bei lokalen Suchen dominiert das
    Kartenpaket ueber den organischen Treffern. Das ist wirksamer als jede
