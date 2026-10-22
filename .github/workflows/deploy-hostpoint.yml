@@ -25,6 +25,8 @@ jobs:
       - name: Syntax pruefen
         run: |
           php -l anfrage.php
+          php -l termine.php
+          php -l kalender-zugang.php
           node --check messung.js
 
   deploy:
@@ -44,6 +46,27 @@ jobs:
             ./ dist/
           cp htaccess-hostpoint dist/.htaccess
           find dist -type f | sort
+
+      # Zugang zum Kalender ¬´Gespraeche¬ª fuer termine.php. Fehlen die Secrets,
+      # bleiben die Platzhalter stehen und gespraech.html zeigt Telefon und Mail.
+      - name: Kalenderzugang eintragen
+        env:
+          KALENDER_BENUTZER: ${{ secrets.KALENDER_BENUTZER }}
+          KALENDER_PASSWORT: ${{ secrets.KALENDER_PASSWORT }}
+        run: |
+          python3 - <<'PY'
+          import os
+          pfad = 'dist/kalender-zugang.php'
+          text = open(pfad, encoding='utf-8').read()
+          php = lambda w: w.replace('\\', '\\\\').replace("'", "\\'")
+          for name in ('KALENDER_BENUTZER', 'KALENDER_PASSWORT'):
+              wert = os.environ.get(name, '')
+              if wert:
+                  text = text.replace('__' + name + '__', php(wert))
+              else:
+                  print(f'::warning::Secret {name} fehlt, Terminbuchung bleibt aus')
+          open(pfad, 'w', encoding='utf-8').write(text)
+          PY
 
       - name: Zugangsdaten vorhanden?
         env:
