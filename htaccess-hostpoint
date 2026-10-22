@@ -3,6 +3,11 @@
 
 Options -Indexes
 
+# Abgleichsdatei des Uploads: listet alle Dateien, geht Besucher nichts an.
+<Files ".ftp-deploy-sync-state.json">
+  Require all denied
+</Files>
+
 # Immer https und immer www.formateins.ch. Faengt auch die Adresse ohne www
 # und spaeter format1.ch ab, wenn sie aufs selbe Hosting zeigt.
 # Setzt ein aktives SSL-Zertifikat bei Hostpoint voraus.

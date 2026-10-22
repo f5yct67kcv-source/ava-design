@@ -143,15 +143,23 @@ Secrets im Repository (Settings → Secrets and variables → Actions):
 
 | Secret | Inhalt |
 |---|---|
-| `HOSTPOINT_FTP_HOST` | FTP-Server von Hostpoint, gleich wie in den anderen Projekten |
-| `FORMATEINS_FTP_USER` | eigener FTP-Benutzer, bei Hostpoint auf den Ordner von formateins.ch eingeschränkt |
+| `HOSTPOINT_FTP_HOST` | `sl250.web.hostpoint.ch` (Webhosting itufeden), nicht `ftp.formateins.ch`, sonst passt das Zertifikat nicht |
+| `FORMATEINS_FTP_USER` | `deploy@formateins.ch`, Pfad `/home/itufeden/www/formateins.ch` |
 | `FORMATEINS_FTP_PASSWORD` | dessen Passwort |
 
 Der FTP-Benutzer ist bewusst auf den einen Ordner beschränkt: Gelangt das
 Passwort je nach aussen, kommt man damit nur an diese Seite.
 
+Der Pfad muss genau der Document Root der Website sein (Hostpoint → Websites →
+formateins.ch, Grundeinstellung «Apache mit PHP»). Beim ersten Versuch fehlte
+`www/`: Der Upload lief fehlerfrei durch, landete aber in einem Ordner, den
+niemand ausliefert. Die Abgleichsdatei `.ftp-deploy-sync-state.json` liegt im
+Zielordner, die `.htaccess` sperrt sie für Besucher.
+
 Den Workflow kann der normale GitHub-Zugang nicht ändern (fehlender Scope
-`workflow`). Für Änderungen daran vorher `gh auth refresh -h github.com -s workflow`.
+`workflow`). Für Änderungen daran vorher `gh auth refresh -h github.com -s workflow`,
+oder die Datei direkt auf github.com bearbeiten. Neu starten ohne Push:
+Actions → «Website zu Hostpoint» → Run workflow.
 
 GitHub Pages läuft parallel weiter, als Vorschau. Nach dem Livegang
 abschalten (Settings → Pages), sonst steht die Seite doppelt im Netz.
