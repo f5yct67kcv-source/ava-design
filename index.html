@@ -95,9 +95,6 @@ FINISH: unreviewed und undokumentiert ist unfertig; dieser Bau endet mit dem Fin
   --linie:#2f4553;
   --linie-hell:#3f5e70;
   --ringschrift:#75909f;
-  /* Muss derselbe Farbwert wie --grund sein, nur durchsichtig: ein transparentes
-     Schwarz als Endpunkt gibt in manchen Browsern einen grauen Schleier. */
-  --grund-klar:rgba(27,42,51,0);
 
   /* Textskala. Fuenf Stufen, mehr braucht die Seite nicht. Ueberschriften laufen
      ueber clamp() und stehen bewusst ausserhalb dieser Leiter. */
@@ -115,27 +112,14 @@ FINISH: unreviewed und undokumentiert ist unfertig; dieser Bau endet mit dem Fin
 *{margin:0;padding:0;box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-/* Ein einziger Verlauf ueber das ganze Dokument, nicht einer pro Abschnitt:
-   Lichtquelle oben links, die Seite dunkelt nach unten weg. html bekommt eine
-   eigene Farbe, sonst wandert der Body-Hintergrund auf das Canvas und wird am
-   Wurzelelement statt am Body ausgemessen. Der Radius ist in Pixeln gesetzt,
-   nicht in Prozent — sonst zoege ihn die Seitenlaenge auseinander. */
+/* Den Verlauf tragen die Bahnen selbst, nicht das Dokument — siehe „Bahnen“
+   weiter unten. Body und html stehen deshalb auf dem dunkelsten Wert: er liegt
+   hinter jeder Bahn und hinter dem Gummiband, wenn die Seite ueber den Rand
+   hinaus gezogen wird. html braucht die Farbe zusaetzlich, sonst wandert der
+   Body-Hintergrund auf das Canvas und wird am Wurzelelement ausgemessen. */
 html{background:var(--grund-tief)}
 body{
-  /* Der Hero bringt seinen eigenen vollstaendigen Verlauf mit (siehe .hero) und
-     endet unten auf --grund-tief. Der Seitenverlauf startet deshalb ebenfalls
-     dunkel, hebt sich zur Mitte wieder an und faellt zum Fuss zurueck. Dadurch
-     entsteht an der Herokante keine Naht, und die Seite atmet hell-dunkel-hell.
-     Die mittlere Lichtquelle nutzt --grund-hoch, nicht --grund-licht: nichts
-     darf heller werden als der Scheitel im ersten Bild. */
-  background:
-    radial-gradient(1000px 780px at 96% 48%, var(--grund-hoch) 0%, var(--grund-klar) 70%),
-    linear-gradient(180deg,
-      var(--grund-tief) 0%,
-      var(--grund-tief) 21%,
-      var(--grund) 40%,
-      var(--grund) 60%,
-      var(--grund-tief) 100%);
+  background:var(--grund-tief);
   color:var(--auf-grund);
   font-family:var(--sans);font-size:clamp(16px,1.04vw,17.5px);line-height:1.6;
   font-weight:400;-webkit-font-smoothing:antialiased;
@@ -275,9 +259,9 @@ p{max-width:62ch}
 .hero{
   position:relative;min-height:min(100svh,820px);display:flex;align-items:center;
   padding-block:clamp(92px,11vh,124px) clamp(32px,3.6vh,48px);
-  /* Der komplette Verlauf steckt im ersten Bild: Lichtquelle oben links, unten
-     ist er auf --grund-tief angekommen. Genau dort setzt der Seitenverlauf an. */
-  background:radial-gradient(125% 95% at 10% 4%,var(--grund-licht) 0%,var(--grund) 50%,var(--grund-tief) 100%);
+  /* Den Verlauf bekommt der Hero als erste Bahn (siehe „Bahnen“): Lichtquelle
+     oben links, unten ist er auf --grund-tief angekommen. Dort setzt die
+     naechste Bahn an, gespiegelt. */
 }
 /* Eine Spalte, von oben nach unten: Headline, dann Portraet und Vorspann
    nebeneinander, dann der Knopf. Dadurch stimmt die Reihenfolge auf jedem
@@ -379,6 +363,29 @@ p{max-width:62ch}
    einzige Regel fuer alle Breiten, weil das Verhaeltnis auf dem Handy und am
    Schirm dasselbe sein soll. */
 section{padding-block:clamp(50px,7.5vh,80px)}
+
+/* ---------- Bahnen ---------- */
+/* Der Hero ist die erste Bahn: Licht in der Ecke oben links, das nach unten
+   rechts auf --grund-tief auslaeuft. Dasselbe Muster traegt jeder Abschnitt,
+   jedes Mal gespiegelt — waagrecht und senkrecht. Dadurch trifft an jeder Naht
+   dunkel auf dunkel und hell auf hell: das Licht wandert als Welle nach unten,
+   die Kante zwischen zwei Bahnen ist nie zu sehen. Vier Stellungen, dann
+   wiederholt sich der Takt.
+   Die Lichtquelle bleibt auf --grund-licht, heller geht nicht: darueber faellt
+   der stille Fliesstext unter 4.5:1. Masse in Prozent statt in Pixeln, damit
+   jede Bahn ihr eigenes Bild bekommt, egal wie hoch sie ist. */
+main > section,
+footer{
+  background:radial-gradient(125% 95% at var(--licht-x) var(--licht-y),
+    var(--grund-licht) 0%, var(--grund) 50%, var(--grund-tief) 100%);
+}
+main > section:nth-of-type(4n+1){--licht-x:10%;--licht-y:4%}   /* Hero: Licht oben links */
+main > section:nth-of-type(4n+2){--licht-x:90%;--licht-y:96%}  /* gekippt: unten rechts */
+main > section:nth-of-type(4n+3){--licht-x:90%;--licht-y:4%}   /* oben rechts */
+main > section:nth-of-type(4n+4){--licht-x:10%;--licht-y:96%}  /* unten links */
+/* Der Fuss setzt den Takt nach dem achten Abschnitt fort. Kommt ein Abschnitt
+   dazu oder faellt einer weg, rueckt er eine Stellung weiter. */
+footer{--licht-x:10%;--licht-y:4%}
 /* Der Hero traegt seinen Uebergang selbst im Farbverlauf, der naechste Abschnitt
    darf deshalb enger anschliessen. */
 @media(min-width:960px){
@@ -589,7 +596,7 @@ section{padding-block:clamp(50px,7.5vh,80px)}
    mit Haarlinien dazwischen, Titel in der Serifenschrift mit der orangen Linie
    der Etiketten. Rechtliches erst ganz unten, klein und gedaempft. */
 footer{
-  border-top:1px solid var(--linie);background:var(--grund-tief);
+  border-top:1px solid var(--linie);
   padding:clamp(56px,9vh,96px) 0 clamp(26px,4vh,38px);font-size:var(--txt-l);
 }
 .fussraster{display:grid;grid-template-columns:1fr;gap:44px}
