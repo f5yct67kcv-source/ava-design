@@ -366,13 +366,20 @@ HEX/RGB/CMYK und Kontrast, Schriften, Regeln).
 - `bauen.py` erzeugt SVGs und Vorlagen, `raster.mjs` rendert sie mit Chrome zu
   PNG und PDF. Farben stehen in `bauen.py` oben und muessen zu `:root` in
   `index.html` passen. `web/formateins.css` wird direkt aus `index.html` gezogen.
-- Drei Instagram-Beitraege (1080x1440) mit Bildunterschriften. Fuer den
+- Vier Instagram-Beitraege (1080x1440) mit Bildunterschriften. Fuer den
   Beitrag zu Johann liegt `johann-handy.webp` daneben: seine Seite am Telefon,
   abgeschnitten ueber der Karte „Platz fuer ein Foto“. Sobald seine Fotos drin
-  sind, neu aufnehmen. Profilbild auf Instagram ist das Signet. Anheften lassen
-  sich hoechstens drei Beitraege: geplant sind der persoenliche Beitrag mit
-  Gesicht, Johann und Kostenrechner; „Haltung“ laeuft normal. Der zuletzt
-  gepostete steht vorne.
+  sind, neu aufnehmen. Der Willkommensbeitrag nimmt `willkommen-foto.webp`
+  (gleicher Ausschnitt wie `foto.webp`, aber 640 px aus der Vorlage mit 1448 px)
+  und `willkommen-licht.webp`, einen Hintergrund aus Higgsfield (GPT Image 2.5,
+  3:4, Qualitaet high, 2K), auf 1080 px Breite verkleinert. Prompt: „Empty
+  photographic studio backdrop, hand-painted canvas in deep slate blue-grey
+  (#1b2a33), subtle mottled texture, a soft warm orange glow (#ff8a4c) like a
+  low sun halo centered slightly above the middle, fading gently into darkness
+  at the edges, minimal, calm, premium, editorial. No objects, no people, no
+  text, no logos.“
+- Profilbild auf Instagram ist das Signet. Anheften lassen sich hoechstens drei
+  Beitraege: Willkommen, Johann und Kostenrechner; „Haltung“ laeuft normal.
 - Signalorange traegt auf Weiss oder Papier keinen Text (Kontrast nur 2.0 bis
   2.3 zu 1), nur Flaechen, Linien und die Wortmarke. Fuer Druck auf hellem
   Grund ist ein tieferes Orange noch offen.

@@ -7,6 +7,7 @@ README unter "Markenpaket".
 """
 import datetime
 import json
+import math
 import re
 import shutil
 import subprocess
@@ -187,10 +188,23 @@ def linkedin():
 # ---------------------------------------------------------------- Instagram
 # Hochformat 3:4, so zeigt Instagram die Beitraege im Profilraster.
 IG_B, IG_H = 1080, 1440
-IG_TEXTE = """Bildunterschriften, zum Kopieren. Reihenfolge im Profil: zuerst 1, dann 2,
-dann 3 posten, dann erscheint 3 links. Anheften lassen sich höchstens drei.
+IG_TEXTE = """Bildunterschriften, zum Kopieren. Reihenfolge: 1 bis 4 nacheinander posten,
+der neueste steht im Profil links. Anheften lassen sich höchstens drei:
+Willkommen, Johann und Kostenrechner. Angeheftete stehen vor allen anderen.
 
-1 · Haltung
+1 · Willkommen
+Grüezi, ich bin Adrian.
+
+Mit formateins baue ich Websites für Selbstständige und kleine Unternehmen in Olten und der Region. Von Hand gebaut, ohne Baukasten, zum Festpreis.
+
+Hier zeige ich meine Arbeiten und was dahintersteckt. Schön, dass du da bist.
+
+Was deine Website kosten würde, siehst du in zwei Minuten auf formateins.ch. Link im Profil.
+
+#webdesign #olten #solothurn #selbstständig #kmu
+
+
+2 · Haltung
 Du machst gute Arbeit. Man müsste sie online auch sehen.
 
 Ich baue Websites für Selbstständige und kleine Unternehmen in Olten und der Region, die ihr Fach verstehen, online aber kaum stattfinden. Von Hand gebaut, zum Festpreis.
@@ -200,7 +214,7 @@ Was deine kosten würde, zeigt dir der Rechner in zwei Minuten. Link im Profil.
 #webdesign #olten #solothurn #selbstständig #kmu
 
 
-2 · Craniosacral Praxis Johann von Arb
+3 · Craniosacral Praxis Johann von Arb
 Eine Seite für die Craniosacral Praxis von Johann von Arb in Fulenbach. Von Hand gebaut, ohne Baukasten, und am Telefon genauso ruhig wie die Therapie selbst.
 
 Mehr Arbeiten auf formateins.ch.
@@ -208,7 +222,7 @@ Mehr Arbeiten auf formateins.ch.
 #webdesign #olten #fulenbach #craniosacral
 
 
-3 · Kostenrechner
+4 · Kostenrechner
 Was kostet meine Website? Sieben Fragen, danach siehst du einen Preisrahmen. Ohne Konto und ohne Telefonnummer. Wenn er passt, bekommst du ein Festpreisangebot.
 
 formateins.ch/kostenrechner, Link im Profil.
@@ -275,6 +289,40 @@ def ig_preis():
                 f'<h1>Was kostet meine Website?<span>Preisrahmen in zwei Minuten.</span></h1>'
                 f'<p>Sieben Fragen, ohne Konto und ohne Telefonnummer.</p>'
                 f'<div class="fuss"><div class="logo">{mono}</div><span>formateins.ch/kostenrechner →</span></div>', stil)
+
+
+def ig_ring(d, text, farbe, groesse=30):
+    # Laufende Schrift im Kreis wie um das Foto auf der Website. textLength
+    # verteilt den Text genau auf den Umfang, damit sich der Kreis schliesst.
+    r = d / 2 - groesse
+    pfad = f"M {d/2},{d/2+r} A {r},{r} 0 1,1 {d/2},{d/2-r} A {r},{r} 0 1,1 {d/2},{d/2+r}"
+    return (f'<svg class="ring" viewBox="0 0 {d} {d}"><defs><path id="ring" d="{pfad}"/></defs>'
+            f'<text fill="{farbe}" font-size="{groesse}"><textPath href="#ring" '
+            f'textLength="{2 * math.pi * r * 0.985:.1f}" lengthAdjust="spacing">{text}</textPath></text></svg>')
+
+
+def ig_willkommen():
+    # Hintergrund aus Higgsfield (Prompt im README). Das Foto ist derselbe
+    # Ausschnitt wie foto.webp, aber aus der Vorlage mit 640 statt 480 Pixeln.
+    grund = (HIER / "willkommen-licht.webp").as_uri()
+    foto = (HIER / "willkommen-foto.webp").as_uri()
+    stil = f"""
+    html,body{{width:{IG_B}px;height:{IG_H}px;overflow:hidden}}
+    body{{background:{F['grund']} url('{grund}') center/cover;color:{F['auf-grund']};font-family:"Schibsted Grotesk";position:relative}}
+    .logo{{position:absolute;left:50%;translate:-50% 0;top:100px;width:220px}}
+    .buehne{{position:absolute;left:50%;translate:-50% 0;top:260px;width:700px;height:700px}}
+    .ring{{position:absolute;inset:0;font-family:"Schibsted Grotesk";font-weight:600;letter-spacing:.14em}}
+    .foto{{position:absolute;inset:80px;border-radius:50%;overflow:hidden;box-shadow:0 50px 100px -30px rgba(0,0,0,.8)}}
+    .foto img{{display:block;width:100%;height:100%}}
+    .txt{{position:absolute;left:0;right:0;bottom:120px;text-align:center}}
+    h1{{font-family:"Playfair Display";font-weight:900;font-size:120px;letter-spacing:-.025em}}
+    p{{margin-top:14px;font-size:30px;font-weight:600;color:{F['auf-grund-still']};letter-spacing:.02em}}
+    """
+    # Tonal wie auf der Website: der Ring ist Signatur, nicht Ansage.
+    ring = ig_ring(700, "Adrian von Arb · Webdesign Olten · formateins · " * 2, "rgba(228,234,238,.5)", 24)
+    return html(f'<div class="logo">{WORT_DUNKEL}</div>'
+                f'<div class="buehne">{ring}<div class="foto"><img src="{foto}"></div></div>'
+                f'<div class="txt"><h1>Grüezi.</h1><p>Adrian von Arb · Webdesign aus Olten</p></div>', stil)
 
 
 # ---------------------------------------------------------------- Stylesheet
@@ -571,7 +619,7 @@ td i+i{{margin-right:2.5mm}}
         <div><code>logo/png</code><span>Für Word, PowerPoint, Canva. Durchsichtig oder mit Grund.</span></div>
         <div><code>signet</code><span>fe als Kachel oder frei gestellt.</span></div>
         <div><code>favicon</code><span>Browser-Symbol, Apple- und Android-Symbol, mit Einbau-Anleitung.</span></div>
-        <div><code>social</code><span>Profilbild, LinkedIn-Banner, Titelbild für das Google-Profil, Link-Vorschau, drei Instagram-Beiträge.</span></div>
+        <div><code>social</code><span>Profilbild, LinkedIn-Banner, Titelbild für das Google-Profil, Link-Vorschau, vier Instagram-Beiträge.</span></div>
         <div><code>web/formateins.css</code><span>Farben und Schriften als CSS-Variablen.</span></div>
       </div>
     </div>
@@ -658,7 +706,8 @@ def main():
     raster(buehne(1920, 1080, 1.6, None), 1920, 1080, paket / "social/google-titelbild-1920x1080.png", False)
     shutil.copy(REPO / "teilen.png", paket / "social/link-vorschau-1200x630.png")
     (paket / "social/instagram").mkdir()
-    for nr, (name, vorlage) in enumerate((("haltung", ig_haltung), ("johann", ig_arbeit), ("kostenrechner", ig_preis)), 1):
+    for nr, (name, vorlage) in enumerate((("willkommen", ig_willkommen), ("haltung", ig_haltung),
+                                          ("johann", ig_arbeit), ("kostenrechner", ig_preis)), 1):
         raster(vorlage(), IG_B, IG_H, paket / f"social/instagram/beitrag-{nr}-{name}-1080x1440.png", False)
     (paket / "social/instagram/bildunterschriften.txt").write_text(IG_TEXTE)
 
@@ -710,7 +759,7 @@ logo/png     Dieselben als Bild in 1000, 2000 und 4000 px Breite, durchsichtig.
 signet       fe, das Zeichen für kleine Flächen.
 favicon      Browser- und App-Symbole, Anleitung in EINBAUEN.txt.
 social       Profilbild, LinkedIn-Banner, Titelbild Google-Profil, Link-Vorschau.
-             instagram: drei Beiträge 3:4 mit Bildunterschriften.
+             instagram: vier Beiträge 3:4 mit Bildunterschriften.
 web          Farben und Schriften als CSS-Variablen.
 
 Schriften: Playfair Display und Schibsted Grotesk, beide kostenlos bei
