@@ -110,7 +110,11 @@ Schriften liegen selbst im Projekt (`schriften/`, `schriften.css`).
 - **Markenname** formateins. Auf swissreg.ch am 22.10.2026 geprüft, kein
   Konflikt. `formateins.ch` ist registriert. `format1.ch` als Umleitung
   darauf ist noch offen (fängt „eins“ als Ziffer ab).
-- **Kontaktweg** fehlt: keine E-Mail-Adresse, keine Telefonnummer hinterlegt.
+- **Kontaktweg:** `adrian@formateins.ch` (Postfach bei Hostpoint, seit
+  22.10.2026) steht im Fuss, im Abschnitt „Wer das macht“, in Impressum,
+  Datenschutz und JSON-LD. Telefonnummer fehlt noch. Bewusst nicht an Hotmail
+  weiterleiten: Weiterleitungen landen dort gern im Spam, und die
+  Datenschutzerklärung geht davon aus, dass Anfragen bei Hostpoint bleiben.
 - **Datenschutzerklaerung geht davon aus**, dass `EMPFAENGER` ein Postfach bei
   Hostpoint ist. Wird an Hotmail oder einen anderen Anbieter weitergeleitet,
   muss dieser dort genannt werden.
@@ -188,13 +192,12 @@ im Code mit `LIVEGANG` markiert — `grep -rn LIVEGANG .` findet sie alle.
    `www` umleiten, `canonical` und `og:url` einkommentieren und `og:image`
    auf die volle Adresse setzen (`https://www.formateins.ch/teilen.png`).
    Offen: `format1.ch` als Umleitung.
-3. **Versand einrichten.** Bei Hostpoint ein Postfach auf der eigenen Domain
-   anlegen, zum Beispiel `anfrage@formateins.ch`. In `anfrage.php` oben
-   `EMPFAENGER` (wo die Anfragen ankommen) und `ABSENDER` (dieses Postfach)
-   eintragen. Der Absender muss auf der eigenen Domain liegen, sonst landen die
-   Mails im Spam. In `kostenrechner.html` bei `VERSAND.mail` die eigene Adresse
-   als Rueckfallweg eintragen. Danach eine Testanfrage abschicken und pruefen,
-   ob sie ankommt, auch im Spam-Ordner nachsehen.
+3. **Versand testen.** `EMPFAENGER` und `ABSENDER` in `anfrage.php` sowie
+   `VERSAND.mail` in `kostenrechner.html` stehen auf `adrian@formateins.ch`.
+   Nach dem Hochladen auf Hostpoint eine Testanfrage abschicken und prüfen,
+   ob sie ankommt, auch im Spam-Ordner. Falls ein eigener Absender gewünscht
+   ist (`anfrage@formateins.ch`, zum Filtern), muss er bei Hostpoint als
+   Postfach existieren.
 4. **Adresse und Telefon** ergaenzen: im JSON-LD, in `impressum.html` und in
    `datenschutz.html` — `grep -rn AUSFUELLEN .` findet alle Stellen.
    Ein LocalBusiness ohne Adresse wird von Google weitgehend ignoriert.

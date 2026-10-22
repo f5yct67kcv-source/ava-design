@@ -4,12 +4,12 @@
 // keine Bibliothek, keine Datenbank. Anfragen werden nicht abgelegt, nur die
 // Bremse merkt sich eine Stunde lang einen Hash der IP und die Uhrzeit.
 
-// LIVEGANG: beide Adressen eintragen.
 // EMPFAENGER: wo die Anfragen ankommen sollen.
 // ABSENDER:   muss ein Postfach auf der eigenen Domain bei Hostpoint sein,
 //             sonst landen die Mails beim Empfaenger im Spam oder gar nicht.
-const EMPFAENGER = '';
-const ABSENDER   = '';
+//             Antworten gehen ueber Reply-To an den Kunden, nicht hierher.
+const EMPFAENGER = 'adrian@formateins.ch';
+const ABSENDER   = 'adrian@formateins.ch';
 
 // Hoechstens so viele Anfragen pro Absender-IP und Stunde.
 const GRENZE_PRO_STUNDE = 5;

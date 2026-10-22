@@ -645,11 +645,11 @@ const steuerung = document.getElementById('steuerung');
 // Wohin die Anfragen gehen.
 // ziel: anfrage.php beim Hoster schickt die Anfrage als Mail. Funktioniert nur
 //       dort — auf GitHub Pages laeuft kein PHP, der Versand schlaegt fehl.
-// mail: LIVEGANG: eigene Adresse eintragen. Rueckfallweg, falls ziel scheitert:
+// mail: Rueckfallweg, falls ziel scheitert:
 //       dann oeffnet sich das Mailprogramm des Besuchers mit fertiger Nachricht.
 const VERSAND = {
   ziel: 'anfrage.php',
-  mail: ''
+  mail: 'adrian@formateins.ch'
 };
 
 const antwort = {};   // schluessel -> wert
