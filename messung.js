@@ -38,7 +38,7 @@
   window.messen = (name, werte = {}) => {
     if (!geladen) return;
     gtag('event', name, werte);
-    if (name === 'anfrage_gesendet' && MESSUNG.ads && MESSUNG.adsLabel) gtag('event', 'conversion', { send_to: MESSUNG.ads + '/' + MESSUNG.adsLabel });
+    if ((name === 'anfrage_gesendet' || name === 'termin_gebucht') && MESSUNG.ads && MESSUNG.adsLabel) gtag('event', 'conversion', { send_to: MESSUNG.ads + '/' + MESSUNG.adsLabel });
   };
 
   // Klicks auf Mail und Telefon, ueberall auf der Seite. Nur der Weg, nicht die Adresse.

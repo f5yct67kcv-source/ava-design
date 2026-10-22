@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Gespräch vereinbaren — Webdesign Olten | formateins</title>
+<meta name="description" content="Ein Gespräch über deine Website, 30 Minuten am Telefon oder per Video. Tag und Zeit selbst wählen, sofort bestätigt.">
+
+<!-- LIVEGANG: diese Zeile entfernen, wie in index.html und kostenrechner.html. -->
+<meta name="robots" content="noindex,nofollow">
+
+<!-- LIVEGANG: einkommentieren, sobald die Seite unter der Domain laeuft.
+<link rel="canonical" href="https://www.formateins.ch/gespraech.html">
+<meta property="og:url" content="https://www.formateins.ch/gespraech.html">
+-->
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="de_CH">
+<meta property="og:site_name" content="formateins">
+<meta property="og:title" content="Gespräch vereinbaren — formateins">
+<meta property="og:description" content="30 Minuten am Telefon oder per Video. Tag und Zeit selbst wählen.">
+<!-- LIVEGANG: auf https://www.formateins.ch/teilen.png setzen. -->
+<meta property="og:image" content="teilen.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="formateins — Webdesign aus Olten und Region">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#1b2a33">
+
+<link rel="preload" href="schriften/schibsted-grotesk.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="schriften/playfair-display.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="schriften.css">
+<script src="messung.js" defer></script>
+
+<!--
+Die Termine kommen aus dem Kalender «Gespraeche» bei Hostpoint, ueber termine.php.
+Buchbar ist nur, was Adrian dort als «frei» eintraegt. Ohne Zugang (GitHub Pages,
+lokal) zeigt die Seite Telefon und Mail statt der Zeiten.
+-->
+
+<style>
+:root{
+  /* Muss mit der Startseite uebereinstimmen — Schiefer, Creme, Signalorange. */
+  --grund:#1b2a33;
+  --grund-tief:#0e1820;
+  --grund-licht:#2e4557;
+  --signal:#ff8a4c;
+  --signal-hell:#ff9f6d;
+  --auf-grund:#e4eaee;
+  --auf-grund-still:#a8b8c4;
+  --tinte:#15202a;
+  --linie:#2f4553;
+  --linie-hell:#3f5e70;
+  --txt-xs:.78rem;
+  --txt-s:.875rem;
+  --txt-m:.95rem;
+  --txt-base:1rem;
+  --txt-l:1.06rem;
+  --serif:"Playfair Display",Georgia,serif;
+  --sans:"Schibsted Grotesk",system-ui,-apple-system,sans-serif;
+  --spalte:min(940px,calc(100% - 2 * clamp(22px,5vw,56px)));
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;background:var(--grund-tief)}
+body{
+  background:radial-gradient(125% 95% at 10% 4%,var(--grund-licht) 0%,var(--grund) 50%,var(--grund-tief) 100%);
+  color:var(--auf-grund);
+  font-family:var(--sans);font-size:clamp(16px,1.04vw,17.5px);line-height:1.6;
+  -webkit-font-smoothing:antialiased;min-height:100svh;
+  display:flex;flex-direction:column;
+}
+a{color:inherit}
+::selection{background:var(--signal);color:var(--tinte)}
+:focus-visible{outline:2px solid var(--signal);outline-offset:3px;border-radius:2px}
+
+.spalte{width:var(--spalte);margin-inline:auto}
+h1,h2{font-family:var(--serif);font-weight:900;letter-spacing:-.022em;line-height:1.1}
+h1{font-size:clamp(2rem,4.4vw,3rem)}
+h2{font-size:clamp(1.5rem,2.6vw,2.1rem)}
+p{max-width:62ch}
+.still{color:var(--auf-grund-still)}
+
+.kopf{position:sticky;top:0;z-index:20;background:var(--grund-tief);border-bottom:1px solid var(--linie)}
+.kopf .spalte{display:flex;align-items:center;justify-content:space-between;gap:18px;height:60px}
+.logo{display:flex;align-items:baseline;font-weight:800;font-size:var(--txt-l);letter-spacing:-.02em;text-decoration:none}
+.logo .s{font-family:var(--sans);font-weight:700;letter-spacing:-.035em}
+.logo .p{font-family:var(--serif);font-weight:900;letter-spacing:-.01em;color:var(--signal)}
+.kopf .logo{font-size:clamp(1.3rem,1.9vw,1.6rem)}
+.zaehler{font-size:var(--txt-xs);letter-spacing:.13em;text-transform:uppercase;font-weight:700;color:var(--auf-grund-still)}
+
+.etikett{
+  display:flex;align-items:center;gap:14px;
+  font-size:var(--txt-xs);letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--auf-grund-still);
+}
+.etikett b{color:var(--signal);font-weight:800;letter-spacing:.08em}
+.etikett i{width:30px;height:1.5px;background:var(--signal)}
+
+main{flex:1;padding-block:clamp(34px,6vh,64px)}
+.einleitung h1{margin:18px 0 10px}
+.einleitung p{color:var(--auf-grund-still)}
+
+.raster{display:grid;gap:clamp(22px,3vw,36px);margin-top:clamp(26px,4vh,40px)}
+.raster>*{min-width:0}
+@media(min-width:860px){.raster{grid-template-columns:260px 1fr}}
+
+/* Zusammenfassung links, nur wo Platz ist. */
+.wer{display:none}
+@media(min-width:860px){
+  .wer{display:flex;flex-direction:column;gap:14px;padding:22px;border:1px solid var(--linie);background:rgba(255,255,255,.02);align-self:start;position:sticky;top:84px}
+}
+.wer img{width:64px;height:64px;border-radius:50%;object-fit:cover;object-position:50% 20%}
+.wer .name{font-weight:700}
+.wer dl{display:flex;flex-direction:column;gap:9px;font-size:var(--txt-s);color:var(--auf-grund-still);border-top:1px solid var(--linie);padding-top:14px}
+.wer dl div{display:flex;gap:10px;align-items:center}
+.wer svg{width:16px;height:16px;flex:none;color:var(--signal)}
+.wer dd b{color:var(--auf-grund);font-weight:600}
+
+.schritt{display:flex;flex-direction:column;gap:12px}
+.schritt+.schritt{margin-top:28px}
+
+.arten{display:grid;gap:12px}
+@media(min-width:560px){.arten{grid-template-columns:1fr 1fr}}
+.art{
+  display:flex;flex-direction:column;gap:4px;text-align:left;padding:16px 18px;
+  border:1px solid var(--linie-hell);background:transparent;color:var(--auf-grund);font:inherit;cursor:pointer;
+  transition:border-color .2s ease,background .2s ease;
+}
+.art:hover{border-color:var(--auf-grund-still)}
+.art b{font-size:var(--txt-base)}
+.art span{font-size:var(--txt-s);color:var(--auf-grund-still)}
+.art[aria-pressed="true"]{border-color:var(--signal);background:rgba(255,138,76,.08);box-shadow:inset 3px 0 0 var(--signal)}
+
+.tage{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px;scrollbar-width:none}
+.tage::-webkit-scrollbar{display:none}
+.tag{
+  flex:none;display:flex;flex-direction:column;align-items:center;gap:2px;width:80px;padding:10px 0;
+  border:1px solid var(--linie);background:transparent;color:var(--auf-grund);font:inherit;cursor:pointer;
+  transition:border-color .2s ease;
+}
+.tag:hover{border-color:var(--linie-hell)}
+.tag small{font-size:var(--txt-xs);letter-spacing:.12em;text-transform:uppercase;color:var(--auf-grund-still)}
+.tag b{font-family:var(--serif);font-size:1.15rem;line-height:1.2;font-variant-numeric:lining-nums}
+.tag em{font-style:normal;font-size:var(--txt-xs);color:var(--auf-grund-still)}
+.tag[aria-pressed="true"]{border-color:var(--signal);background:var(--signal);color:var(--tinte)}
+.tag[aria-pressed="true"] small,.tag[aria-pressed="true"] em{color:var(--tinte)}
+
+.zeiten{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px}
+.zeit{
+  padding:12px 0;border:1px solid var(--linie-hell);background:transparent;color:var(--auf-grund);
+  font:inherit;font-weight:600;font-variant-numeric:tabular-nums;cursor:pointer;transition:border-color .2s ease;
+}
+.zeit:hover{border-color:var(--auf-grund-still)}
+.zeit[aria-pressed="true"]{border-color:var(--signal);background:var(--signal);color:var(--tinte)}
+
+.hinweis{font-size:var(--txt-s);color:var(--auf-grund-still)}
+.hinweis a{color:var(--auf-grund)}
+.ersatz{padding:18px 20px;border:1px dashed var(--linie-hell);color:var(--auf-grund-still);font-size:var(--txt-m)}
+.ersatz a{color:var(--auf-grund)}
+[hidden]{display:none !important}
+
+.formular{display:flex;flex-direction:column;gap:14px}
+.paar{display:grid;gap:14px}
+@media(min-width:640px){.paar{grid-template-columns:1fr 1fr}}
+.feld{display:flex;flex-direction:column;gap:7px}
+.feld label{font-size:var(--txt-s);font-weight:700;color:var(--auf-grund-still)}
+.feld input{
+  background:var(--grund-tief);border:1px solid var(--linie);color:var(--auf-grund);
+  font:inherit;padding:13px 15px;width:100%;transition:border-color .2s ease;
+}
+.feld input:hover{border-color:var(--linie-hell)}
+.feld input::placeholder{color:#71889a}
+.feld [aria-invalid="true"]{border-color:var(--signal)}
+.fehlertext{font-size:var(--txt-s);font-weight:600;color:var(--signal)}
+.fehlertext:empty{display:none}
+.gewaehlt{font-weight:600}
+.gewaehlt:empty{display:none}
+@media(min-width:860px){.gewaehlt{display:none}}
+.formstatus{color:var(--signal);font-size:var(--txt-s)}
+.formstatus:empty{display:none}
+
+.knopf{
+  align-self:flex-start;display:inline-flex;align-items:center;gap:11px;
+  background:var(--signal);color:var(--tinte);font-weight:700;font-size:var(--txt-base);
+  padding:15px 25px;border:0;cursor:pointer;text-decoration:none;
+  transition:background .2s ease,transform .2s ease,box-shadow .2s ease,opacity .2s ease;
+}
+.knopf:hover:not(:disabled){background:var(--signal-hell);transform:translateY(-2px);box-shadow:0 14px 30px -14px rgba(255,138,76,.7)}
+.knopf:disabled{opacity:.38;cursor:not-allowed}
+.knopf .pfeil{transition:transform .2s ease}
+.knopf:hover:not(:disabled) .pfeil{transform:translateX(4px)}
+
+/* Bestaetigung, gleiche Karte wie im Kostenrechner. */
+.danke{
+  display:grid;grid-template-columns:auto 1fr;gap:6px clamp(14px,2vw,22px);
+  padding:clamp(22px,4vw,40px);border:1px solid var(--linie-hell);border-radius:6px;
+  background:rgba(255,122,61,.06);box-shadow:inset 3px 0 0 var(--signal);margin-top:clamp(26px,4vh,40px);
+}
+.danke:focus{outline:none}
+.danke .haken{
+  grid-row:1/3;width:clamp(44px,6vw,54px);height:clamp(44px,6vw,54px);border-radius:50%;
+  background:var(--signal);color:var(--grund-tief);display:grid;place-items:center;
+}
+.danke .haken svg{width:46%;height:46%}
+.danke h2{font-size:clamp(1.7rem,3.6vw,2.6rem);line-height:1.08;text-wrap:balance}
+.danke .unter{color:var(--auf-grund-still);font-size:var(--txt-m);max-width:56ch}
+.danke .unter b{color:var(--auf-grund)}
+.danke .fuss{grid-column:1/-1;margin-top:16px;font-size:var(--txt-s);color:var(--auf-grund-still)}
+.danke .fuss a{color:var(--auf-grund)}
+.danke .knopf{grid-column:1/-1;margin-top:18px}
+@media(prefers-reduced-motion:no-preference){
+  .danke:not([hidden]){animation:auftauchen .6s cubic-bezier(.16,1,.3,1)}
+  @keyframes auftauchen{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+}
+
+footer{border-top:1px solid var(--linie);background:var(--grund-tief);padding-block:28px;font-size:var(--txt-s)}
+footer .spalte{display:flex;flex-wrap:wrap;gap:14px 34px;justify-content:space-between;align-items:center}
+footer .logo{font-size:1.3rem}
+footer nav{display:flex;flex-wrap:wrap;gap:8px 22px;color:var(--auf-grund-still)}
+footer nav a{text-decoration:none}
+footer nav a:hover{color:var(--signal)}
+
+.nurleser{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+
+<header class="kopf">
+  <div class="spalte">
+    <a class="logo" href="index.html"><span class="s">format</span><span class="p">eins</span></a>
+    <span class="zaehler">Gespräch</span>
+  </div>
+</header>
+
+<main>
+  <div class="spalte">
+
+    <div class="einleitung" id="einleitung">
+      <p class="etikett"><i aria-hidden="true"></i>Gespräch vereinbaren</p>
+      <h1>Wann passt es dir?</h1>
+      <p>Wähle Art, Tag und Zeit. Du bekommst sofort eine Bestätigung mit Kalendereintrag.</p>
+    </div>
+
+    <div class="raster" id="buchung">
+      <aside class="wer" aria-label="Deine Wahl">
+        <img src="portrait.webp" alt="" width="64" height="64">
+        <div><div class="name">Adrian von Arb</div><div class="still" style="font-size:var(--txt-s)">formateins, Olten</div></div>
+        <dl>
+          <div><dt class="nurleser">Art</dt><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg><dd id="wahl-art"><b>Telefon</b>, ich rufe dich an</dd></div>
+          <div><dt class="nurleser">Dauer</dt><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><dd><span id="wahl-dauer">30</span> Minuten</dd></div>
+          <div><dt class="nurleser">Termin</dt><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="1.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><dd id="wahl-termin">Noch keine Zeit gewählt</dd></div>
+        </dl>
+      </aside>
+
+      <div>
+        <div class="schritt">
+          <p class="etikett"><b>01</b><i aria-hidden="true"></i>Wie</p>
+          <div class="arten" role="group" aria-label="Art des Gesprächs">
+            <button class="art" type="button" data-art="telefon" aria-pressed="true"><b>Telefon</b><span>30 Minuten. Ich rufe dich an.</span></button>
+            <button class="art" type="button" data-art="video" aria-pressed="false"><b>Video</b><span>30 Minuten per Zoom.</span></button>
+          </div>
+        </div>
+
+        <div class="schritt">
+          <p class="etikett"><b>02</b><i aria-hidden="true"></i>Wann</p>
+          <p class="hinweis" id="laden">Freie Zeiten werden geladen …</p>
+          <div class="ersatz" id="ersatz" hidden></div>
+          <div class="tage" id="tage" role="group" aria-label="Tag" hidden></div>
+          <div class="zeiten" id="zeiten" role="group" aria-label="Uhrzeit" hidden></div>
+        </div>
+
+        <div class="schritt">
+          <p class="etikett"><b>03</b><i aria-hidden="true"></i>Wer</p>
+          <form class="formular" id="formular" novalidate>
+            <div class="paar">
+              <div class="feld">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required autocomplete="name" placeholder="Vor- und Nachname" aria-describedby="name-fehler">
+                <span class="fehlertext" id="name-fehler"></span>
+              </div>
+              <div class="feld">
+                <label for="tel">Telefon</label>
+                <input type="tel" id="tel" name="tel" required autocomplete="tel" placeholder="079 000 00 00" aria-describedby="tel-fehler">
+                <span class="fehlertext" id="tel-fehler"></span>
+              </div>
+            </div>
+            <div class="feld">
+              <label for="mail">E-Mail</label>
+              <input type="email" id="mail" name="mail" required autocomplete="email" placeholder="name@betrieb.ch" aria-describedby="mail-fehler">
+              <span class="fehlertext" id="mail-fehler"></span>
+            </div>
+            <div class="nurleser" aria-hidden="true">
+              <label for="gotcha">Nicht ausfüllen</label>
+              <input type="text" id="gotcha" name="_gotcha" tabindex="-1" autocomplete="off">
+            </div>
+            <p class="gewaehlt" id="gewaehlt"></p>
+            <button class="knopf" type="submit" id="senden">Termin buchen<span class="pfeil">→</span></button>
+            <p class="formstatus" id="formstatus" role="status" aria-live="polite"></p>
+            <p class="hinweis">Absagen geht jederzeit über den Link in der Bestätigung. Deine Angaben verwende ich nur für dieses Gespräch, mehr dazu im <a href="datenschutz.html#gespraech">Datenschutz</a>.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="danke" id="danke" hidden tabindex="-1" role="status">
+      <div class="haken" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+      <h2 id="danke-titel">Danke.</h2>
+      <p class="unter" id="danke-text"></p>
+      <p class="fuss">Etwas dazwischengekommen? Schreib an <a href="mailto:adrian@formateins.ch">adrian@formateins.ch</a> oder ruf an: <a href="tel:+41796868486">079 686 84 86</a>.</p>
+    </div>
+
+    <div class="danke" id="absage" hidden tabindex="-1">
+      <div class="haken" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M7 7l10 10M17 7L7 17"/></svg></div>
+      <h2 id="absage-titel">Termin absagen?</h2>
+      <p class="unter" id="absage-text">Die Zeit wird wieder frei, und ich bekomme eine Nachricht. Danach kannst du gleich einen neuen Termin wählen.</p>
+      <button class="knopf" type="button" id="absage-knopf">Ja, absagen</button>
+      <p class="fuss" id="absage-fuss" hidden><a href="gespraech.html">Neuen Termin wählen</a></p>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <div class="spalte">
+    <a class="logo" href="index.html" aria-label="formateins, zur Startseite"><span class="s">format</span><span class="p">eins</span></a>
+    <nav><a href="index.html">Startseite</a><a href="kostenrechner.html">Kostenrechner</a><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a><a href="#" data-cookies hidden>Cookies</a></nav>
+    <span class="still">© 2026 formateins, eine Marke der pzu consulting gmbh</span>
+  </div>
+</footer>
+
+<script>
+const ZIEL = 'termine.php';
+const TELEFON = '<a href="tel:+41796868486">079 686 84 86</a>';
+const MAIL = '<a href="mailto:adrian@formateins.ch">adrian@formateins.ch</a>';
+const messen = (name, werte) => { if (window.messen) window.messen(name, werte); };
+
+const WOCHENTAGE = ['So','Mo','Di','Mi','Do','Fr','Sa'];
+const WOCHENTAGE_LANG = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+const MONATE = ['Jan.','Feb.','März','Apr.','Mai','Juni','Juli','Aug.','Sept.','Okt.','Nov.','Dez.'];
+const MONATE_LANG = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+const datum = (iso) => { const [j, m, t] = iso.split('-').map(Number); return new Date(j, m - 1, t); };
+const kurz = (iso) => { const d = datum(iso); return d.getDate() + '. ' + MONATE[d.getMonth()]; };
+const lang = (iso, zeit) => { const d = datum(iso); return WOCHENTAGE_LANG[d.getDay()] + ', ' + d.getDate() + '. ' + MONATE_LANG[d.getMonth()] + ', ' + zeit; };
+
+const wahl = { art: 'telefon', tag: null, zeit: null };
+let tage = {};
+
+const el = (id) => document.getElementById(id);
+
+function wahlZeigen(){
+  el('wahl-art').innerHTML = wahl.art === 'telefon' ? '<b>Telefon</b>, ich rufe dich an' : '<b>Video</b>, per Zoom';
+  const text = wahl.zeit ? lang(wahl.tag, wahl.zeit) : '';
+  el('wahl-termin').innerHTML = text ? '<b>' + text + '</b>' : 'Noch keine Zeit gewählt';
+  el('gewaehlt').textContent = text ? text + ' · ' + (wahl.art === 'telefon' ? 'Telefon' : 'Video') : '';
+}
+
+function ersatz(text){
+  el('laden').hidden = true;
+  el('tage').hidden = el('zeiten').hidden = true;
+  el('ersatz').innerHTML = text;
+  el('ersatz').hidden = false;
+}
+
+function tageZeigen(){
+  const box = el('tage');
+  box.innerHTML = '';
+  for (const iso of Object.keys(tage)) {
+    const d = datum(iso);
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'tag'; b.dataset.tag = iso;
+    b.setAttribute('aria-pressed', String(iso === wahl.tag));
+    const frei = tage[iso].length;
+    b.innerHTML = '<small>' + WOCHENTAGE[d.getDay()] + '</small><b>' + kurz(iso) + '</b><em>' + frei + ' frei</em>';
+    b.setAttribute('aria-label', lang(iso, frei + ' Zeiten frei'));
+    box.append(b);
+  }
+  box.hidden = false;
+}
+
+function zeitenZeigen(){
+  const box = el('zeiten');
+  box.innerHTML = '';
+  for (const z of tage[wahl.tag] || []) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'zeit'; b.dataset.zeit = z; b.textContent = z;
+    b.setAttribute('aria-pressed', String(z === wahl.zeit));
+    box.append(b);
+  }
+  box.hidden = false;
+}
+
+async function laden(){
+  try {
+    const r = await fetch(ZIEL, { headers: { Accept: 'application/json' } });
+    const d = await r.json();
+    if (!r.ok || !d.ok) throw new Error(d.grund || r.status);
+    tage = d.tage || {};
+    if (d.dauer) el('wahl-dauer').textContent = d.dauer;
+  } catch (fehler) {
+    ersatz('Die Terminwahl ist gerade nicht erreichbar. Ruf mich an, ' + TELEFON + ', oder schreib an ' + MAIL + '.');
+    return;
+  }
+  if (!Object.keys(tage).length) {
+    ersatz('In den nächsten Wochen ist gerade alles belegt. Ruf mich an, ' + TELEFON + ', oder schreib an ' + MAIL + ', dann finden wir eine Zeit.');
+    return;
+  }
+  el('laden').hidden = true;
+  if (!wahl.tag || !tage[wahl.tag]) { wahl.tag = Object.keys(tage)[0]; wahl.zeit = null; }
+  tageZeigen();
+  zeitenZeigen();
+  wahlZeigen();
+}
+
+document.querySelector('.arten').addEventListener('click', (e) => {
+  const b = e.target.closest('.art'); if (!b) return;
+  wahl.art = b.dataset.art;
+  document.querySelectorAll('.art').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  wahlZeigen();
+});
+el('tage').addEventListener('click', (e) => {
+  const b = e.target.closest('.tag'); if (!b) return;
+  wahl.tag = b.dataset.tag; wahl.zeit = null;
+  el('tage').querySelectorAll('.tag').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  zeitenZeigen(); wahlZeigen();
+});
+el('zeiten').addEventListener('click', (e) => {
+  const b = e.target.closest('.zeit'); if (!b) return;
+  wahl.zeit = b.dataset.zeit;
+  el('zeiten').querySelectorAll('.zeit').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  el('formstatus').textContent = '';
+  wahlZeigen();
+});
+
+// Gleiche Regeln wie im Kostenrechner und in termine.php.
+function telPruefen(){
+  const tel = el('tel');
+  const wert = tel.value.trim();
+  tel.setCustomValidity(/^[+0-9 ()\/.\-]+$/.test(wert) && wert.replace(/\D/g, '').length >= 8 ? '' : 'Telefon');
+}
+el('tel').addEventListener('input', telPruefen);
+
+function pruefen(){
+  telPruefen();
+  const pflicht = [
+    ['name', 'Wie darf ich dich ansprechen?'],
+    ['tel', 'Damit ich dich erreiche, brauche ich eine Nummer mit mindestens acht Ziffern.'],
+    ['mail', 'An diese Adresse geht die Bestätigung. Bitte prüfen.']
+  ];
+  let erstes = null;
+  for (const [id, meldung] of pflicht) {
+    const feld = el(id);
+    feld.value = feld.value.trim();
+    const ok = feld.checkValidity();
+    feld.setAttribute('aria-invalid', ok ? 'false' : 'true');
+    el(id + '-fehler').textContent = ok ? '' : meldung;
+    if (!ok && !erstes) erstes = feld;
+  }
+  if (erstes) erstes.focus();
+  return !erstes;
+}
+['name','tel','mail'].forEach(id => el(id).addEventListener('input', e => {
+  if (e.target.getAttribute('aria-invalid') === 'true' && e.target.checkValidity()) {
+    e.target.setAttribute('aria-invalid', 'false');
+    el(id + '-fehler').textContent = '';
+  }
+}));
+
+function kartenZeigen(karte){
+  el('einleitung').hidden = true;
+  el('buchung').hidden = true;
+  karte.hidden = false;
+  karte.focus({ preventScroll: true });
+  scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+}
+
+el('formular').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const status = el('formstatus');
+  if (!wahl.zeit) { status.textContent = 'Wähle oben zuerst einen Tag und eine Zeit.'; return; }
+  if (!pruefen()) return;
+
+  const daten = new FormData(el('formular'));
+  daten.append('aktion', 'buchen');
+  daten.append('art', wahl.art);
+  daten.append('datum', wahl.tag);
+  daten.append('zeit', wahl.zeit);
+  daten.append('dauer', Math.round(performance.now()));
+
+  el('senden').disabled = true;
+  status.textContent = 'Wird gebucht …';
+  try {
+    const r = await fetch(ZIEL, { method: 'POST', body: daten, headers: { Accept: 'application/json' } });
+    const d = await r.json();
+    if (r.status === 409) {
+      status.textContent = 'Diese Zeit hat gerade jemand anderes gebucht. Wähle bitte eine andere.';
+      el('senden').disabled = false;
+      wahl.zeit = null; wahlZeigen();
+      laden();
+      return;
+    }
+    if (!r.ok || !d.ok) throw new Error(d.grund || r.status);
+    const vorname = el('name').value.trim().split(/\s+/)[0];
+    el('danke-titel').innerHTML = (vorname ? 'Danke, ' + vorname.replace(/[<>&"]/g, '') + '.' : 'Danke.') + '<br>' + (d.vorbehalt ? 'Dein Wunsch ist da.' : 'Wir sprechen uns.');
+    const wann = lang(wahl.tag, wahl.zeit);
+    el('danke-text').innerHTML = d.vorbehalt
+      ? 'Dein Wunschtermin <b>' + wann + '</b> ist bei mir. Ich trage ihn ein und bestätige ihn dir per Mail.'
+      : '<b>' + wann + '</b>, ' + (wahl.art === 'telefon' ? 'ich rufe dich an.' : 'per Video.') + ' Die Bestätigung mit Kalendereintrag ist unterwegs. Siehst du sie nicht, schau im Spam-Ordner nach.';
+    kartenZeigen(el('danke'));
+    messen('termin_gebucht', { art: wahl.art });
+  } catch (fehler) {
+    el('senden').disabled = false;
+    status.innerHTML = 'Das hat leider nicht geklappt. Ruf mich an, ' + TELEFON + ', oder schreib an ' + MAIL + '.';
+  }
+});
+
+// Absage ueber den Link aus der Bestaetigung: gespraech.html?absagen=…&t=…
+const suche = new URLSearchParams(location.search);
+if (suche.get('absagen')) {
+  kartenZeigen(el('absage'));
+  el('absage-knopf').addEventListener('click', async () => {
+    const knopf = el('absage-knopf');
+    knopf.disabled = true;
+    const daten = new FormData();
+    daten.append('aktion', 'absagen');
+    daten.append('uid', suche.get('absagen'));
+    daten.append('t', suche.get('t') || '');
+    try {
+      const r = await fetch(ZIEL, { method: 'POST', body: daten, headers: { Accept: 'application/json' } });
+      const d = await r.json();
+      if (r.status === 403) throw new Error('link');
+      if (!r.ok || !d.ok) throw new Error(d.grund || r.status);
+      el('absage-titel').textContent = d.schon ? 'Schon abgesagt.' : 'Abgesagt.';
+      el('absage-text').textContent = d.schon
+        ? 'Dieser Termin war bereits abgesagt.'
+        : (d.wann ? 'Dein Termin am ' + d.wann + ' ist gestrichen. ' : 'Dein Termin ist gestrichen. ') + 'Danke, dass du Bescheid gibst.';
+      knopf.hidden = true;
+      el('absage-fuss').hidden = false;
+    } catch (fehler) {
+      knopf.disabled = false;
+      el('absage-text').innerHTML = fehler.message === 'link'
+        ? 'Dieser Link stimmt nicht. Schreib mir kurz an ' + MAIL + ', dann sage ich den Termin ab.'
+        : 'Das hat leider nicht geklappt. Schreib mir kurz an ' + MAIL + ' oder ruf an, ' + TELEFON + '.';
+    }
+  });
+} else {
+  laden();
+}
+</script>

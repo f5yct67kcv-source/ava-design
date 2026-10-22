@@ -13,6 +13,8 @@ Schriften liegen selbst im Projekt (`schriften/`, `schriften.css`).
 | `index.html` | Startseite |
 | `kostenrechner.html` | Kostenrechner, sieben Fragen, Preisrahmen vor dem Formular |
 | `anfrage.php` | Nimmt die Anfrage aus dem Rechner an und schickt sie als Mail |
+| `gespraech.html`, `termine.php` | Terminbuchung, siehe „Gespräch vereinbaren“ unten |
+| `kalender-zugang.php` | Platzhalter für den Kalenderzugang, der Upload füllt ihn aus den Secrets |
 | `messung.js` | Banner und Messung mit Google, ausgeschaltet bis eine Kennung steht |
 | `impressum.html`, `datenschutz.html` | Rechtsseiten, gemeinsame Gestaltung in `recht.css`, dauerhaft `noindex` |
 | `foto.webp`, `portrait.webp` | Fotos, siehe unten |
@@ -161,6 +163,8 @@ Secrets im Repository (Settings → Secrets and variables → Actions):
 | `HOSTPOINT_FTP_HOST` | `sl250.web.hostpoint.ch` (Webhosting itufeden), nicht `ftp.formateins.ch`, sonst passt das Zertifikat nicht |
 | `FORMATEINS_FTP_USER` | `deploy@formateins.ch`, Pfad `/home/itufeden/www/formateins.ch` |
 | `FORMATEINS_FTP_PASSWORD` | dessen Passwort |
+| `KALENDER_BENUTZER` | `adrian@formateins.ch`, Anmeldung bei Hostpoint Cloud Office |
+| `KALENDER_PASSWORT` | dessen Passwort. Ändert es sich, hier nachführen, sonst geht jede Buchung nur als Mail ein. Alte Absage-Links werden dann ungültig |
 
 Der FTP-Benutzer ist bewusst auf den einen Ordner beschränkt: Gelangt das
 Passwort je nach aussen, kommt man damit nur an diese Seite.
@@ -178,6 +182,40 @@ Actions → «Website zu Hostpoint» → Run workflow.
 
 GitHub Pages läuft parallel weiter, als Vorschau. Nach dem Livegang
 abschalten (Settings → Pages), sonst steht die Seite doppelt im Netz.
+
+## Gespräch vereinbaren
+
+`gespraech.html` zeigt freie Zeiten und bucht sie, `termine.php` holt sie per
+CalDAV aus dem Kalender «Gespräche» in Hostpoint Cloud Office
+(`https://caldav.hostpoint.ch/caldav/Y2FsOi8vMC8xMDE/`). Kein fremder Dienst,
+nichts eingebettet: «0 Cookies» und «Gehostet in der Schweiz» bleiben wahr.
+
+**Bedienung, nur im Kalender:**
+- Termin mit Titel **frei** = in diesem Fenster ist buchbar. Feste Zeiten als
+  wiederkehrender Termin (wöchentlich, auch mit Ausnahmen).
+- **Alles andere** im Kalender «Gespräche» blockiert, auch ganztägig
+  («gesperrt») und die gebuchten Gespräche selbst.
+- Ohne «frei» ist nichts buchbar. TimeTree (Familienkalender) hat keine
+  Schnittstelle, darum gibt Adrian nur frei, was dort frei ist.
+
+**Regeln** zuoberst in `termine.php`: 30 Minuten, 15 Minuten Puffer, ab morgen,
+vier Wochen voraus. Ein Fenster 14–17 Uhr ergibt 14:00, 14:45, 15:30, 16:15.
+Arten: Telefon oder Video (Zoom). `VIDEO_LINK` leer = Link kommt von Hand.
+
+**Ablauf einer Buchung:** Zeit unter Sperre nochmals prüfen, Termin per PUT in
+den Kalender, Mail an Adrian, Bestätigung an den Kunden (HTML, `termin.ics`,
+Absage-Link mit HMAC). Ist der Kalender nicht erreichbar, geht der Wunsch als
+Mail an Adrian („NICHT eingetragen“) und der Kunde sieht „ich bestätige per
+Mail“. Absagen über `gespraech.html?absagen=…&t=…` löscht den Termin.
+
+**Zugang:** `KALENDER_BENUTZER`/`KALENDER_PASSWORT` als Secrets, der Workflow
+schreibt sie beim Upload in `kalender-zugang.php` (per `.htaccess` gesperrt).
+Ohne Secrets zeigt die Seite Telefon und Mail statt Zeiten, ebenso auf GitHub
+Pages und lokal.
+
+**Lokal testen:** `termine.php` mit geänderter `KALENDER`-Adresse gegen einen
+nachgebauten CalDAV-Server (`php -S` mit Router, der REPORT/PUT/GET/DELETE auf
+Dateien abbildet), Mails über `sendmail_path` in Dateien.
 
 ## Messung und Banner (Google)
 
@@ -209,6 +247,7 @@ Einschalten, wenn die Google-Kampagne startet.
 | `rechner_frage` mit `nr` | jede Frage beim ersten Beantworten | Trichter: wo steigen Leute aus |
 | `anfrage_gesendet` | erst wenn `anfrage.php` den Eingang bestätigt | Hauptziel, Conversion |
 | `kontakt_klick` mit `weg` | Klick auf Mail- oder Telefonlink, auf allen Seiten | Nebenziel |
+| `termin_gebucht` mit `art` | erst wenn `termine.php` die Buchung bestätigt | Hauptziel, Conversion wie `anfrage_gesendet` |
 
 Formularinhalte gehen nie an Google, auch nicht die Antworten im Rechner,
 nur die Nummer der Frage. Die Mail-Rückfalllösung zählt nicht als Anfrage,
@@ -239,7 +278,7 @@ etwas an Cookies, Anbieter oder Datenübermittlung, dort nachführen.
 Die SEO-Grundlage steht, aber sie ist bewusst stillgelegt. Alle Schalter sind
 im Code mit `LIVEGANG` markiert — `grep -rn LIVEGANG .` findet sie alle.
 
-1. **noindex entfernen** in `index.html` und `kostenrechner.html`. Solange die
+1. **noindex entfernen** in `index.html`, `kostenrechner.html` und `gespraech.html`. Solange die
    Zeile steht, bleibt die Seite aus dem Suchindex. Das ist Absicht: mit
    Platzhalterpreisen und toten Links waere eine Indexierung schaedlich, weil
    Google die Entwurfsfassung behaelt und sie spaeter gegen die echte Domain

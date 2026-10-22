@@ -8,6 +8,12 @@ Options -Indexes
   Require all denied
 </Files>
 
+# Zugang zum Kalender, nur fuer termine.php. Lieferte ohnehin nichts aus,
+# sicherheitshalber trotzdem gesperrt.
+<Files "kalender-zugang.php">
+  Require all denied
+</Files>
+
 # Immer https und immer www.formateins.ch. Faengt auch die Adresse ohne www
 # und spaeter format1.ch ab, wenn sie aufs selbe Hosting zeigt.
 # Setzt ein aktives SSL-Zertifikat bei Hostpoint voraus.
