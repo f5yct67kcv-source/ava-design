@@ -1,0 +1,70 @@
+name: Website zu Hostpoint
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Nie zwei Uploads gleichzeitig, sonst kommt sich die Abgleichsdatei in die Quere.
+concurrency:
+  group: deploy-hostpoint
+  cancel-in-progress: false
+
+jobs:
+  pruefen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: PHP bereitstellen
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
+      # Kein Upload mit kaputter Syntax. Lokal laeuft kein PHP-Server.
+      - name: Syntax pruefen
+        run: |
+          php -l anfrage.php
+          node --check messung.js
+
+  deploy:
+    needs: pruefen
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Alles ausser dem, was nur ins Repository gehoert. Neue Dateien kommen
+      # so von selbst mit, eintragen muss man hier nur Ausnahmen.
+      - name: Auslieferung zusammenstellen
+        run: |
+          rsync -a \
+            --exclude '.git/' --exclude '.github/' --exclude '.claude/' \
+            --exclude '.gitignore' --exclude 'archiv/' --exclude 'quellen/' \
+            --exclude 'README.md' --exclude 'htaccess-hostpoint' --exclude 'dist/' \
+            ./ dist/
+          cp htaccess-hostpoint dist/.htaccess
+          find dist -type f | sort
+
+      - name: Zugangsdaten vorhanden?
+        env:
+          HOST: ${{ secrets.HOSTPOINT_FTP_HOST }}
+          BENUTZER: ${{ secrets.FORMATEINS_FTP_USER }}
+          PASSWORT: ${{ secrets.FORMATEINS_FTP_PASSWORD }}
+        run: |
+          fehlt=""
+          [ -z "$HOST" ] && fehlt="$fehlt HOSTPOINT_FTP_HOST"
+          [ -z "$BENUTZER" ] && fehlt="$fehlt FORMATEINS_FTP_USER"
+          [ -z "$PASSWORT" ] && fehlt="$fehlt FORMATEINS_FTP_PASSWORD"
+          if [ -n "$fehlt" ]; then echo "Diese Secrets fehlen im Repository:$fehlt"; exit 1; fi
+
+      - name: Nach Hostpoint hochladen (FTPS)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.HOSTPOINT_FTP_HOST }}
+          username: ${{ secrets.FORMATEINS_FTP_USER }}
+          password: ${{ secrets.FORMATEINS_FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: ./dist/
+          # Der FTP-Benutzer ist bei Hostpoint auf den Ordner von formateins.ch
+          # eingeschraenkt, darum hier nur "/".
+          server-dir: /
