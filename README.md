@@ -37,7 +37,17 @@ Schriften liegen selbst im Projekt (`schriften/`, `schriften.css`).
 - **Versand der Anfragen** laeuft ueber `anfrage.php` beim Hoster (Hostpoint).
   Das Skript prueft die Angaben, schickt sie als Mail und legt keine Anfrage ab. Es
   bremst nach fuenf Anfragen pro Stunde und Absender, faengt Spam-Programme ueber
-  ein unsichtbares Feld ab und nimmt nur Anfragen von der eigenen Seite an.
+  ein unsichtbares Feld und eine Zeitfalle ab (unter acht Sekunden Seitenzeit gibt
+  es ein falsches „ok“) und nimmt nur Anfragen von der eigenen Seite an.
+- **Bestaetigung an den Kunden** schickt `anfrage.php` erst, wenn die Anfrage bei
+  mir raus ist: HTML mit Textfassung, Preisrahmen und Antworten, Antworten gehen an
+  adrian@formateins.ch. Gegen Missbrauch als Spam-Schleuder steht darin nichts
+  frei Eingegebenes ausser einem geprueften Vornamen, keine Bemerkung, kein
+  Betrieb, keine URL. Die Antworttexte kommen aus `ANTWORTEN` in `anfrage.php`
+  (muss zu den `data-wert` im Rechner passen), nicht aus dem mitgeschickten Text.
+  Hoechstens eine Bestaetigung pro Adresse und Tag, keine bei Links im Namen.
+  Lokal testen: `php -d sendmail_path=… ` mit einem Skript, das die Mail in eine
+  Datei schreibt.
   Auf GitHub Pages laeuft kein PHP, dort schlaegt der Versand bewusst fehl.
 - **Fotos** sind drin, aus einer Vorlage mit 1448 Pixel Breite: `foto.webp`
   (480 x 480, runder Platz im ersten Bild) und `portrait.webp` (680 x 850, 4:5,

@@ -1014,6 +1014,10 @@ formular.addEventListener('submit', async (e) => {
   daten.append('rahmen', rahmenText);
   if (separat.length) daten.append('separat', separat.join(', '));
   for (const k of Object.keys(titelFuerVersand)) if (beschriftung[k]) daten.append(k, antwortText(k));
+  // Fuer die Bestaetigung an den Kunden: nur die Kennungen, die Texte setzt der Server.
+  for (const k of Object.keys(titelFuerVersand)) if (antwort[k]) daten.append('wert_' + k, antwort[k]);
+  // Fuer die Zeitfalle in anfrage.php: wie lange die Seite schon offen ist.
+  daten.append('dauer', Math.round(performance.now()));
 
   senden.disabled = true;
   formstatus.textContent = 'Wird gesendet …';
