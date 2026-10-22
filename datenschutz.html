@@ -14,6 +14,8 @@
 <link rel="preload" href="schriften/playfair-display.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="schriften.css">
 <link rel="stylesheet" href="recht.css">
+<!-- Banner und Messung. Tut nichts, solange in messung.js keine Kennung steht. -->
+<script src="messung.js" defer></script>
 
 <header class="kopf">
   <div class="spalte">
@@ -27,7 +29,10 @@
     <h1>Datenschutz</h1>
     <p class="stand">Stand: Oktober 2026</p>
 
-    <p class="kurz">Kurz gesagt: Diese Website setzt keine Cookies, misst keine Besuche, zeigt keine Werbung und lädt nichts von fremden Servern. Persönliche Angaben bekomme ich nur, wenn du mir über den Kostenrechner schreibst, und dann verwende ich sie nur, um dir zu antworten.</p>
+    <!-- Zwei Fassungen: messung.js zeigt "an", sobald dort eine Google-Kennung steht.
+         Ohne Kennung oder ohne JavaScript bleibt "aus" stehen, und das stimmt dann auch. -->
+    <p class="kurz" data-messung="aus">Kurz gesagt: Diese Website setzt keine Cookies, misst keine Besuche, zeigt keine Werbung und lädt nichts von fremden Servern. Persönliche Angaben bekomme ich nur, wenn du mir über den Kostenrechner schreibst, und dann verwende ich sie nur, um dir zu antworten.</p>
+    <p class="kurz" data-messung="an" hidden>Kurz gesagt: Diese Website setzt Cookies nur, wenn du zustimmst. Dann misst Google, wie die Seite genutzt wird und ob meine Werbung wirkt. Ohne Zustimmung lädt nichts von Google. Persönliche Angaben bekomme ich nur, wenn du mir über den Kostenrechner schreibst, und dann verwende ich sie nur, um dir zu antworten.</p>
 
     <h2>Wer verantwortlich ist</h2>
     <!-- LIVEGANG: Adresse und E-Mail eintragen (AUSFUELLEN). -->
@@ -42,7 +47,8 @@
     <h2>Wenn du die Website besuchst</h2>
     <p>Die Website liegt bei der Hostpoint AG in Rapperswil-Jona, auf Servern in der Schweiz. Wie bei jedem Webserver werden dort bei jedem Aufruf technische Angaben protokolliert: deine IP-Adresse, Datum und Uhrzeit, die aufgerufene Seite sowie Browser und Betriebssystem. Das dient dem Betrieb und der Sicherheit der Website. Wie lange Hostpoint diese Protokolle aufbewahrt, steht in der Datenschutzerklärung von Hostpoint.</p>
 
-    <p>Alles, was die Website zum Anzeigen braucht, auch die Schriften, kommt von diesem einen Server in der Schweiz. Es gibt keine Verbindungen zu anderen Anbietern, keine Cookies, keine Besucherstatistik, keine eingebetteten Inhalte von sozialen Netzwerken und keine Werbung.</p>
+    <p data-messung="aus">Alles, was die Website zum Anzeigen braucht, auch die Schriften, kommt von diesem einen Server in der Schweiz. Es gibt keine Verbindungen zu anderen Anbietern, keine Cookies, keine Besucherstatistik, keine eingebetteten Inhalte von sozialen Netzwerken und keine Werbung.</p>
+    <p data-messung="an" hidden>Alles, was die Website zum Anzeigen braucht, auch die Schriften, kommt von diesem einen Server in der Schweiz. Andere Anbieter kommen nur ins Spiel, wenn du der Messung zustimmst, siehe <a href="#messung">Messung und Werbung</a>. Es gibt keine eingebetteten Inhalte von sozialen Netzwerken.</p>
 
     <h2>Wenn du den Kostenrechner nutzt</h2>
     <p>Der Preisrahmen wird in deinem Browser berechnet. Solange du das Formular nicht abschickst, verlässt keine deiner Antworten dein Gerät.</p>
@@ -55,6 +61,20 @@
     <p>Die Angaben gehen an den Server bei Hostpoint und von dort als E-Mail in mein Postfach. Auf dem Server selbst wird die Anfrage nicht gespeichert. Um massenhaften Missbrauch des Formulars zu verhindern, merkt sich der Server eine Stunde lang einen aus deiner IP-Adresse abgeleiteten Wert, nicht die Adresse selbst, zusammen mit der Uhrzeit.</p>
     <p>Klappt der Versand nicht, öffnet sich auf Wunsch dein eigenes Mailprogramm mit der fertigen Nachricht. Dann läuft die Nachricht über deinen E-Mail-Anbieter.</p>
     <p>Ich verwende deine Angaben, um deine Anfrage zu beantworten und dir ein Angebot zu machen. Kein Newsletter, keine Weitergabe an Dritte.</p>
+
+    <section id="messung" data-messung="an" hidden>
+      <h2>Messung und Werbung</h2>
+      <p>Ich schalte Werbung bei Google. Um zu sehen, ob sie Anfragen bringt, nutze ich Google Analytics und Google Ads. Anbieter ist die Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland. Beides lädt erst, wenn du im Banner „Akzeptieren“ wählst. Lehnst du ab, entsteht keine Verbindung zu Google.</p>
+      <p>Mit deiner Zustimmung erfährt Google:</p>
+      <ul>
+        <li>welche Seiten du aufrufst und woher du kommst, zum Beispiel über eine Anzeige oder die Google-Suche</li>
+        <li>Gerät, Browser und ungefähre Region</li>
+        <li>ob du den Kostenrechner startest, welche Fragen du beantwortest und ob du eine Anfrage abschickst. Gezählt wird nur die Nummer der Frage, nicht deine Antwort.</li>
+      </ul>
+      <p>Was du ins Formular schreibst, also Name, E-Mail, Antworten und Preisrahmen, geht nie an Google.</p>
+      <p>Google setzt dafür Cookies in deinem Browser, die bis zu zwei Jahre gültig sind, und kann die Angaben nutzen, um dir später Anzeigen von mir zu zeigen. In Google Analytics werden die Daten nach 14 Monaten gelöscht. Google kann Daten auch in den USA bearbeiten. Google LLC ist nach dem Swiss-U.S. Data Privacy Framework zertifiziert, das der Bundesrat als angemessenen Schutz anerkennt. Mehr dazu in der <a href="https://policies.google.com/privacy">Datenschutzerklärung von Google</a>.</p>
+      <p>Deine Wahl speichert die Website in deinem Browser, nicht als Cookie, damit der Banner nicht bei jedem Besuch erscheint. Nach zwölf Monaten fragt sie wieder. Ändern kannst du sie jederzeit über „Cookies“ unten auf jeder Seite. Lehnst du nachträglich ab, löscht die Website die Cookies von Google.</p>
+    </section>
 
     <h2>Wie lange ich Daten aufbewahre</h2>
     <p>Kommt kein Auftrag zustande, lösche ich deine Anfrage spätestens nach zwölf Monaten. Wird daraus ein Auftrag, bewahre ich die Unterlagen so lange auf, wie das Projekt und die gesetzlichen Aufbewahrungspflichten es verlangen, für Geschäftsunterlagen sind das zehn Jahre.</p>
@@ -95,7 +115,7 @@
       </div>
     </div>
     <div class="rechtliches">
-      <nav><a href="impressum.html">Impressum</a><a href="datenschutz.html" aria-current="page">Datenschutz</a></nav>
+      <nav><a href="impressum.html">Impressum</a><a href="datenschutz.html" aria-current="page">Datenschutz</a><a href="#" data-cookies hidden>Cookies</a></nav>
       <span>© 2026 formateins · Webdesign aus Olten</span>
     </div>
   </div>

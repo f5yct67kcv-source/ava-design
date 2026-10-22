@@ -13,6 +13,7 @@ Schriften liegen selbst im Projekt (`schriften/`, `schriften.css`).
 | `index.html` | Startseite |
 | `kostenrechner.html` | Kostenrechner, sieben Fragen, Preisrahmen vor dem Formular |
 | `anfrage.php` | Nimmt die Anfrage aus dem Rechner an und schickt sie als Mail |
+| `messung.js` | Banner und Messung mit Google, ausgeschaltet bis eine Kennung steht |
 | `impressum.html`, `datenschutz.html` | Rechtsseiten, gemeinsame Gestaltung in `recht.css`, dauerhaft `noindex` |
 | `foto.webp`, `portrait.webp` | Fotos, siehe unten |
 | `arbeiten/` | Aufnahmen der Projekte für die Werkbank, siehe unten |
@@ -113,6 +114,61 @@ Schriften liegen selbst im Projekt (`schriften/`, `schriften.css`).
 - **Datenschutzerklaerung geht davon aus**, dass `EMPFAENGER` ein Postfach bei
   Hostpoint ist. Wird an Hotmail oder einen anderen Anbieter weitergeleitet,
   muss dieser dort genannt werden.
+
+## Messung und Banner (Google)
+
+Gebaut, aber ausgeschaltet. `messung.js` liegt auf allen vier Seiten und tut
+nichts, solange oben in `MESSUNG` keine Kennung steht: kein Banner, keine
+Verbindung zu Google, die Datenschutzerklärung zeigt die Fassung ohne Messung.
+Einschalten, wenn die Google-Kampagne startet.
+
+**Entschieden (22.10.2026):**
+
+- Google zuerst, Meta später.
+- Google laedt erst nach „Akzeptieren“. Vorher geht keine einzige Anfrage an
+  Google. Bewusst nicht der erweiterte Einwilligungsmodus, in dem Google auch
+  ohne Zustimmung Signale ohne Cookies schickt und fehlende Conversions schätzt.
+- Banner als Leiste unten. Titel „Cookies“, Text „Ich nutze Cookies, um zu
+  sehen, ob meine Werbung wirkt. Nur wenn du zustimmst.“, Link zum Datenschutz.
+  Google steht nicht im Banner, aber in der Datenschutzerklärung.
+- Knöpfe „Ablehnen“ und „Akzeptieren“, gleich gross.
+- Die Wahl liegt zwölf Monate im Browser (localStorage, kein Cookie). Link
+  „Cookies“ im Fuss jeder Seite öffnet den Banner wieder. Wer nachträglich
+  ablehnt, dessen Google-Cookies werden gelöscht.
+
+**Gezählt wird** (im Kostenrechner, über `messen()` aus `messung.js`):
+
+| Ereignis | Wann | Rolle |
+|---|---|---|
+| `page_view` | jeder Seitenaufruf, kommt vom Google-Tag | automatisch |
+| `rechner_start` | erste Antwort im Rechner | Nebenziel |
+| `rechner_frage` mit `nr` | jede Frage beim ersten Beantworten | Trichter: wo steigen Leute aus |
+| `anfrage_gesendet` | erst wenn `anfrage.php` den Eingang bestätigt | Hauptziel, Conversion |
+
+Formularinhalte gehen nie an Google, auch nicht die Antworten im Rechner,
+nur die Nummer der Frage. Die Mail-Rückfalllösung zählt nicht als Anfrage,
+weil niemand weiss, ob die Mail abgeschickt wurde. Klicks auf Mail und
+Telefon kommen dazu, sobald die Kontaktdaten auf der Seite stehen.
+
+**Einschalten:**
+
+1. In Google Analytics eine Property anlegen, Mess-ID `G-…` in
+   `MESSUNG.analytics` eintragen. Unter Datenaufbewahrung 14 Monate
+   einstellen, so steht es in der Datenschutzerklärung.
+2. `anfrage_gesendet` in Analytics als Schlüsselereignis markieren.
+3. In Google Ads die Conversion-ID `AW-…` in `MESSUNG.ads` eintragen. Die
+   Conversion „Anfrage gesendet“ entweder aus Analytics importieren (dann
+   `adsLabel` leer lassen) oder in Ads anlegen und das Label in
+   `MESSUNG.adsLabel` eintragen. Nicht beides, sonst zählt sie doppelt.
+4. Testen: Seite öffnen, akzeptieren, Rechner durchspielen, eine Anfrage
+   schicken und in Analytics unter Echtzeit nachsehen.
+
+Zum Ansehen ohne Kennung: `?banner-test` an die Adresse hängen. Dann
+erscheint der Banner, geladen wird nichts.
+
+Die Datenschutzerklärung hat dafür zwei Fassungen (`data-messung="aus"` und
+`"an"`). `messung.js` schaltet um, sobald eine Kennung steht. Ändert Google
+etwas an Cookies, Anbieter oder Datenübermittlung, dort nachführen.
 
 ## Vor dem Livegang
 

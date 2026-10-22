@@ -47,6 +47,8 @@
 <link rel="preload" href="schriften/schibsted-grotesk.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="schriften/playfair-display.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="schriften.css">
+<!-- Banner und Messung. Tut nichts, solange in messung.js keine Kennung steht. -->
+<script src="messung.js" defer></script>
 
 <!--
 THESIS: Der Rechner qualifiziert, statt Kontaktdaten abzugreifen. Der Preis steht
@@ -561,7 +563,7 @@ footer nav a:hover{color:var(--signal)}
 <footer>
   <div class="spalte">
     <a class="logo" href="index.html" aria-label="formateins, zur Startseite"><span class="s">format</span><span class="p">eins</span></a>
-    <nav><a href="index.html">Startseite</a><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></nav>
+    <nav><a href="index.html">Startseite</a><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a><a href="#" data-cookies hidden>Cookies</a></nav>
     <span class="still">© 2026 formateins · Webdesign aus Olten</span>
   </div>
 </footer>
@@ -679,6 +681,10 @@ function zeichnen(){
   ansage.textContent = 'Frage ' + (dran + 1) + ' von ' + fragen.length + ': ' + fragen[dran].querySelector('h1').textContent;
 }
 
+// Ohne messung.js oder ohne Zustimmung laeuft messen ins Leere.
+const messen = (name, werte) => { if (window.messen) window.messen(name, werte); };
+const gezaehlt = new Set();
+
 fragen.forEach(frage => {
   const schluessel = frage.dataset.schluessel;
   frage.querySelectorAll('.antwort').forEach(knopf => {
@@ -688,6 +694,10 @@ fragen.forEach(frage => {
       knopf.setAttribute('aria-pressed', 'true');
       antwort[schluessel] = knopf.dataset.wert;
       beschriftung[schluessel] = knopf.dataset.text;
+
+      // Messung: erste Antwort ueberhaupt, dann jede Frage einmal, nur mit Nummer.
+      if (!gezaehlt.size) messen('rechner_start');
+      if (!gezaehlt.has(schluessel)) { gezaehlt.add(schluessel); messen('rechner_frage', { nr: fragen.indexOf(frage) + 1 }); }
 
       // Zusatzfelder tauchen nur auf, wenn die Antwort sie braucht.
       const url = document.getElementById('urlfeld');
@@ -898,6 +908,7 @@ formular.addEventListener('submit', async (e) => {
     const antwortServer = await fetch(VERSAND.ziel, { method:'POST', body:daten, headers:{ Accept:'application/json' } });
     if (!antwortServer.ok) throw new Error(antwortServer.status);
     dankeZeigen();
+    messen('anfrage_gesendet');
   } catch (fehler) {
     senden.disabled = false;
     ueberMailprogramm('Das hat leider nicht geklappt.');
