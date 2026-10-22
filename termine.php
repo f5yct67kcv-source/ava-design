@@ -487,7 +487,7 @@ $frei = freieZeiten();
 $uid = 'formateins-' . bin2hex(random_bytes(10));
 $titel = 'Gespräch: ' . $name . ' (' . ARTEN[$art] . ')';
 $raum = $art === 'video' ? VIDEO_RAUM . bin2hex(random_bytes(8)) : '';
-$beschreibung = "Telefon: $telefon\nE-Mail: $mail\nArt: " . ARTEN[$art] . ($raum !== '' ? "\nVideo: $raum" : '') . "\n\nGebucht über formateins.ch/gespraech.html";
+$beschreibung = "Telefon: $telefon\nE-Mail: $mail\nArt: " . ARTEN[$art] . ($raum !== '' ? "\nVideo: $raum" : '') . "\n\nGebucht über formateins.ch/gespraech";
 $eingetragen = false;
 
 if ($frei !== null) {
@@ -525,7 +525,7 @@ $anrede = $vorname !== '' ? 'Danke, ' . $vorname . '.' : 'Danke.';
 $wie = $art === 'telefon'
   ? 'Ich rufe dich unter ' . $telefon . ' an.'
   : 'Per Video über kMeet, direkt im Browser, ohne Konto und ohne Installation.';
-$absagen = SEITE . '/gespraech.html?absagen=' . $uid . '&t=' . schluessel($uid);
+$absagen = SEITE . '/gespraech?absagen=' . $uid . '&t=' . schluessel($uid);
 $text = "$anrede Wir sprechen uns.\n\nDein Termin: $wann\n$wie\n" . ($raum !== '' ? "Video-Raum: $raum\n" : '') . "\nDer Termin hängt als Kalendereintrag an dieser Mail.\nPasst es doch nicht? Hier absagen und einfach neu buchen:\n$absagen\n\nBis bald\nAdrian von Arb\n" . TELEFON . " · formateins.ch";
 $icsKunde = icsTermin($uid, $beginn, 'Gespräch mit Adrian von Arb, formateins', $wie . ($raum !== '' ? "\n" . $raum : '') . "\n\nAbsagen: " . $absagen, 'PUBLISH', $raum);
 try {

@@ -22,6 +22,24 @@ RewriteCond %{HTTPS} off [OR]
 RewriteCond %{HTTP_HOST} !^www\.formateins\.ch$ [NC]
 RewriteRule ^ https://www.formateins.ch%{REQUEST_URI} [R=301,L]
 
+# Adressen ohne .html: /gespraech statt /gespraech.html. Wer die alte Form
+# aufruft (Lesezeichen, Absage-Links in schon verschickten Mails), wird
+# dauerhaft umgeleitet, die Angaben nach dem ? bleiben erhalten. THE_REQUEST
+# ist die Anfrage des Browsers, nicht das Ergebnis der Regel darunter, darum
+# entsteht keine Schleife.
+RewriteCond %{THE_REQUEST} \s/+index\.html[\s?]
+RewriteRule ^ / [R=301,L]
+RewriteCond %{THE_REQUEST} \s/+([^\s?]+)\.html[\s?]
+RewriteRule ^ /%1 [R=301,L]
+# Schraegstrich am Ende weg, ausser bei echten Ordnern.
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)/$ /$1 [R=301,L]
+# Die kurze Adresse intern wieder auf die Datei legen. Das Muster endet nie auf
+# /, sonst haengt Apache .html an "gespraech/" und dreht sich im Kreis.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.*[^/])$ $1.html [L]
+
 # Seiten, Stil und Skript immer frisch nachfragen, damit Aenderungen sofort
 # sichtbar sind. Schriften aendern sich nie, Bilder selten (die Werkbank
 # zaehlt bei neuen Aufnahmen ?v= hoch).

@@ -10,8 +10,8 @@
 <meta name="robots" content="noindex,nofollow">
 
 <!-- LIVEGANG: einkommentieren, sobald die Seite unter der Domain laeuft.
-<link rel="canonical" href="https://www.formateins.ch/gespraech.html">
-<meta property="og:url" content="https://www.formateins.ch/gespraech.html">
+<link rel="canonical" href="https://www.formateins.ch/gespraech">
+<meta property="og:url" content="https://www.formateins.ch/gespraech">
 -->
 
 <meta property="og:type" content="website">
@@ -228,7 +228,7 @@ footer nav a:hover{color:var(--signal)}
 
 <header class="kopf">
   <div class="spalte">
-    <a class="logo" href="index.html"><span class="s">format</span><span class="p">eins</span></a>
+    <a class="logo" href="./"><span class="s">format</span><span class="p">eins</span></a>
     <span class="zaehler">Gespräch</span>
   </div>
 </header>
@@ -297,7 +297,7 @@ footer nav a:hover{color:var(--signal)}
             <p class="gewaehlt" id="gewaehlt"></p>
             <button class="knopf" type="submit" id="senden">Termin buchen<span class="pfeil">→</span></button>
             <p class="formstatus" id="formstatus" role="status" aria-live="polite"></p>
-            <p class="hinweis">Absagen geht jederzeit über den Link in der Bestätigung. Deine Angaben verwende ich nur für dieses Gespräch, mehr dazu im <a href="datenschutz.html#gespraech">Datenschutz</a>.</p>
+            <p class="hinweis">Absagen geht jederzeit über den Link in der Bestätigung. Deine Angaben verwende ich nur für dieses Gespräch, mehr dazu im <a href="datenschutz#gespraech">Datenschutz</a>.</p>
           </form>
         </div>
       </div>
@@ -315,7 +315,7 @@ footer nav a:hover{color:var(--signal)}
       <h2 id="absage-titel">Termin absagen?</h2>
       <p class="unter" id="absage-text">Die Zeit wird wieder frei, und ich bekomme eine Nachricht. Danach kannst du gleich einen neuen Termin wählen.</p>
       <button class="knopf" type="button" id="absage-knopf">Ja, absagen</button>
-      <p class="fuss" id="absage-fuss" hidden><a href="gespraech.html">Neuen Termin wählen</a></p>
+      <p class="fuss" id="absage-fuss" hidden><a href="gespraech">Neuen Termin wählen</a></p>
     </div>
 
   </div>
@@ -323,8 +323,8 @@ footer nav a:hover{color:var(--signal)}
 
 <footer>
   <div class="spalte">
-    <a class="logo" href="index.html" aria-label="formateins, zur Startseite"><span class="s">format</span><span class="p">eins</span></a>
-    <nav><a href="index.html">Startseite</a><a href="kostenrechner.html">Kostenrechner</a><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a><a href="#" data-cookies hidden>Cookies</a></nav>
+    <a class="logo" href="./" aria-label="formateins, zur Startseite"><span class="s">format</span><span class="p">eins</span></a>
+    <nav><a href="./">Startseite</a><a href="kostenrechner">Kostenrechner</a><a href="impressum">Impressum</a><a href="datenschutz">Datenschutz</a><a href="#" data-cookies hidden>Cookies</a></nav>
     <span class="still">© 2026 formateins, eine Marke der pzu consulting gmbh</span>
   </div>
 </footer>
@@ -520,7 +520,7 @@ el('formular').addEventListener('submit', async (e) => {
   }
 });
 
-// Absage ueber den Link aus der Bestaetigung: gespraech.html?absagen=…&t=…
+// Absage ueber den Link aus der Bestaetigung: /gespraech?absagen=…&t=…
 const suche = new URLSearchParams(location.search);
 if (suche.get('absagen')) {
   kartenZeigen(el('absage'));

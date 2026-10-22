@@ -88,7 +88,7 @@
       leiste.className = 'zustimmung';
       leiste.setAttribute('role', 'region');
       leiste.setAttribute('aria-label', 'Cookies');
-      leiste.innerHTML = '<div class="text"><b>Cookies</b><p>Ich nutze Cookies, um zu sehen, ob meine Werbung wirkt. Nur wenn du zustimmst. <a href="datenschutz.html#messung">Datenschutz</a></p></div>'
+      leiste.innerHTML = '<div class="text"><b>Cookies</b><p>Ich nutze Cookies, um zu sehen, ob meine Werbung wirkt. Nur wenn du zustimmst. <a href="datenschutz#messung">Datenschutz</a></p></div>'
         + '<div class="knoepfe"><button class="nein" type="button">Ablehnen</button><button class="ja" type="button">Akzeptieren</button></div>';
       leiste.querySelector('.ja').addEventListener('click', () => { merken('ja'); leiste.hidden = true; laden(); });
       leiste.querySelector('.nein').addEventListener('click', () => {

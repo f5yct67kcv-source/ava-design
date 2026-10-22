@@ -184,6 +184,16 @@ Actions → «Website zu Hostpoint» → Run workflow.
 GitHub Pages läuft parallel weiter, als Vorschau. Nach dem Livegang
 abschalten (Settings → Pages), sonst steht die Seite doppelt im Netz.
 
+### Adressen ohne .html
+
+Die Seiten heissen `/kostenrechner`, `/gespraech`, `/impressum`, `/datenschutz`.
+Die Dateien behalten ihre Endung, `.htaccess` legt die kurze Adresse intern auf
+die Datei und leitet die alte Form mit 301 um (Angaben nach `?` bleiben, also
+funktionieren auch Absage-Links aus alten Mails). `/index.html` geht auf `/`.
+Interne Links stehen ohne Endung und relativ (`gespraech`, `./#angebot`), damit
+sie auch in der Vorschau auf GitHub Pages laufen. Geprueft mit einem lokalen
+Apache und denselben Regeln.
+
 ## Gespräch vereinbaren
 
 `gespraech.html` zeigt freie Zeiten und bucht sie, `termine.php` holt sie per
@@ -209,7 +219,7 @@ der Bestätigung, im Kalendereintrag (Ort) und in Adrians Mail.
 den Kalender, Mail an Adrian, Bestätigung an den Kunden (HTML, `termin.ics`,
 Absage-Link mit HMAC). Ist der Kalender nicht erreichbar, geht der Wunsch als
 Mail an Adrian („NICHT eingetragen“) und der Kunde sieht „ich bestätige per
-Mail“. Absagen über `gespraech.html?absagen=…&t=…` löscht den Termin.
+Mail“. Absagen über `/gespraech?absagen=…&t=…` löscht den Termin.
 
 **Zugang:** `KALENDER_BENUTZER`/`KALENDER_PASSWORT` als Secrets, der Workflow
 schreibt sie beim Upload in `kalender-zugang.php` (per `.htaccess` gesperrt).
@@ -385,7 +395,9 @@ und danach ausgeschnitten.
 ## Lokal ansehen
 
 ```bash
-python3 -m http.server 8000
+php -S 127.0.0.1:8000 -t . quellen/lokal.php
 ```
 
-Dann `http://localhost:8000` öffnen.
+Dann `http://localhost:8000` öffnen. Der Router `quellen/lokal.php` liefert die
+Seiten wie Hostpoint ohne `.html` aus; ein einfacher `python3 -m http.server`
+kennt `/gespraech` nicht. Formular und Terminbuchung schicken lokal nichts ab.
