@@ -20,9 +20,9 @@ const TELEFON    = '079 686 84 86';
 // Fest, nicht aus dem Host-Kopf: sonst liesse sich der Absage-Link in der
 // Bestaetigung auf eine fremde Seite umbiegen.
 const SEITE      = 'https://www.formateins.ch';
-// Zoom-Link fuer Video-Gespraeche, steht in der Bestaetigung. Leer: Adrian
-// schickt den Link von Hand.
-const VIDEO_LINK = '';
+// Video ueber kMeet (Infomaniak, Genf): Jede Buchung bekommt einen eigenen,
+// nicht erratbaren Raum. Kein Konto noetig, weder fuer Adrian noch fuer Gaeste.
+const VIDEO_RAUM = 'https://kmeet.infomaniak.com/formateins-';
 
 const DAUER_MIN       = 30;  // Laenge eines Gespraechs
 const PUFFER_MIN      = 15;  // Abstand zu allem anderen im Kalender
@@ -324,7 +324,7 @@ function icsZeilen(array $zeilen): string {
   return $aus;
 }
 
-function icsTermin(string $uid, DateTimeImmutable $beginn, string $titel, string $beschreibung, string $methode = ''): string {
+function icsTermin(string $uid, DateTimeImmutable $beginn, string $titel, string $beschreibung, string $methode = '', string $raum = ''): string {
   $utc = fn(DateTimeImmutable $d) => $d->setTimezone(new DateTimeZone('UTC'))->format('Ymd\THis\Z');
   $zeilen = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//formateins//Termine//DE'];
   if ($methode !== '') $zeilen[] = 'METHOD:' . $methode;
@@ -335,10 +335,10 @@ function icsTermin(string $uid, DateTimeImmutable $beginn, string $titel, string
     'DTSTART:' . $utc($beginn),
     'DTEND:' . $utc($beginn->modify('+' . DAUER_MIN . ' minutes')),
     'SUMMARY:' . icsEscape($titel),
-    'DESCRIPTION:' . icsEscape($beschreibung),
-    'END:VEVENT',
-    'END:VCALENDAR'
+    'DESCRIPTION:' . icsEscape($beschreibung)
   );
+  if ($raum !== '') array_push($zeilen, 'LOCATION:' . icsEscape($raum), 'URL:' . $raum);
+  array_push($zeilen, 'END:VEVENT', 'END:VCALENDAR');
   return icsZeilen($zeilen);
 }
 
@@ -380,11 +380,12 @@ function mailSenden(string $an, string $betreff, string $text, string $html = ''
 }
 
 // Bestaetigung an den Kunden, gleiche Gestalt wie die aus anfrage.php.
-function bestaetigungHtml(string $anrede, string $wann, string $wie, string $absagen): string {
+function bestaetigungHtml(string $anrede, string $wann, string $wie, string $absagen, string $raum = ''): string {
   $h = fn(string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
   $serif = "Georgia,'Times New Roman',serif";
   $sans  = 'Helvetica,Arial,sans-serif';
   $etikett = "margin:0;font-family:$sans;font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:700";
+  $raumHtml = $raum === '' ? '' : '<p style="margin:14px 0 0"><a href="' . $h($raum) . '" style="display:inline-block;background:#0f1a21;color:#ffffff;font-family:' . $sans . ';font-size:14px;font-weight:700;text-decoration:none;padding:11px 18px;border-radius:4px">Zum Video-Raum</a></p>';
   return <<<HTML
 <!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>Dein Gespräch ist gebucht</title></head>
 <body style="margin:0;padding:0;background:#ecebe7">
@@ -401,6 +402,7 @@ function bestaetigungHtml(string $anrede, string $wann, string $wie, string $abs
         <p style="$etikett;color:#6b7a83">Dein Termin</p>
         <p style="margin:6px 0 0;font-family:$serif;font-size:24px;line-height:1.25;color:#0f1a21;font-weight:700">{$h($wann)}</p>
         <p style="margin:8px 0 0;font-family:$sans;font-size:15px;line-height:1.5;color:#3b4a53">{$h($wie)}</p>
+        $raumHtml
       </td></tr>
     </table>
     <p style="margin:14px 0 0;font-family:$sans;font-size:13px;line-height:1.5;color:#6b7a83">Der Termin hängt als Kalendereintrag an dieser Mail. Passt es doch nicht? <a href="{$h($absagen)}" style="color:#0f1a21">Hier absagen</a> und einfach neu buchen.</p>
@@ -484,7 +486,8 @@ flock($sperre, LOCK_EX);
 $frei = freieZeiten();
 $uid = 'formateins-' . bin2hex(random_bytes(10));
 $titel = 'Gespräch: ' . $name . ' (' . ARTEN[$art] . ')';
-$beschreibung = "Telefon: $telefon\nE-Mail: $mail\nArt: " . ARTEN[$art] . "\n\nGebucht über formateins.ch/gespraech.html";
+$raum = $art === 'video' ? VIDEO_RAUM . bin2hex(random_bytes(8)) : '';
+$beschreibung = "Telefon: $telefon\nE-Mail: $mail\nArt: " . ARTEN[$art] . ($raum !== '' ? "\nVideo: $raum" : '') . "\n\nGebucht über formateins.ch/gespraech.html";
 $eingetragen = false;
 
 if ($frei !== null) {
@@ -492,7 +495,7 @@ if ($frei !== null) {
     flock($sperre, LOCK_UN);
     ende(409, ['grund' => 'Zeit nicht mehr frei']);
   }
-  [$code] = dav('PUT', KALENDER . $uid . '.ics', icsTermin($uid, $beginn, $titel, $beschreibung),
+  [$code] = dav('PUT', KALENDER . $uid . '.ics', icsTermin($uid, $beginn, $titel, $beschreibung, '', $raum),
     ['Content-Type: text/calendar; charset=utf-8', 'If-None-Match: *']);
   $eingetragen = in_array($code, [200, 201, 204], true);
 }
@@ -513,7 +516,7 @@ if (!$eingetragen) {
 }
 
 mailSenden(EMPFAENGER, 'Neues Gespräch: ' . $name . ', ' . $beginn->format('d.m. H:i'),
-  "$wann\nArt: " . ARTEN[$art] . "\n\nName: $name\nTelefon: $telefon\nE-Mail: $mail\n\nSteht im Kalender «Gespräche».", '', '', $mail);
+  "$wann\nArt: " . ARTEN[$art] . ($raum !== '' ? "\nVideo-Raum: $raum" : '') . "\n\nName: $name\nTelefon: $telefon\nE-Mail: $mail\n\nSteht im Kalender «Gespräche».", '', '', $mail);
 
 // Bestaetigung an den Kunden. Vorname nur, wenn er wie einer aussieht (siehe anfrage.php).
 $vorname = mb_substr(preg_split('/\s+/u', $name)[0] ?? '', 0, 30);
@@ -521,13 +524,13 @@ if (!preg_match('/^[\p{L}][\p{L}\'’\-\.]*$/u', $vorname)) $vorname = '';
 $anrede = $vorname !== '' ? 'Danke, ' . $vorname . '.' : 'Danke.';
 $wie = $art === 'telefon'
   ? 'Ich rufe dich unter ' . $telefon . ' an.'
-  : (VIDEO_LINK !== '' ? 'Per Zoom: ' . VIDEO_LINK : 'Per Video. Den Link schicke ich dir vorher per Mail.');
+  : 'Per Video über kMeet, direkt im Browser, ohne Konto und ohne Installation.';
 $absagen = SEITE . '/gespraech.html?absagen=' . $uid . '&t=' . schluessel($uid);
-$text = "$anrede Wir sprechen uns.\n\nDein Termin: $wann\n$wie\n\nDer Termin hängt als Kalendereintrag an dieser Mail.\nPasst es doch nicht? Hier absagen und einfach neu buchen:\n$absagen\n\nBis bald\nAdrian von Arb\n" . TELEFON . " · formateins.ch";
-$icsKunde = icsTermin($uid, $beginn, 'Gespräch mit Adrian von Arb, formateins', $wie . "\n\nAbsagen: " . $absagen, 'PUBLISH');
+$text = "$anrede Wir sprechen uns.\n\nDein Termin: $wann\n$wie\n" . ($raum !== '' ? "Video-Raum: $raum\n" : '') . "\nDer Termin hängt als Kalendereintrag an dieser Mail.\nPasst es doch nicht? Hier absagen und einfach neu buchen:\n$absagen\n\nBis bald\nAdrian von Arb\n" . TELEFON . " · formateins.ch";
+$icsKunde = icsTermin($uid, $beginn, 'Gespräch mit Adrian von Arb, formateins', $wie . ($raum !== '' ? "\n" . $raum : '') . "\n\nAbsagen: " . $absagen, 'PUBLISH', $raum);
 try {
   mailSenden($mail, 'Dein Gespräch am ' . $beginn->format('j.n.') . ' um ' . $beginn->format('H:i') . ' · formateins',
-    $text, bestaetigungHtml($anrede, $wann, $wie, $absagen), $icsKunde);
+    $text, bestaetigungHtml($anrede, $wann, $wie, $absagen, $raum), $icsKunde);
 } catch (Throwable $e) {
   error_log('Terminbestaetigung: ' . $e->getMessage());
 }

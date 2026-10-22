@@ -258,7 +258,7 @@ footer nav a:hover{color:var(--signal)}
           <p class="etikett"><b>01</b><i aria-hidden="true"></i>Wie</p>
           <div class="arten" role="group" aria-label="Art des Gesprächs">
             <button class="art" type="button" data-art="telefon" aria-pressed="true"><b>Telefon</b><span>30 Minuten. Ich rufe dich an.</span></button>
-            <button class="art" type="button" data-art="video" aria-pressed="false"><b>Video</b><span>30 Minuten per Zoom.</span></button>
+            <button class="art" type="button" data-art="video" aria-pressed="false"><b>Video</b><span>30 Minuten per kMeet, im Browser, ohne Konto.</span></button>
           </div>
         </div>
 
@@ -349,7 +349,7 @@ let tage = {};
 const el = (id) => document.getElementById(id);
 
 function wahlZeigen(){
-  el('wahl-art').innerHTML = wahl.art === 'telefon' ? '<b>Telefon</b>, ich rufe dich an' : '<b>Video</b>, per Zoom';
+  el('wahl-art').innerHTML = wahl.art === 'telefon' ? '<b>Telefon</b>, ich rufe dich an' : '<b>Video</b>, per kMeet';
   const text = wahl.zeit ? lang(wahl.tag, wahl.zeit) : '';
   el('wahl-termin').innerHTML = text ? '<b>' + text + '</b>' : 'Noch keine Zeit gewählt';
   el('gewaehlt').textContent = text ? text + ' · ' + (wahl.art === 'telefon' ? 'Telefon' : 'Video') : '';

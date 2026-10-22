@@ -201,7 +201,9 @@ nichts eingebettet: «0 Cookies» und «Gehostet in der Schweiz» bleiben wahr.
 
 **Regeln** zuoberst in `termine.php`: 30 Minuten, 15 Minuten Puffer, ab morgen,
 vier Wochen voraus. Ein Fenster 14–17 Uhr ergibt 14:00, 14:45, 15:30, 16:15.
-Arten: Telefon oder Video (Zoom). `VIDEO_LINK` leer = Link kommt von Hand.
+Arten: Telefon oder Video über kMeet (Infomaniak, Schweiz): jede Buchung bekommt
+den eigenen Raum `VIDEO_RAUM` + 16 Zufallszeichen, ohne Konto. Der Link steht in
+der Bestätigung, im Kalendereintrag (Ort) und in Adrians Mail.
 
 **Ablauf einer Buchung:** Zeit unter Sperre nochmals prüfen, Termin per PUT in
 den Kalender, Mail an Adrian, Bestätigung an den Kunden (HTML, `termin.ics`,
