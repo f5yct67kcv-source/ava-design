@@ -230,6 +230,7 @@ p{max-width:62ch}
 .feld textarea{min-height:96px;resize:vertical}
 .feld [aria-invalid="true"]{border-color:var(--signal)}
 .fehlertext{font-size:var(--txt-s);font-weight:600;color:var(--signal)}
+.feldhinweis{font-size:var(--txt-s);color:var(--auf-grund-still)}
 .fehlertext:empty{display:none}
 .zusatzfeld{display:none}
 .zusatzfeld.zeigen{display:flex}
@@ -530,8 +531,10 @@ footer nav a:hover{color:var(--signal)}
               <span class="fehlertext" id="mail-fehler"></span>
             </div>
             <div class="feld">
-              <label for="tel">Telefon (freiwillig)</label>
-              <input type="tel" id="tel" name="tel" autocomplete="tel" placeholder="079 000 00 00">
+              <label for="tel">Telefon</label>
+              <input type="tel" id="tel" name="tel" required autocomplete="tel" placeholder="079 000 00 00" aria-describedby="tel-hinweis tel-fehler">
+              <span class="feldhinweis" id="tel-hinweis">Ich rufe dich kurz an, um zu verstehen, was du dir vorstellst. Kein Verkaufsgespräch.</span>
+              <span class="fehlertext" id="tel-fehler"></span>
             </div>
           </div>
           <div class="feld">
@@ -554,8 +557,8 @@ footer nav a:hover{color:var(--signal)}
           <h2><span id="danke-name">Danke.</span><br>Deine Anfrage ist da.</h2>
           <p class="unter">Sie liegt bei mir im Postfach, mit deinem Preisrahmen und allen Angaben.</p>
           <ol>
-            <li><b>Ich schaue mir alles an</b><span>Bei Unklarem rufe ich kurz an oder schreibe dir.</span></li>
-            <li><b>Du bekommst ein Festpreisangebot</b><span>In der Regel innerhalb von zwei Arbeitstagen<span id="danke-mail"></span>.</span></li>
+            <li><b>Ich rufe dich kurz an</b><span>In der Regel innerhalb von zwei Arbeitstagen. Damit ich verstehe, was du dir vorstellst: Texte, Bilder, was dir wichtig ist.</span></li>
+            <li><b>Du bekommst ein Festpreisangebot</b><span>Nach unserem Gespräch, schriftlich<span id="danke-mail"></span>.</span></li>
             <li><b>Du entscheidest in Ruhe</b><span>Kein Nachhaken, keine Frist.</span></li>
           </ol>
           <p class="fuss">Etwas vergessen? Schreib an <a href="mailto:adrian@formateins.ch">adrian@formateins.ch</a> oder ruf an: <a href="tel:+41796868486">079 686 84 86</a>.</p>
@@ -921,8 +924,10 @@ const titelFuerVersand = {
 function pruefen(){
   const pflicht = [
     ['name', 'Wie darf ich dich ansprechen?'],
-    ['mail', 'Ohne gültige E-Mail-Adresse kann ich dir nicht antworten.']
+    ['mail', 'Ohne gültige E-Mail-Adresse kann ich dir nicht antworten.'],
+    ['tel', 'Damit ich dich anrufen kann, brauche ich eine Nummer mit mindestens acht Ziffern.']
   ];
+  telPruefen();
   let erstesFalsches = null;
   for (const [id, meldung] of pflicht) {
     const feld = document.getElementById(id);
@@ -935,8 +940,18 @@ function pruefen(){
   if (erstesFalsches) erstesFalsches.focus();
   return !erstesFalsches;
 }
+// Telefon: nur Ziffern und die ueblichen Trennzeichen, mindestens acht Ziffern.
+// Muss zur Pruefung in anfrage.php passen.
+function telPruefen(){
+  const tel = document.getElementById('tel');
+  const wert = tel.value.trim();
+  const ok = /^[+0-9 ()\/.\-]+$/.test(wert) && wert.replace(/\D/g, '').length >= 8;
+  tel.setCustomValidity(ok ? '' : 'Telefon');
+}
+document.getElementById('tel').addEventListener('input', telPruefen);
+
 // Fehler verschwinden, sobald sie behoben sind, nicht erst beim naechsten Absenden.
-['name','mail'].forEach(id => document.getElementById(id).addEventListener('input', e => {
+['name','mail','tel'].forEach(id => document.getElementById(id).addEventListener('input', e => {
   if (e.target.getAttribute('aria-invalid') === 'true' && e.target.checkValidity()) {
     e.target.setAttribute('aria-invalid', 'false');
     document.getElementById(id + '-fehler').textContent = '';

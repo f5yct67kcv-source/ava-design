@@ -87,6 +87,8 @@ if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) ende(400, 'E-Mail ungueltig');
 
 $betrieb   = zeile('betrieb');
 $telefon   = zeile('tel', 40);
+// Gleiche Regel wie im Rechner: uebliche Zeichen, mindestens acht Ziffern.
+if (!preg_match('~^[+0-9 ()/.\-]+$~', $telefon) || strlen(preg_replace('/\D/', '', $telefon)) < 8) ende(400, 'Telefon fehlt');
 $bemerkung = absatz('bemerkung');
 
 $fragen = [
@@ -191,7 +193,7 @@ function bestaetigen(string $name, string $mail): void {
 
   // Textfassung fuer Mailprogramme ohne HTML.
   $text = [$anrede . ' Deine Anfrage ist da.', '',
-    'Ich schaue mir deine Angaben an und melde mich in der Regel innerhalb von zwei Arbeitstagen mit einem Festpreisangebot. Bis dahin musst du nichts tun.', ''];
+    'Ich schaue mir deine Angaben an und rufe dich in der Regel innerhalb von zwei Arbeitstagen kurz an, um zu verstehen, was du dir vorstellst. Danach bekommst du ein Festpreisangebot.', ''];
   if ($rahmen !== '') {
     $text[] = 'Dein Preisrahmen: ' . $rahmen;
     $text[] = 'Unverbindlicher Richtwert. Verbindlich ist das Festpreisangebot.';
@@ -257,7 +259,7 @@ HTML;
   <tr><td style="padding:40px 36px 8px">
     <p style="$etikett;color:#ff7a3d;margin-bottom:6px">Anfrage erhalten</p>
     <h1 style="margin:0;font-family:$serif;font-size:32px;line-height:1.15;color:#0f1a21;font-weight:700">{$h($anrede)}<br>Deine Anfrage ist da.</h1>
-    <p style="margin:18px 0 0;font-family:$sans;font-size:16px;line-height:1.6;color:#3b4a53">Ich schaue mir deine Angaben an und melde mich in der Regel innerhalb von zwei Arbeitstagen mit einem Festpreisangebot. Bis dahin musst du nichts tun.</p>
+    <p style="margin:18px 0 0;font-family:$sans;font-size:16px;line-height:1.6;color:#3b4a53">Ich schaue mir deine Angaben an und rufe dich in der Regel innerhalb von zwei Arbeitstagen kurz an, um zu verstehen, was du dir vorstellst. Danach bekommst du ein Festpreisangebot.</p>
   </td></tr>
 $rahmenHtml
 $angabenHtml

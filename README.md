@@ -39,6 +39,11 @@ Schriften liegen selbst im Projekt (`schriften/`, `schriften.css`).
   bremst nach fuenf Anfragen pro Stunde und Absender, faengt Spam-Programme ueber
   ein unsichtbares Feld und eine Zeitfalle ab (unter acht Sekunden Seitenzeit gibt
   es ein falsches „ok“) und nimmt nur Anfragen von der eigenen Seite an.
+- **Telefon ist Pflicht** im Anfrageformular (mindestens acht Ziffern, gleiche
+  Regel in `kostenrechner.html` und `anfrage.php`). Grund: Angebote koennen im
+  Spam landen, und vor dem Festpreis kommt ohnehin ein kurzes Gespraech, um die
+  Vorstellung des Kunden zu verstehen. Der Preisrahmen bleibt ohne Nummer
+  sichtbar, so steht es auch auf der Startseite.
 - **Bestaetigung an den Kunden** schickt `anfrage.php` erst, wenn die Anfrage bei
   mir raus ist: HTML mit Textfassung, Preisrahmen und Antworten, Antworten gehen an
   adrian@formateins.ch. Gegen Missbrauch als Spam-Schleuder steht darin nichts
