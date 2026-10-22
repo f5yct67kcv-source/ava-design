@@ -91,7 +91,6 @@ function dav(string $methode, string $adresse, string $koerper = '', array $koep
 // (expand). Tut er es nicht, uebernimmt das vorkommen() weiter unten.
 // null heisst: Kalender nicht erreichbar.
 function termineHolen(DateTimeImmutable $von, DateTimeImmutable $bis, bool $aufloesen = true): ?array {
-  global $diagnose;
   $z = fn(DateTimeImmutable $d) => $d->setTimezone(new DateTimeZone('UTC'))->format('Ymd\THis\Z');
   $daten = $aufloesen
     ? '<C:calendar-data><C:expand start="' . $z($von) . '" end="' . $z($bis) . '"/></C:calendar-data>'
@@ -103,7 +102,6 @@ function termineHolen(DateTimeImmutable $von, DateTimeImmutable $bis, bool $aufl
     . '<C:time-range start="' . $z($von) . '" end="' . $z($bis) . '"/>'
     . '</C:comp-filter></C:comp-filter></C:filter></C:calendar-query>';
   [$code, $antwort] = dav('REPORT', KALENDER, $abfrage, ['Depth: 1', 'Content-Type: application/xml; charset=utf-8']);
-  $diagnose[] = ['aufloesen' => $aufloesen, 'code' => $code, 'laenge' => strlen($antwort)];
   if ($code !== 207) return null;
 
   $dom = new DOMDocument();
@@ -115,15 +113,6 @@ function termineHolen(DateTimeImmutable $von, DateTimeImmutable $bis, bool $aufl
     $gefunden++;
     foreach (icsLesen($knoten->textContent) as $t) $termine[] = $t;
   }
-  $diagnose[count($diagnose) - 1] += [
-    'antworten' => $dom->getElementsByTagNameNS('DAV:', 'response')->length,
-    'daten' => $gefunden,
-    'termine' => array_map(fn($t) => [
-      'frei' => preg_match('/^\s*frei\b/iu', $t['titel'] ?? '') === 1,
-      'beginn' => $t['beginn']->format('c'), 'ende' => $t['ende']->format('c'),
-      'rrule' => !empty($t['rrule']), 'wdh' => !empty($t['wiederholungVon']),
-    ], $termine),
-  ];
   // Manche Server loesen Wiederholungen nicht auf und lassen die Daten dann
   // ganz weg. Dann ohne expand nochmals, vorkommen() uebernimmt das Aufloesen.
   if ($aufloesen && $gefunden === 0 && $dom->getElementsByTagNameNS('DAV:', 'response')->length > 0) {
@@ -423,19 +412,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   $ablage = zwischenspeicher();
   $alt = @json_decode((string) @file_get_contents($ablage), true);
   if (is_array($alt) && ($alt['zeit'] ?? 0) > time() - ZWISCHENSPEICHER_S) ende(200, ['dauer' => DAUER_MIN, 'tage' => $alt['tage']]);
-  $diagnose = [];
   $tage = freieZeiten();
-  if (isset($_GET['diagnose'])) {  // VORUEBERGEHEND
-    $liste = [];
-    [$c, $x] = dav('PROPFIND', 'https://caldav.hostpoint.ch/caldav/', '<?xml version="1.0"?><D:propfind xmlns:D="DAV:"><D:prop><D:displayname/><D:resourcetype/></D:prop></D:propfind>', ['Depth: 1', 'Content-Type: application/xml']);
-    $d = new DOMDocument(); @$d->loadXML($x, LIBXML_NONET);
-    foreach ($d->getElementsByTagNameNS('DAV:', 'response') as $r) {
-      $liste[] = [$r->getElementsByTagNameNS('DAV:', 'href')->item(0)?->textContent, $r->getElementsByTagNameNS('DAV:', 'displayname')->item(0)?->textContent];
-    }
-    [$c2, $x2] = dav('PROPFIND', KALENDER, '<?xml version="1.0"?><D:propfind xmlns:D="DAV:"><D:prop><D:getetag/></D:prop></D:propfind>', ['Depth: 1', 'Content-Type: application/xml']);
-    $d2 = new DOMDocument(); @$d2->loadXML($x2, LIBXML_NONET);
-    ende(200, ['diagnose' => $diagnose, 'kalender' => $liste, 'code' => $c, 'inhaltCode' => $c2, 'eintraege' => $d2->getElementsByTagNameNS('DAV:', 'response')->length]);
-  }
   if ($tage === null) ende(503, ['grund' => 'Kalender nicht erreichbar']);
   @file_put_contents($ablage, json_encode(['zeit' => time(), 'tage' => $tage]), LOCK_EX);
   ende(200, ['dauer' => DAUER_MIN, 'tage' => $tage]);
