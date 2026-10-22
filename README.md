@@ -119,7 +119,7 @@ Schriften liegen selbst im Projekt (`schriften/`, `schriften.css`).
   darauf ist noch offen (fängt „eins“ als Ziffer ab).
 - **Kontaktweg:** `adrian@formateins.ch` (Postfach bei Hostpoint, seit
   22.10.2026) steht im Fuss, im Abschnitt „Wer das macht“, in Impressum,
-  Datenschutz und JSON-LD. Telefonnummer fehlt noch. Bewusst nicht an Hotmail
+  Datenschutz und JSON-LD. Telefon 079 686 84 86 in Fuss, Impressum und JSON-LD. Bewusst nicht an Hotmail
   weiterleiten: Weiterleitungen landen dort gern im Spam, und die
   Datenschutzerklärung geht davon aus, dass Anfragen bei Hostpoint bleiben.
 - **Datenschutzerklaerung geht davon aus**, dass `EMPFAENGER` ein Postfach bei
@@ -185,11 +185,11 @@ Einschalten, wenn die Google-Kampagne startet.
 | `rechner_start` | erste Antwort im Rechner | Nebenziel |
 | `rechner_frage` mit `nr` | jede Frage beim ersten Beantworten | Trichter: wo steigen Leute aus |
 | `anfrage_gesendet` | erst wenn `anfrage.php` den Eingang bestätigt | Hauptziel, Conversion |
+| `kontakt_klick` mit `weg` | Klick auf Mail- oder Telefonlink, auf allen Seiten | Nebenziel |
 
 Formularinhalte gehen nie an Google, auch nicht die Antworten im Rechner,
 nur die Nummer der Frage. Die Mail-Rückfalllösung zählt nicht als Anfrage,
-weil niemand weiss, ob die Mail abgeschickt wurde. Klicks auf Mail und
-Telefon kommen dazu, sobald die Kontaktdaten auf der Seite stehen.
+weil niemand weiss, ob die Mail abgeschickt wurde.
 
 **Einschalten:**
 
@@ -235,11 +235,11 @@ im Code mit `LIVEGANG` markiert — `grep -rn LIVEGANG .` findet sie alle.
    ob sie ankommt, auch im Spam-Ordner. Falls ein eigener Absender gewünscht
    ist (`anfrage@formateins.ch`, zum Filtern), muss er bei Hostpoint als
    Postfach existieren.
-4. **Telefon** ergänzen oder die Zeile „Telefon folgt“ im Fuss entfernen.
-   Pflicht ist es nicht. Anbieterin ist die pzu consulting gmbh, Hochgasse 7,
-   4632 Trimbach (Sitz laut Handelsregister); so steht es in Impressum,
-   Datenschutz und JSON-LD. Dieselbe Adresse im Google-Unternehmensprofil
-   verwenden, dort als Einzugsgebiet ohne sichtbare Adresse.
+4. **Kontaktangaben** stehen: pzu consulting gmbh, Hochgasse 7, 4632
+   Trimbach (Sitz laut Handelsregister), `adrian@formateins.ch`,
+   079 686 84 86. So in Impressum, Fuss und JSON-LD. Genau dieselben Angaben im
+   Google-Unternehmensprofil und in den Verzeichnissen verwenden, im Profil
+   als Einzugsgebiet ohne sichtbare Adresse.
 5. **Google-Unternehmensprofil anlegen.** Bei lokalen Suchen dominiert das
    Kartenpaket ueber den organischen Treffern, und auch KI-Assistenten stützen
    Empfehlungen wie „Webdesigner in Olten“ stark auf Profile und Bewertungen.

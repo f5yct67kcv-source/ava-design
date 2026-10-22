@@ -41,6 +41,12 @@
     if (name === 'anfrage_gesendet' && MESSUNG.ads && MESSUNG.adsLabel) gtag('event', 'conversion', { send_to: MESSUNG.ads + '/' + MESSUNG.adsLabel });
   };
 
+  // Klicks auf Mail und Telefon, ueberall auf der Seite. Nur der Weg, nicht die Adresse.
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest && e.target.closest('a[href^="mailto:"], a[href^="tel:"]');
+    if (a) window.messen('kontakt_klick', { weg: a.href.startsWith('tel:') ? 'telefon' : 'mail' });
+  });
+
   // Lehnt jemand nachtraeglich ab, kommen die Google-Cookies weg.
   function cookiesLoeschen(){
     const teile = location.hostname.split('.');
