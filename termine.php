@@ -90,22 +90,44 @@ function dav(string $methode, string $adresse, string $koerper = '', array $koep
 // Alle Termine im Zeitraum. Der Server soll Wiederholungen selbst aufloesen
 // (expand). Tut er es nicht, uebernimmt das vorkommen() weiter unten.
 // null heisst: Kalender nicht erreichbar.
-function termineHolen(DateTimeImmutable $von, DateTimeImmutable $bis): ?array {
+function termineHolen(DateTimeImmutable $von, DateTimeImmutable $bis, bool $aufloesen = true): ?array {
+  global $diagnose;
   $z = fn(DateTimeImmutable $d) => $d->setTimezone(new DateTimeZone('UTC'))->format('Ymd\THis\Z');
+  $daten = $aufloesen
+    ? '<C:calendar-data><C:expand start="' . $z($von) . '" end="' . $z($bis) . '"/></C:calendar-data>'
+    : '<C:calendar-data/>';
   $abfrage = '<?xml version="1.0" encoding="utf-8"?>'
     . '<C:calendar-query xmlns:D="DAV:" xmlns:C="urn:ietf:params:xml:ns:caldav">'
-    . '<D:prop><C:calendar-data><C:expand start="' . $z($von) . '" end="' . $z($bis) . '"/></C:calendar-data></D:prop>'
+    . '<D:prop>' . $daten . '</D:prop>'
     . '<C:filter><C:comp-filter name="VCALENDAR"><C:comp-filter name="VEVENT">'
     . '<C:time-range start="' . $z($von) . '" end="' . $z($bis) . '"/>'
     . '</C:comp-filter></C:comp-filter></C:filter></C:calendar-query>';
   [$code, $antwort] = dav('REPORT', KALENDER, $abfrage, ['Depth: 1', 'Content-Type: application/xml; charset=utf-8']);
+  $diagnose[] = ['aufloesen' => $aufloesen, 'code' => $code, 'laenge' => strlen($antwort)];
   if ($code !== 207) return null;
 
   $dom = new DOMDocument();
   if (!@$dom->loadXML($antwort, LIBXML_NONET)) return null;
   $termine = [];
+  $gefunden = 0;
   foreach ($dom->getElementsByTagNameNS('urn:ietf:params:xml:ns:caldav', 'calendar-data') as $knoten) {
+    if (trim($knoten->textContent) === '') continue;
+    $gefunden++;
     foreach (icsLesen($knoten->textContent) as $t) $termine[] = $t;
+  }
+  $diagnose[count($diagnose) - 1] += [
+    'antworten' => $dom->getElementsByTagNameNS('DAV:', 'response')->length,
+    'daten' => $gefunden,
+    'termine' => array_map(fn($t) => [
+      'frei' => preg_match('/^\s*frei\b/iu', $t['titel'] ?? '') === 1,
+      'beginn' => $t['beginn']->format('c'), 'ende' => $t['ende']->format('c'),
+      'rrule' => !empty($t['rrule']), 'wdh' => !empty($t['wiederholungVon']),
+    ], $termine),
+  ];
+  // Manche Server loesen Wiederholungen nicht auf und lassen die Daten dann
+  // ganz weg. Dann ohne expand nochmals, vorkommen() uebernimmt das Aufloesen.
+  if ($aufloesen && $gefunden === 0 && $dom->getElementsByTagNameNS('DAV:', 'response')->length > 0) {
+    return termineHolen($von, $bis, false);
   }
   return $termine;
 }
@@ -401,7 +423,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   $ablage = zwischenspeicher();
   $alt = @json_decode((string) @file_get_contents($ablage), true);
   if (is_array($alt) && ($alt['zeit'] ?? 0) > time() - ZWISCHENSPEICHER_S) ende(200, ['dauer' => DAUER_MIN, 'tage' => $alt['tage']]);
+  $diagnose = [];
   $tage = freieZeiten();
+  if (isset($_GET['diagnose'])) ende(200, ['diagnose' => $diagnose, 'tage' => $tage]);  // VORUEBERGEHEND
   if ($tage === null) ende(503, ['grund' => 'Kalender nicht erreichbar']);
   @file_put_contents($ablage, json_encode(['zeit' => time(), 'tage' => $tage]), LOCK_EX);
   ende(200, ['dauer' => DAUER_MIN, 'tage' => $tage]);
