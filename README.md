@@ -345,6 +345,47 @@ als Frage und Antwort lesen. Nach jeder Änderung an den Fragen ausführen:
 python3 quellen/faq-daten.py
 ```
 
+## Gestaltungsauftrag
+
+Der Auftrag, nach dem die beiden Hauptseiten gebaut sind. Er stand bis zum
+23.10.2026 als Kommentar in `index.html` und `kostenrechner.html` und steht
+jetzt hier: er gehoert zur Arbeit am Bau, nicht in die Datei, die der Besucher
+laedt.
+
+**Startseite**
+
+- *Leitsatz:* Eine Person aus Olten baut Websites von Hand zum Festpreis. Die
+  Seite zeigt das Gesicht im ersten Bild und den Preisweg. Arbeiten erscheinen
+  nicht als Referenzband, sondern aufgeschnitten auf einer Werkbank
+  (`#arbeiten`). Sie verweigert die Paketkarten-Tabelle.
+- *Eigene Welt:* Schiefer als kuehler getraenkter Grund, warmes Creme als
+  Papier, Signalorange als einziges Signal. Playfair Display als Stimme,
+  Schibsted Grotesk fuer alles Funktionale. Karten gibt es nicht — es gibt
+  Flaechen, Zeilen und ein rundes Portraet mit laufendem Schriftring.
+- *Weg des Besuchers:* Er erkennt sein Problem, sieht wer dahintersteht,
+  versteht den Ablauf und holt sich den Preisrahmen, ohne vorher telefonieren
+  zu muessen.
+- *Erster Bildschirm:* Schieferblaue Vollflaeche, Headline links ueber sieben
+  Spalten, darunter Knopf in Signalorange und ruhiger Zweitweg, rechts das
+  runde Portraet mit Schriftring, der Name und Ort traegt.
+- *Form:* Vierte Richtung, vom Nutzer gewaehlt nach drei gewuerfelten
+  Vorschlaegen (`archiv/richtungen.html`).
+
+**Kostenrechner**
+
+- *Leitsatz:* Der Rechner qualifiziert, statt Kontaktdaten abzugreifen. Der
+  Preis steht vor dem Formular, nicht dahinter. Er verweigert die uebliche
+  Leadstrecke, in der die Zahl erst nach der Mailadresse kommt.
+- *Eigene Welt:* Dieselbe Welt wie die Startseite — Schiefer, Creme,
+  Signalorange, Playfair Display und Schibsted Grotesk. Eine Frage pro
+  Bildschirm, keine Karten.
+- *Weg des Besuchers:* Sieben Fragen, sofort ein Rahmen, dann entscheidet er
+  selbst, ob er seine Daten hergibt.
+- *Erster Bildschirm:* Knotenleiste oben wie der Ablauf der Startseite, Frage
+  gross gesetzt, Antworten als breite Zeilen, Zurueck links und Weiter rechts
+  unten.
+- *Form:* Vierte Richtung, Fortsetzung der Startseite.
+
 ## Logo
 
 Wortmarke ohne Zeichen: „format“ in Schibsted Grotesk 700, „eins“ in Playfair
