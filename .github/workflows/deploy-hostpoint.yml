@@ -43,9 +43,22 @@ jobs:
             --exclude '.git/' --exclude '.github/' --exclude '.claude/' \
             --exclude '.gitignore' --exclude 'archiv/' --exclude 'quellen/' \
             --exclude 'README.md' --exclude 'CLAUDE.md' --exclude 'htaccess-hostpoint' --exclude 'dist/' \
+            --exclude 'node_modules/' \
             ./ dist/
           cp htaccess-hostpoint dist/.htaccess
           find dist -type f | sort
+
+      # Die Kommentare im Quelltext sind fuer das Repository geschrieben, nicht
+      # fuer Besucher: wer die Seite im Browser als Quelltext oeffnet, soll den
+      # Bau sehen und nicht die Notizen dazu. Im Repository bleiben sie stehen,
+      # herausgenommen werden sie nur hier, in der Auslieferung. Das Skript
+      # schneidet Zeichenbereiche heraus und schreibt nichts um; findet es
+      # etwas, das es nicht sicher einordnen kann, bricht es ab und es wird
+      # nichts hochgeladen.
+      - name: Kommentare aus der Auslieferung nehmen
+        run: |
+          npm install --no-save --no-audit --no-fund --ignore-scripts acorn@8.14.0
+          node quellen/kommentare-entfernen.mjs dist
 
       # Zugang zum Kalender ¬´Gespraeche¬ª fuer termine.php. Fehlen die Secrets,
       # bleiben die Platzhalter stehen und gespraech.html zeigt Telefon und Mail.

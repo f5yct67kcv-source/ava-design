@@ -1,2 +1,5 @@
 .DS_Store
 __pycache__/
+# Nur fuer den Schritt, der die Kommentare aus der Auslieferung nimmt.
+node_modules/
+package-lock.json

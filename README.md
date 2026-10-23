@@ -151,11 +151,34 @@ Jeder Push auf `main` lädt die Seite per GitHub Action auf Hostpoint
 `SamKirkland/FTP-Deploy-Action`. Vorher prüft die Action die Syntax von
 `anfrage.php` und `messung.js`, bei einem Fehler wird nichts hochgeladen.
 
-Hochgeladen wird alles ausser `archiv/`, `quellen/`, `README.md`, `.github/`,
-`.claude/` und `.gitignore`. Neue Dateien kommen also von selbst mit, nur neue
-Ausnahmen gehören in den Workflow. `htaccess-hostpoint` wird als `.htaccess`
-ausgeliefert: immer https und `www.formateins.ch`, Zwischenspeicher-Regeln,
-Sicherheitskopfzeilen.
+Hochgeladen wird alles ausser `archiv/`, `quellen/`, `README.md`, `CLAUDE.md`,
+`.github/`, `.claude/`, `.gitignore` und `node_modules/`. Neue Dateien kommen
+also von selbst mit, nur neue Ausnahmen gehören in den Workflow.
+`htaccess-hostpoint` wird als `.htaccess` ausgeliefert: immer https und
+`www.formateins.ch`, Zwischenspeicher-Regeln, Sicherheitskopfzeilen.
+
+### Kommentare bleiben im Repository
+
+Der Quelltext ist dicht kommentiert, und das soll er bleiben — aber nur hier.
+Wer auf der Seite den Quelltext öffnet, soll den Bau sehen und nicht die Notizen
+dazu. Darum nimmt die Action nach dem Zusammenstellen die Kommentare aus
+`dist/`: `node quellen/kommentare-entfernen.mjs dist`, für HTML, CSS und
+JavaScript. Allein auf der Startseite sind das rund 25'000 Zeichen, ein Viertel
+der Datei.
+
+Bewusst kein Minifizieren. Die Einrückung, die kurz zusammengezogenen Zeilen,
+die Reihenfolge der Eigenschaften: das ist die Handschrift der Seite, und ein
+Minifizierer schreibt sie um. Das Skript schneidet nur Zeichenbereiche heraus,
+der Rest bleibt Zeichen für Zeichen gleich. Wo bei JavaScript ein Kommentar
+anfängt, sagt der Parser (`acorn`) und kein Suchmuster — ein `//` kann in einer
+Zeichenkette oder einem regulären Ausdruck stehen, und dort darf nichts
+verschwinden. Danach vergleicht das Skript die Token vor und nach dem Schnitt;
+sind sie nicht identisch, bricht es ab und es wird nichts hochgeladen. PHP
+bleibt unberührt, der Quelltext verlässt den Server nie.
+
+Geprüft wurde der Schnitt mit beiden Fassungen im Browser: alle fünf Seiten auf
+Handy- und Desktopbreite pixelgleich, gleicher DOM, gleiches Verhalten beim
+Durchklicken, gleiche Preisrahmen im Rechner, keine Fehler in der Konsole.
 
 Secrets im Repository (Settings → Secrets and variables → Actions):
 
