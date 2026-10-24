@@ -34,10 +34,32 @@ der Entwurf versehentlich auf `main` landet, steht er damit nicht auf
 formateins.ch. Erst wenn Adrian den Entwurf abnimmt, wandert der Inhalt in die
 echten Dateien und die Entwurfsdateien verschwinden.
 
-Angeschaut wird der Entwurf ueber GitHub Pages (Vorschau, siehe README) oder
-ueber Bilder aus dem lokalen Server. Aus der Cloud-Sitzung ist weder
-formateins.ch noch github.io erreichbar, gepruefte Aussagen ueber die Vorschau
-sind von hier aus also nicht moeglich.
+### Die Vorschau auf GitHub Pages
+
+Pages ist eingeschaltet und baut aus **`main`**, mit der klassischen
+Zweig-Veroeffentlichung (Lauf «pages build and deployment» nach jedem Push).
+Adresse: `https://f5yct67kcv-source.github.io/formateins/`. Das Repository ist
+oeffentlich.
+
+Wichtig: Pages veroeffentlicht den **ganzen** Zweig, ohne die Ausschluesse des
+Hostpoint-Workflows. Die Ausnahme fuer `entwurf*` schuetzt also formateins.ch,
+nicht github.io — auf Pages wird ein Entwurf sichtbar, sobald er auf dem
+veroeffentlichten Zweig liegt. Das ist fuer die Vorschau genau erwuenscht,
+sollte man aber wissen. Dasselbe gilt fuer `README.md`, `CLAUDE.md` und
+`quellen/`: auf dem Webserver liegen sie nicht, auf Pages schon (im
+oeffentlichen Repository stehen sie ohnehin offen).
+
+Damit gibt es zwei Wege zu einem Vorschau-Link, und beide gehoeren Adrian:
+
+1. **Pages auf den Arbeitszweig stellen** (Settings → Pages → Branch).
+   Kein Deploy, formateins.ch bleibt unberuehrt, jederzeit zurueckzustellen.
+2. **Entwurf nach `main`**. Dann baut Pages ihn von selbst, und der
+   Hostpoint-Deploy laedt ihn wegen `--exclude 'entwurf*'` nicht hoch. Loest
+   aber einen Lauf aus und braucht Adrians Wort.
+
+Was von hier aus **nicht** geht: die Vorschau selbst oeffnen. Der Egress-Proxy
+blockt `github.io` genauso wie `formateins.ch`. Ob eine Seite dort wirklich
+steht, zeigt nur der Lauf «pages build and deployment» oder Adrians Blick.
 
 ## Push auf main heisst live
 
