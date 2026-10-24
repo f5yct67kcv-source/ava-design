@@ -83,3 +83,8 @@ Livegang sind die Logs der Action («replacing index.html», «Sync complete»).
 Gestaltung erst vorfuehren, dann bauen: Entwuerfe als Bild rendern (Playwright,
 die Seite lokal ueber `python3 -m http.server` ausliefern) und Adrian zur Wahl
 stellen. Nicht ungefragt die bestehende Gestaltung umbauen.
+
+Das gilt fuer die **Gestaltung**, nicht fuer den **Text**. Steht nur eine
+Formulierung zur Wahl, kommen die Varianten als Text in den Chat — kein Umbau,
+kein Rendern. Bilder erst, wenn die Form zur Frage gehoert (Umbruch, Hoehe,
+Abstaende) oder Adrian sie verlangt.
