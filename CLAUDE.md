@@ -84,6 +84,10 @@ Gestaltung erst vorfuehren, dann bauen: Entwuerfe als Bild rendern (Playwright,
 die Seite lokal ueber `python3 -m http.server` ausliefern) und Adrian zur Wahl
 stellen. Nicht ungefragt die bestehende Gestaltung umbauen.
 
+Ein «fix das mal» ist keine Vollmacht, die Fassung auszusuchen. Varianten
+zeigen, Adrian waehlt, dann bauen und pushen — auch wenn der Fehler klar ist
+und die Loesung naheliegt.
+
 Das gilt fuer die **Gestaltung**, nicht fuer den **Text**. Steht nur eine
 Formulierung zur Wahl, kommen die Varianten als Text in den Chat — kein Umbau,
 kein Rendern. Bilder erst, wenn die Form zur Frage gehoert (Umbruch, Hoehe,
