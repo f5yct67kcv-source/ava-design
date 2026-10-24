@@ -1568,6 +1568,25 @@ if (reduziert || !('IntersectionObserver' in window)) {
   setTimeout(() => aufElemente.forEach(zeigen), 2000);
 }
 
+// Der Ring dreht sich. Bleibt zu viel Platz, haengt der Name in jedem zweiten
+// Moment als Fetzen an einer Seite, statt rundzulaufen — kurze Beschriftungen
+// werden deshalb gesperrt, bis sie den Ring fuellen. Laenge = Grundlaenge plus
+// Laufweite je Zeichen, also laesst sich die noetige Sperrung ausrechnen, statt
+// sie fuer jeden Namen von Hand zu suchen.
+const RINGFUELLUNG = .76; // Anteil des Umfangs, den die Schrift einnehmen soll
+
+function ringSchriftSperren(text, umfang){
+  const pfad = text.querySelector('textPath');
+  const zeichen = (pfad || text).textContent.trim().length;
+  if (!zeichen) return;
+
+  const jetzt = parseFloat(getComputedStyle(text).letterSpacing) || 0;
+  const grund = text.getComputedTextLength() - zeichen * jetzt;
+  const ziel  = umfang * RINGFUELLUNG;
+  if (grund >= ziel) return;  // langer Name: der fuellt den Ring von allein
+  text.style.letterSpacing = ((ziel - grund) / zeichen).toFixed(2) + 'px';
+}
+
 // Die Haarlinie schliesst genau die Luecke, die die Schrift unten frei laesst.
 // Gemessen statt geschaetzt, sonst verschiebt sich alles sobald Text, Schriftgrad
 // oder Laufweite sich aendern.
@@ -1577,6 +1596,7 @@ function ringLinieSetzen(){
   if (!text || !linie) return;
 
   const r = 41, umfang = 2 * Math.PI * r, luft = 7; // luft = Grad Abstand je Seite
+  ringSchriftSperren(text, umfang);
   const luecke = Math.max(0, umfang - text.getComputedTextLength());
   const grad = (luecke / umfang) * 360 - 2 * luft;
 
