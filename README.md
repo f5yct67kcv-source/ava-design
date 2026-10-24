@@ -152,7 +152,8 @@ Jeder Push auf `main` lädt die Seite per GitHub Action auf Hostpoint
 `anfrage.php` und `messung.js`, bei einem Fehler wird nichts hochgeladen.
 
 Hochgeladen wird alles ausser `archiv/`, `quellen/`, `README.md`, `CLAUDE.md`,
-`.github/`, `.claude/`, `.gitignore` und `node_modules/`. Neue Dateien kommen
+`.github/`, `.claude/`, `.gitignore`, `node_modules/` und allem, was
+mit `entwurf` anfaengt (siehe CLAUDE.md, Entwuerfe). Neue Dateien kommen
 also von selbst mit, nur neue Ausnahmen gehören in den Workflow.
 `htaccess-hostpoint` wird als `.htaccess` ausgeliefert: immer https und
 `www.formateins.ch`, Zwischenspeicher-Regeln, Sicherheitskopfzeilen.

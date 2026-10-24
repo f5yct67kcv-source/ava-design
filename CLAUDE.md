@@ -17,6 +17,28 @@ beruehrt er dieselben Dateien, die eigene Aenderung noch einmal pruefen.
 Nie mit `--force` auf `main`. Auf dem eigenen Arbeitsbranch ist `--force` in
 Ordnung, dort arbeitet sonst niemand.
 
+## Entwuerfe bleiben auf der Testseite
+
+Die Seite ist live. Entwuerfe gehen deshalb **nie** in `index.html` und die
+anderen ausgelieferten Dateien, sondern in eigene Dateien mit dem Praefix
+`entwurf`:
+
+```
+entwurf.html            Startseite im Entwurf
+entwurf-auftritt.html   usw.
+```
+
+Der Workflow schliesst alles aus, was `entwurf` am Anfang hat, auch Bilder
+(`entwurf-markenblatt.webp`). Selbst wenn
+der Entwurf versehentlich auf `main` landet, steht er damit nicht auf
+formateins.ch. Erst wenn Adrian den Entwurf abnimmt, wandert der Inhalt in die
+echten Dateien und die Entwurfsdateien verschwinden.
+
+Angeschaut wird der Entwurf ueber GitHub Pages (Vorschau, siehe README) oder
+ueber Bilder aus dem lokalen Server. Aus der Cloud-Sitzung ist weder
+formateins.ch noch github.io erreichbar, gepruefte Aussagen ueber die Vorschau
+sind von hier aus also nicht moeglich.
+
 ## Push auf main heisst live
 
 Jeder Push auf `main` startet die Action «Website zu Hostpoint» und laedt die
